@@ -1,0 +1,107 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.heroSection { padding: 21px 16px 0; }
+.hero {
+  display: flex;
+  min-height: 420px;
+  max-width: 1840px;
+  margin-inline: auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 190px 20px 48px;
+  border-radius: 32px;
+  background: linear-gradient(249.78deg, #01211e 3.44%, #02534a 93.72%);
+  color: #fff;
+  text-align: center;
+}
+.breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.title { text-transform: uppercase; }
+.albumsSection { padding-block: 32px 64px; }
+.albumsGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.albumCard {
+  position: relative;
+  display: block;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--muted);
+  color: #fff;
+  outline: none;
+}
+.albumCover { object-fit: cover; transition: scale 700ms ease-out; }
+.albumCard:hover .albumCover,
+.albumCard:focus-visible .albumCover { scale: 1.04; }
+.albumShade {
+  position: absolute;
+  inset: 35% 0 0;
+  background: linear-gradient(180deg, transparent 0%, rgb(0 0 0 / 78%) 100%);
+}
+.albumDetails {
+  position: absolute;
+  inset: auto 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.albumTitle { overflow: hidden; font-size: 1.25rem; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+.albumMeta { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.albumDate { color: #d3d3d3; font-size: 1rem; font-weight: 500; }
+.albumCount { flex: none; font-size: 1.5rem; font-weight: 500; line-height: 1; }
+.albumCard:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+.pagination { display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 60px; }
+.pagination > :first-child { margin-right: 8px; }
+.pagination > :last-child { margin-left: 8px; }
+.pageArrow,
+.pageArrowDisabled,
+.pageNumber { display: inline-flex; width: 44px; height: 44px; flex: none; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px; font-weight: 500; }
+.pageArrow,
+.pageArrowDisabled { border: 1px solid var(--border); }
+.pageArrowDisabled { opacity: 0.7; }
+.pageNumber { background: var(--secondary); color: var(--foreground); }
+.pageNumber[aria-current="page"] { background: transparent; }
+.pageArrow:hover,
+.pageNumber:hover:not([aria-current="page"]) { background: var(--muted); }
+.pagination a:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .heroSection { padding-inline: 40px; }
+  .hero { min-height: 480px; }
+  .albumsSection { padding-block: 48px 80px; }
+  .albumsGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (width >= theme(--breakpoint-desktop)) {
+  .albumsGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .albumTitle { font-size: 1.5rem; }
+}
+
+@media (width >= theme(--breakpoint-desktop1250)) {
+  .hero { min-height: 600px; padding: 0 40px; }
+  .albumsSection { padding-block: 64px 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .albumCover { transition: none; }
+}
+
+:global(html[data-a11y-enabled="true"]) .hero,
+:global(html[data-text-mode="true"]) .hero {
+  min-height: 0;
+  padding: 48px 24px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+:global(html[data-a11y-enabled="true"]) .breadcrumbs,
+:global(html[data-text-mode="true"]) .breadcrumbs { flex-wrap: wrap; font-size: 1rem; }
+:global(html[data-a11y-enabled="true"]) .albumCard { height: auto; min-height: 400px; color: var(--foreground); background: var(--card); }
+:global(html[data-a11y-enabled="true"]) .albumShade,
+:global(html[data-text-mode="true"]) .albumShade { display: none; }
+:global(html[data-a11y-enabled="true"]) .albumDetails { position: relative; inset: auto; margin: 240px 16px 16px; padding: 12px; background: var(--background); }
+:global(html[data-a11y-enabled="true"]) .albumTitle { overflow: visible; white-space: normal; }
+:global(html[data-a11y-enabled="true"]) .albumDate { color: var(--muted-foreground); }
+:global(html[data-text-mode="true"]) .albumCard { height: auto; min-height: 0; overflow: visible; border: 0; background: transparent; color: var(--foreground); }
+:global(html[data-text-mode="true"]) .albumDetails { position: static; inset: auto; margin: 0; padding: 0; background: transparent; }
+:global(html[data-text-mode="true"]) .albumTitle { overflow: visible; white-space: normal; }

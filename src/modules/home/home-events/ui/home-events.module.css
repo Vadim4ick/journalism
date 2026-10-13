@@ -1,0 +1,54 @@
+@reference "../../../../shared/assets/style/globals.css";
+
+.carousel .arrow {
+  top: calc(12px + (100vw - 56px) * 0.2994);
+  bottom: auto;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  transform: translateY(-50%);
+  border-color: rgb(255 255 255 / 80%);
+  background: rgb(255 255 255 / 94%);
+  color: var(--brand);
+  box-shadow: 0 4px 20px rgb(0 0 0 / 14%);
+  backdrop-filter: blur(12px);
+  transition: background 200ms, color 200ms, box-shadow 200ms, opacity 200ms;
+}
+
+.carousel .arrow:hover:not(:disabled) {
+  background: var(--brand);
+  color: white;
+  box-shadow: 0 6px 24px rgb(124 35 35 / 24%);
+}
+
+.carousel .arrow:disabled {
+  opacity: 0;
+}
+
+.carousel .arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+.carousel .previous { left: -8px; }
+.carousel .next { right: -8px; }
+
+@media (min-width: theme(--breakpoint-mobile)) {
+  .carousel .arrow {
+    top: calc(16px + (85vw - 62px) * 0.2994);
+    width: 56px;
+    height: 56px;
+  }
+  .carousel .previous { left: 0; }
+  .carousel .next { right: 0; }
+}
+
+@media (min-width: theme(--breakpoint-tablet)) {
+  .carousel .arrow { top: 216px; }
+}
+
+@media (min-width: theme(--breakpoint-desktop1350)) {
+  .carousel .previous { left: -12px; }
+  .carousel .next { right: -12px; }
+}

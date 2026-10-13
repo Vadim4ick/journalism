@@ -1,0 +1,311 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.container {
+  width: 100%;
+  padding: 64px 24px 100px;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.container .heading {
+  margin: 42px 0 0;
+  font-size: 2.5rem;
+  font-weight: 400;
+}
+
+.contactsGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.35fr);
+  gap: clamp(36px, 5vw, 80px);
+  align-items: start;
+  margin-top: 38px;
+}
+
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.contactInfo .label {
+  margin-bottom: 14px;
+  color: var(--muted-foreground);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.hours {
+  display: grid;
+  gap: 10px;
+}
+
+.quickContacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.contactInfo a,
+.detailRow a {
+  text-underline-offset: 3px;
+}
+
+.contactInfo a:hover,
+.contactInfo a:focus-visible,
+.detailRow a:hover,
+.detailRow a:focus-visible {
+  text-decoration: underline;
+}
+
+.quickContacts a {
+  overflow-wrap: anywhere;
+}
+
+.socials {
+  gap: 8px;
+}
+
+.map {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 2.22;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--muted);
+}
+
+.requisitesSection {
+  margin-top: 92px;
+  scroll-margin-top: 24px;
+}
+
+.container .requisitesSection .heading {
+  margin-top: 0;
+}
+
+.requisitesPanel {
+  margin-top: 40px;
+  padding: 8px 26px;
+  border-radius: 20px;
+  background: var(--card);
+}
+
+.requisite + .requisite {
+  border-top: 1px solid var(--border);
+}
+
+.requisiteHeading {
+  margin: 0;
+}
+
+.requisiteTrigger {
+  display: flex;
+  width: 100%;
+  min-height: 76px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.requisitePanel {
+  overflow: hidden;
+}
+
+.requisiteTrigger svg {
+  flex: 0 0 auto;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.requisiteTrigger[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.requisiteTrigger:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: -3px;
+  border-radius: 6px;
+}
+
+.requisiteContent {
+  padding: 12px 0 34px;
+}
+
+.detailList {
+  display: grid;
+  gap: 22px;
+  margin: 0;
+}
+
+.detailRow {
+  display: grid;
+  grid-template-columns: 218px minmax(0, 1fr);
+  gap: 24px;
+  align-items: baseline;
+  min-width: 0;
+}
+
+.detailRow dt {
+  color: var(--muted-foreground);
+  font-size: 16px;
+}
+
+.detailRow dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.detailRow a {
+  text-decoration: underline;
+}
+
+@media (max-width: 991px) {
+  .container {
+    padding-top: 44px;
+    padding-bottom: 80px;
+  }
+
+  .contactsGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 28px;
+  }
+
+  .map {
+    aspect-ratio: 1.4;
+  }
+
+  .detailRow {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+
+  .container .heading { font-size: 2.25rem; }
+  .contactInfo, .detailRow dd { font-size: 18px; }
+  .contactInfo .label, .detailRow dt { font-size: 15px; }
+  .requisiteTrigger { font-size: 18px; }
+}
+
+@media (max-width: 767px) {
+  .container {
+    padding: 32px 16px 64px;
+  }
+
+  .container .heading {
+    margin-top: 32px;
+    font-size: 2rem;
+  }
+
+  .contactsGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    margin-top: 28px;
+  }
+
+  .contactInfo {
+    gap: 22px;
+    font-size: 17px;
+  }
+
+  .contactInfo .label, .detailRow dt { font-size: 14px; }
+
+  .map {
+    aspect-ratio: 1.65;
+  }
+
+  .requisitesSection {
+    margin-top: 64px;
+  }
+
+  .requisitesPanel {
+    margin-top: 28px;
+    padding: 4px 16px;
+  }
+
+  .requisiteTrigger {
+    min-height: 68px;
+    font-size: 17px;
+  }
+
+  .detailList {
+    gap: 18px;
+  }
+
+  .detailRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .detailRow dd { font-size: 17px; }
+}
+
+:global(html[data-a11y-enabled="true"]) .requisitesPanel {
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+
+:global(html[data-a11y-enabled="true"]) .contactInfo,
+:global(html[data-a11y-enabled="true"]) .detailRow dd,
+:global(html[data-a11y-enabled="true"]) .requisiteTrigger {
+  font-size: 1rem;
+}
+
+:global(html[data-a11y-enabled="true"]) .contactInfo .label,
+:global(html[data-a11y-enabled="true"]) .detailRow dt,
+:global(html[data-a11y-enabled="true"]) .breadcrumbs {
+  font-size: 0.875rem;
+}
+
+:global(html[data-a11y-enabled="true"]) .map {
+  min-height: 260px;
+}
+
+:global(html[data-text-mode="true"]) .map {
+  aspect-ratio: auto;
+  min-height: 0;
+  background: none;
+}
+
+:global(html[data-text-mode="true"]) .requisite {
+  margin-block: 1rem;
+}
+
+:global(html[data-text-mode="true"]) .requisitePanel[aria-hidden="true"] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .requisiteTrigger svg {
+    transition: none;
+  }
+}

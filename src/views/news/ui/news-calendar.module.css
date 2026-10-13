@@ -1,0 +1,45 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.calendar { padding: 30px 30px 50px; border-radius: 20px; background: var(--card); color: var(--card-foreground); }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 32px; }
+.month { font-size: 20px; font-weight: 500; text-transform: capitalize; text-align: center; }
+.navigation { min-width: 44px; min-height: 44px; color: var(--muted-foreground); font-size: 28px; }
+.calendarViewport { max-width: 100%; overflow-x: auto; }
+.grid { width: 100%; min-width: 392px; table-layout: fixed; border-collapse: collapse; }
+.grid th { height: 64px; padding: 0 0 20px; color: var(--muted-foreground); font-size: 18px; font-weight: 400; }
+.grid td { position: relative; height: 72px; padding: 0; text-align: center; }
+.grid td[data-in-range]::before { content: ""; position: absolute; inset: 8px 0; background: color-mix(in srgb, var(--primary) 10%, var(--card)); }
+.grid td[data-range-start]::before { left: 50%; }
+.grid td[data-range-end]::before { right: 50%; }
+.day { position: relative; width: 56px; height: 56px; max-width: 100%; padding: 0; border-radius: 50%; font-family: Arial, sans-serif; font-size: 24px; font-weight: 400; }
+.day[data-has-news]::after { position: absolute; bottom: 4px; left: 25%; width: 50%; height: 2px; background: var(--primary); content: ""; }
+.day[aria-pressed="true"] { color: var(--primary); font-weight: 600; }
+.day[data-boundary] { background: var(--primary); color: var(--primary-foreground); }
+.day[data-boundary]::after { background: var(--primary-foreground); }
+.day:hover { transform: none; }
+.selection { margin-top: 24px; text-align: center; }
+.rangeLabel { font-size: 14px; font-weight: 600; line-height: 1.5; }
+.hint { margin-top: 6px; color: var(--muted-foreground); font-size: 14px; line-height: 1.5; }
+
+@media (width < theme(--breakpoint-desktop1450)) {
+  .calendar { padding: 20px 12px; }
+  .header { margin-bottom: 12px; }
+  .month { font-size: 18px; }
+  .grid { min-width: 308px; }
+  .grid th { height: 48px; padding-bottom: 12px; font-size: 14px; }
+  .grid td { height: 48px; }
+  .grid td[data-in-range]::before { inset-block: 2px; }
+  .day { width: 44px; height: 44px; font-size: 18px; }
+}
+:global(html[data-a11y-enabled="true"]) .calendar { border: 1px solid var(--border); }
+:global(html[data-a11y-enabled="true"]) .month { font-size: 1rem; }
+:global(html[data-a11y-enabled="true"]) .grid th { font-size: 0.65rem; }
+:global(html[data-a11y-enabled="true"]) .day { font-size: 0.75rem; }
+:global(html[data-a11y-enabled="true"]) .hint,
+:global(html[data-a11y-enabled="true"]) .rangeLabel { font-size: 0.75rem; }
+:global(html[data-text-mode="true"]) .calendar .header { display: flex !important; margin-block: 16px !important; }
+:global(html[data-text-mode="true"] [data-text-flow]) .calendarViewport { width: 100% !important; max-width: 100% !important; overflow-x: auto !important; }
+:global(html[data-text-mode="true"]) .grid { width: max-content; min-width: 100%; table-layout: auto; }
+:global(html[data-text-mode="true"]) .grid :is(th, td) { min-width: 2.25em; }
+:global(html[data-text-mode="true"]) .day { padding: 4px !important; min-width: 36px; }
+:global(html[data-text-mode="true"]) .day[data-has-news] { text-decoration: underline; }

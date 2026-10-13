@@ -1,0 +1,268 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.article,
+.narrow,
+.talesSection,
+.quote,
+.expertsSection {
+  width: min(100%, 800px);
+  margin-inline: auto;
+}
+
+.article {
+  padding-block: 56px 64px;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+
+.breadcrumbs a:hover { text-decoration: underline; }
+.breadcrumbs a:focus-visible,
+.partnerLink:focus-visible,
+.galleryButton:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.title,
+.sectionTitle,
+.quote blockquote {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.title {
+  font-size: clamp(23px, 2.2vw, 28px);
+}
+
+.heroFigure {
+  margin-top: 28px;
+}
+
+.logoFrame,
+.photoFrame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--background);
+}
+
+.logoFrame { aspect-ratio: 1.4; }
+.photoFrame { aspect-ratio: 2 / 1; }
+
+.source {
+  margin-top: 12px;
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+.story {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  line-height: 1.5;
+}
+
+.lead {
+  font-weight: 600;
+}
+
+.paragraph { line-height: 1.5; }
+
+.partnerLink {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+  padding: 5px 5px 5px 18px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.partnerLink:hover { border-color: var(--primary); }
+
+.partnerIcon {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.gallerySection { margin-bottom: 96px; }
+.galleryHeading {
+  display: flex;
+  min-height: 64px;
+  justify-content: flex-end;
+  width: min(100%, 800px);
+  margin: 0 auto 20px;
+}
+.galleryControls { display: flex; align-items: center; gap: 12px; }
+.galleryButton {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+.galleryButton:hover:not(:disabled) { background: var(--muted); }
+.galleryButton:disabled { cursor: not-allowed; opacity: .42; }
+.galleryTrack { margin-left: -14px; }
+.galleryItem { flex-basis: 86%; padding-left: 14px; }
+.galleryImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.45;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--muted);
+}
+.textGallery { display: grid; gap: 12px; }
+
+.organizers {
+  margin-bottom: 92px;
+  padding: 44px 24px 52px;
+  border-radius: 24px;
+  background: var(--card);
+}
+.organizersInner { width: min(100%, 800px); margin: auto; }
+.sectionTitle { font-size: clamp(24px, 2.5vw, 32px); }
+.organizers .sectionTitle { text-align: center; }
+.organizerIntro { margin-top: 24px; line-height: 1.5; }
+.partnersTitle { margin-top: 22px; font-weight: 600; }
+.partnersList {
+  columns: 1;
+  margin-top: 10px;
+  padding-left: 20px;
+  list-style: disc;
+  line-height: 1.55;
+}
+.partnersList li { break-inside: avoid; padding-left: 3px; margin-bottom: 8px; }
+
+.culturesSection { margin-bottom: 96px; }
+.sectionLead { margin-top: 22px; font-weight: 600; line-height: 1.5; }
+.cultureGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 22px;
+  margin-top: 42px;
+}
+.cultureCard {
+  min-width: 0;
+  padding: 12px 12px 28px;
+  border-radius: 22px;
+  background: var(--card);
+}
+.cultureCard > p { padding: 20px 10px 0; line-height: 1.5; }
+.cultureBanner {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 18px 8px 10px;
+  border-radius: 12px;
+  color: #fff;
+  background-image: repeating-linear-gradient(45deg, transparent 0 14px, #ffffff1a 14px 16px, transparent 16px 28px);
+}
+.cultureBanner h3 { font-size: 16px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.cultureMark {
+  display: inline-flex;
+  width: 31px;
+  height: 31px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #fff;
+  color: #8d3e2d;
+  font-family: var(--font-foglihten);
+  font-size: 22px;
+}
+.slavic { background-color: #843121; }
+.tatar { background-color: #677b42; }
+.greek { background-color: #6b9ead; }
+.adyghe { background-color: #315b52; }
+.armenian { background-color: #c8752b; }
+.jewish { background-color: #b99431; }
+
+.talesSection { margin-bottom: 68px; }
+.talesSection .paragraph { margin-top: 18px; }
+.quote {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: 12px 28px;
+  margin-bottom: 96px;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--card);
+}
+.quoteMark { align-self: center; color: var(--primary); font-family: var(--font-foglihten); font-size: 120px; line-height: .7; }
+.quote blockquote { font-size: clamp(25px, 3vw, 38px); }
+.quote figcaption { font-size: 13px; font-weight: 600; text-align: right; }
+.expertsSection { margin-bottom: 110px; }
+.expertsEmpty {
+  margin-top: 28px;
+  padding: 38px 24px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card);
+  color: var(--muted-foreground);
+}
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .article { padding-top: 80px; padding-bottom: 72px; }
+  .logoFrame { aspect-ratio: 1.85; }
+  .galleryItem { flex-basis: 50%; }
+  .organizers { padding: 52px 48px 60px; }
+  .partnersList { columns: 2; column-gap: 44px; }
+  .cultureGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .quote { grid-template-columns: 150px minmax(0, 1fr); }
+  .quoteMark { grid-row: span 2; font-size: 170px; }
+}
+
+@media (width >= theme(--breakpoint-desktop)) {
+  .galleryItem { flex-basis: 33.333333%; }
+  .cultureGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+:global(html[data-a11y-enabled="true"]) .cultureBanner {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+:global(html[data-a11y-enabled="true"]) .cultureMark {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galleryButton { transition: none; }
+}

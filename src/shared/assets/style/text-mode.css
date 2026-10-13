@@ -1,0 +1,248 @@
+.text-mode-only {
+  display: none;
+}
+
+/* Section 12 of the specification: independent of the contrast palette. */
+html[data-text-mode="true"] {
+  color-scheme: light;
+  background: #fff;
+  scroll-behavior: auto;
+  scroll-padding-top: 1rem;
+}
+
+html[data-text-mode="true"] body {
+  background: #fff !important;
+  color: #000 !important;
+  font-family: system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Keep the selected low-vision scale when text mode is also active. */
+html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="2"] {
+  --a11y-text-scale: 2;
+}
+
+html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="2.5"] {
+  --a11y-text-scale: 2.5;
+}
+
+html[data-text-mode="true"] body {
+  font-size: calc(1rem * var(--a11y-text-scale, 1));
+}
+
+html[data-text-mode="true"] body * {
+  font-family: inherit !important;
+  font-size: inherit;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+  background-color: transparent !important;
+  color: #000 !important;
+  border-radius: 0 !important;
+  border-color: #000 !important;
+  animation: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+html[data-text-mode="true"] body *::before,
+html[data-text-mode="true"] body *::after {
+  content: none !important;
+}
+
+html[data-text-mode="true"] .text-mode-only {
+  display: inline;
+}
+
+html[data-text-mode="true"] :is(.text-mode-hidden, [data-text-decorative], [data-a11y-background-image]) {
+  display: none !important;
+}
+
+html[data-text-mode="true"] :is(a, a *) {
+  color: #0000ff !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.15em;
+}
+
+html[data-text-mode="true"] :is(h1, h2, h3, h4, h5, h6) {
+  max-width: none !important;
+  font-weight: 700 !important;
+  margin-block: 1em 0.5em !important;
+  text-align: left !important;
+}
+
+html[data-text-mode="true"] h1 { font-size: 1.75em !important; }
+html[data-text-mode="true"] h2 { font-size: 1.5em !important; }
+html[data-text-mode="true"] h3 { font-size: 1.25em !important; }
+html[data-text-mode="true"] :is(h4, h5, h6) { font-size: 1.125em !important; }
+
+html[data-text-mode="true"] :is([data-site-header], #main-content, [data-site-directory], [data-site-footer]) {
+  position: static !important;
+  inset: auto !important;
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  min-height: 0;
+  margin: 0 auto;
+  padding: 1rem;
+  background: #fff !important;
+}
+
+/* Flatten content layouts, while leaving dialog positioning and controls intact. */
+html[data-text-mode="true"] [data-text-flow] :is(div, section, article, ul, dl) {
+  display: block !important;
+  position: static !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  overflow: visible !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  text-align: left !important;
+  opacity: 1 !important;
+}
+
+html[data-text-mode="true"] [data-text-flow] :is(section, article) {
+  margin-block: 0 2rem !important;
+}
+
+html[data-text-mode="true"] [data-text-flow] :is(p, dl, time) {
+  display: block;
+  margin-block: 0.75em !important;
+}
+
+html[data-text-mode="true"] [data-text-flow] :is(p, li, dd) {
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  overflow: visible !important;
+}
+
+html[data-text-mode="true"] [data-text-flow-inline] {
+  position: static !important;
+  display: block !important;
+  width: fit-content;
+  margin-block: 0.5em !important;
+}
+
+html[data-text-mode="true"] [data-text-flow] li { display: list-item !important; }
+
+html[data-text-mode="true"] [data-text-flow] dt { font-weight: 700; }
+html[data-text-mode="true"] [data-text-flow] dd { margin: 0 0 0.5em; }
+
+html[data-text-mode="true"] [data-text-flow] :is(.text-mode-hidden, [data-text-decorative], [data-a11y-background-image]) {
+  display: none !important;
+}
+
+html[data-text-mode="true"] [data-site-footer] a {
+  display: inline-block;
+  margin-right: 0.75em;
+  padding-block: 0.5em;
+  min-height: 44px;
+}
+
+html[data-text-mode="true"] [data-site-footer] [data-typography-variant="footer-caption"] {
+  display: block;
+  margin-block: 0.5em;
+}
+
+html[data-text-mode="true"] :is(nav, [data-site-directory]) ul {
+  display: block !important;
+  padding-left: 1.5em;
+  list-style: disc;
+}
+
+html[data-text-mode="true"] :is(nav, [data-site-directory]) a {
+  display: inline-block;
+  padding-block: 0.5em;
+  min-height: 44px;
+}
+
+html[data-text-mode="true"] [data-site-header] div:not([data-text-controls]) {
+  display: block;
+  height: auto;
+  width: auto;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+}
+
+html[data-text-mode="true"] [data-text-controls] {
+  margin-block: 1em;
+}
+
+html[data-text-mode="true"] [data-text-search] {
+  margin-block: 1em !important;
+}
+
+html[data-text-mode="true"] :is(button, input, textarea, select, [role="button"]) {
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  height: auto !important;
+  border: 1px solid #000 !important;
+  padding: 0.5em 0.75em !important;
+  white-space: normal !important;
+}
+
+html[data-text-mode="true"] button {
+  width: auto;
+}
+
+html[data-text-mode="true"] button[aria-pressed="true"] {
+  outline: 2px solid #000;
+  outline-offset: -3px;
+  font-weight: 700;
+}
+
+html[data-text-mode="true"] :disabled {
+  opacity: 0.6 !important;
+}
+
+html[data-text-mode="true"] :focus-visible {
+  outline: 3px solid #0000ff !important;
+  outline-offset: 3px !important;
+}
+
+html[data-text-mode="true"] [role="dialog"] {
+  background: #fff !important;
+  max-width: min(800px, calc(100% - 2rem)) !important;
+  border: 1px solid #000;
+  max-height: calc(100dvh - 2.5rem);
+  overflow-y: auto;
+}
+
+html[data-text-mode="true"] [role="dialog"] .grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media print {
+  html[data-text-mode="true"] :is(.skip-link, [data-text-controls], [data-text-search], button, [role="dialog"]) {
+    display: none !important;
+  }
+
+  html[data-text-mode="true"] :is([data-site-header], #main-content, [data-site-directory], [data-site-footer]) {
+    max-width: none;
+    padding: 0;
+  }
+
+  html[data-text-mode="true"] :is(h1, h2, h3, h4, h5, h6) {
+    break-after: avoid;
+  }
+
+  html[data-text-mode="true"] :is(p, li) {
+    orphans: 3;
+    widows: 3;
+  }
+}

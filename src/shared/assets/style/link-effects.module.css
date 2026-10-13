@@ -1,0 +1,49 @@
+.link {
+  outline-offset: 5px;
+  transition: transform 220ms ease, background-color 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
+}
+.link:focus-visible { outline: 2px solid currentColor; }
+.logo { display: inline-block; border-radius: 8px; color: white; }
+.footerLogo { display: inline-block; border-radius: 8px; color: currentColor; }
+.nav { display: block; border-radius: 999px; }
+.social { display: block; border-radius: 50%; color: currentColor; }
+.text {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 5px;
+  transition: text-decoration-color 220ms ease, text-underline-offset 220ms ease, opacity 220ms ease;
+}
+.menu { border-radius: 12px; }
+.nav, .menu { transition: transform 220ms ease; }
+@media (hover: hover) {
+  .logo:hover, .footerLogo:hover { transform: translateY(-2px); opacity: .8; }
+  .nav:hover { transform: translateY(-2px); }
+  .social:hover { transform: translateY(-4px) rotate(-5deg); box-shadow: 0 6px 20px rgb(255 255 255 / 12%); }
+  .text:hover { text-decoration-color: currentColor; text-underline-offset: 8px; }
+  .menu:hover { transform: translateY(-2px); }
+}
+.link:active { transform: scale(.97); }
+.nav:active, .menu:active { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .link, .text { transition: none; }
+  .link:hover, .link:active { transform: none; }
+  .text:hover { text-underline-offset: 5px; }
+}
+
+:global(html[data-a11y-enabled="true"]) .logo {
+  color: var(--foreground);
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .link,
+:global(html[data-a11y-reduce-motion="true"]) .text {
+  transition: none;
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .link:hover,
+:global(html[data-a11y-reduce-motion="true"]) .link:active {
+  transform: none;
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .text:hover {
+  text-underline-offset: 5px;
+}

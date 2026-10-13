@@ -1,0 +1,220 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.heroSection {
+  padding: 21px 16px 0;
+}
+.hero {
+  display: flex;
+  min-height: 420px;
+  max-width: 1840px;
+  margin-inline: auto;
+  align-items: center;
+  justify-content: center;
+  padding: 180px 24px 56px;
+  border-radius: 32px;
+  background: linear-gradient(249.78deg, #01211e 3.44%, #02534a 93.72%);
+  color: #fff;
+  text-align: center;
+}
+.heroContent {
+  display: flex;
+  width: min(100%, 866px);
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.breadcrumbSeparator {
+  display: flex;
+  align-items: center;
+}
+.title {
+  font-size: clamp(40px, 4.5vw, 64px);
+}
+.description {
+  max-width: 100%;
+  font-size: clamp(0.75rem, 1.05vw, 1.25rem);
+  letter-spacing: 0.07em;
+}
+.storySection {
+  padding-block: 56px 72px;
+}
+.storyGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 42px;
+  align-items: start;
+}
+.column {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 28px;
+}
+.middleColumn {
+  flex-direction: column-reverse;
+}
+.storyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.storyHeading {
+  width: 100%;
+  color: var(--foreground);
+}
+.rule {
+  height: 1px;
+  width: 100%;
+  background: #d3d3d3;
+}
+.storyText {
+  color: var(--foreground);
+  font-size: 1.125rem;
+  line-height: 1.5;
+  text-align: justify;
+}
+.imageCard {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: clamp(220px, 16.67vw, 320px);
+  overflow: hidden;
+  margin: 0;
+  border-radius: 20px;
+  background: var(--muted);
+}
+.eventsLink {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 72px;
+  align-self: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 10px 10px 24px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.eventsLink:hover {
+  background: var(--muted);
+}
+.linkArrow {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--muted);
+  font-size: 24px;
+}
+.quote {
+  margin: 44px auto 0;
+  padding-block: 22px 26px;
+  border-block: 1px solid #d3d3d3;
+}
+.quoteText {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-inline: 12px;
+  font-family: var(--font-foglihten), serif;
+  font-size: clamp(20px, 2vw, 32px);
+  line-height: 1.4;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .heroSection {
+    padding-inline: 40px;
+  }
+  .hero {
+    min-height: 480px;
+  }
+  .storySection {
+    padding-block: 64px 96px;
+  }
+  .storyGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px;
+  }
+  .column {
+    gap: 30px;
+  }
+  .middleColumn {
+    flex-direction: column;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop1250)) {
+  .hero {
+    min-height: 600px;
+    padding: 0 40px;
+  }
+  .heroContent {
+    transform: translateY(31px);
+  }
+  .storySection {
+    padding-block: 80px 120px;
+  }
+  .storyGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+  }
+  .column {
+    gap: 32px;
+  }
+}
+
+:global(html[data-a11y-enabled="true"]) .hero,
+:global(html[data-text-mode="true"]) .hero {
+  min-height: 0;
+  padding: 48px 24px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+:global(html[data-a11y-enabled="true"]) .heroContent,
+:global(html[data-text-mode="true"]) .heroContent {
+  transform: none;
+}
+:global(html[data-a11y-enabled="true"]) .breadcrumbs,
+:global(html[data-text-mode="true"]) .breadcrumbs {
+  font-size: 1rem;
+}
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator img {
+  display: none;
+}
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator span,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator span {
+  display: inline;
+}
+:global(html[data-a11y-enabled="true"]) .middleColumn,
+:global(html[data-text-mode="true"]) .middleColumn {
+  display: flex;
+  flex-direction: column;
+}
+:global(html[data-a11y-enabled="true"]) .quote,
+:global(html[data-text-mode="true"]) .quote {
+  border-color: var(--border);
+}
+:global(html[data-a11y-enabled="true"]) .quoteText,
+:global(html[data-text-mode="true"]) .quoteText {
+  font-family: inherit;
+  font-size: 1.25rem;
+  text-transform: none;
+}

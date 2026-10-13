@@ -1,0 +1,121 @@
+@reference "../../../../shared/assets/style/globals.css";
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 600px;
+  align-items: flex-end;
+  overflow: hidden;
+  padding: 260px 24px 40px;
+  border-radius: 24px;
+  background: linear-gradient(254.79deg, #01211e 3.44%, #02534a 93.72%);
+  color: #fff;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 866px;
+}
+
+.title {
+  font-size: clamp(2.25rem, 8vw, 4rem);
+}
+
+.description {
+  margin-top: 22px;
+  font-size: clamp(0.875rem, 2.2vw, 1.25rem);
+  letter-spacing: 0.07em;
+}
+
+.illustration {
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  bottom: 0;
+  width: min(50.65%, 915px);
+  height: min(78%, 634px);
+}
+
+.accessible {
+  display: block;
+  min-height: auto;
+  padding: 2rem;
+  border: 2px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.accessible .content {
+  max-width: none;
+}
+
+.accessible .illustration {
+  position: relative;
+  inset: auto;
+  width: min(100%, 45rem);
+  height: auto;
+  aspect-ratio: 915 / 634;
+  margin: 2rem 0 0 auto;
+}
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .hero {
+    min-height: 700px;
+    padding: 300px 40px 60px;
+    border-radius: 32px;
+  }
+
+  .title {
+    font-size: clamp(2.5rem, 4.5vw, 4rem);
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop1250)) {
+  .hero {
+    min-height: 813px;
+    padding: 300px 40px 95px;
+  }
+
+  .content {
+    width: 49.2%;
+  }
+
+  .title {
+    font-size: clamp(2.5rem, 3.34vw, 4rem);
+  }
+
+  .description {
+    font-size: clamp(0.875rem, 1.05vw, 1.25rem);
+    line-height: normal;
+  }
+
+  .illustration {
+    height: 78%;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop1450)) {
+  .hero {
+    min-height: min(813px, calc(100vh - 40px));
+  }
+}
+
+.hero.accessible {
+  padding: 2rem;
+}
+
+@media (width < theme(--breakpoint-mobile)) {
+  .hero.accessible {
+    padding: 1rem;
+  }
+
+  .accessible .title {
+    font-size: clamp(1.25rem, 8vw, 2rem);
+  }
+}

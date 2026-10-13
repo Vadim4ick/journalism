@@ -1,0 +1,41 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.article { margin: 24px auto 64px; }
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.breadcrumbSeparator { color: var(--muted-foreground); }
+.header { width: 100%; max-width: 1200px; margin: 0 auto 32px; }
+.albumMeta { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted-foreground); }
+.albumMeta .metaText { font-size: 1rem; font-weight: 500; }
+.header .title { margin-top: 8px; font-size: 2rem; }
+.photosGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+.photoFrame {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--muted);
+}
+.photo { object-fit: cover; }
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .article { margin-block: 32px 80px; }
+  .photosGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+}
+
+@media (width >= theme(--breakpoint-desktop)) {
+  .article { margin-block: 48px 96px; }
+  .photosGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbs { font-size: 1rem; }
+:global(html[data-text-mode="true"]) .photoFrame { height: auto; overflow: visible; border: 0; background: transparent; }

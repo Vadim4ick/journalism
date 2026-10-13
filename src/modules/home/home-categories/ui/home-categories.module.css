@@ -1,0 +1,95 @@
+@reference "../../../../shared/assets/style/globals.css";
+
+.grid {
+  --category-gap: 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px var(--category-gap);
+}
+
+/* Size columns with the inherited font so larger text gets more room. */
+:global(html[data-a11y-enabled="true"]) .grid {
+  --category-gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20em), 1fr));
+  row-gap: 48px;
+}
+
+:global(html[data-a11y-enabled="true"]) .card {
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+:global(html[data-a11y-enabled="true"]) .card::before {
+  content: none;
+}
+
+:global(html[data-a11y-enabled="true"]) .title {
+  width: 100%;
+  max-width: none;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+.image {
+  display: block;
+  width: min(100%, 220px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.title {
+  max-width: 352px;
+  margin: 0;
+  text-align: center;
+  color: var(--brand-foreground);
+}
+@media (width < theme(--breakpoint-mobile)) {
+  .grid { row-gap: 64px; }
+  .card + .card::before {
+    content: "";
+    position: absolute;
+    top: -32px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--secondary);
+  }
+}
+@media (width >= theme(--breakpoint-mobile)) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card:nth-child(even)::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--category-gap) / -2);
+    width: 1px;
+    background: var(--secondary);
+  }
+}
+@media (width >= theme(--breakpoint-mobile)) {
+  .card { gap: 32px; }
+  .image { width: min(100%, 270px); }
+}
+@media (width >= theme(--breakpoint-desktop1450)) {
+  .grid {
+    --category-gap: clamp(32px, calc((100vw - 1440px) / 3), 117.333px);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .card + .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--category-gap) / -2);
+    width: 1px;
+    background: var(--secondary);
+  }
+}

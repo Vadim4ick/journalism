@@ -1,0 +1,113 @@
+@reference "../../assets/style/globals.css";
+
+.body { font-size: 1em; }
+.caption { font-size: 0.75em; }
+.small { font-size: 0.875em; }
+.headingMedium { font-size: 1.25em; }
+.sectionTitle {
+  font-family: var(--font-foglihten);
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.newsTitle { font-size: 1.25em; }
+.eventTitle { font-size: 1.125em; }
+.newsDescription { font-size: 1em; }
+.eventDescription { font-size: 0.875em; }
+.detailLabel { font-size: 0.875em; }
+.detailValue { font-size: 0.875em; }
+.date { font-size: 0.875em; }
+.navigation { font-size: 1em; white-space: nowrap; }
+.navigationMobile { font-size: clamp(1.375em, 5vw, 2.25em); }
+.footerLabel { font-size: 0.875em; }
+.footerBody { font-size: 1em; }
+.footerLink { font-size: 0.875em; }
+.footerCaption { font-size: 0.875em; }
+.button { font-size: 0.875em; }
+.buttonPill { font-size: 1em; }
+.buttonXs { font-size: 0.75em; }
+.buttonSm { font-size: 0.8em; }
+.buttonLogin { font-size: 0.875em; }
+.buttonResponsive { font-size: 0.875em; }
+.input { font-size: 1em; }
+.searchTrigger { font-size: 0.75em; }
+
+.heroTitle {
+  font-family: var(--font-foglihten);
+  font-size: clamp(1.625em, 5.8vw, 2.75em);
+  font-weight: 400;
+  line-height: 1.28;
+  text-transform: uppercase;
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+.heroDescription {
+  font-size: 0.75em;
+  line-height: 1.5;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: pre-line;
+}
+.categoryTitle {
+  font-family: var(--font-foglihten), serif;
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.3;
+}
+.directoryTitle {
+  font-family: var(--font-foglihten), serif;
+  font-size: clamp(1.5em, 6vw, 2.375em);
+  line-height: 1.1;
+}
+.directoryNumber {
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .newsTitle { font-size: 1.5em; }
+  .eventTitle { font-size: 1.5em; }
+  .newsDescription { font-size: 1.125em; }
+  .eventDescription { font-size: 1.125em; }
+  .detailLabel { font-size: 1em; }
+  .detailValue { font-size: 1.125em; }
+  .date { font-size: 1em; }
+  .footerLabel { font-size: 1em; }
+  .footerBody { font-size: 1.25em; }
+  .footerLink { font-size: 1.125em; }
+  .footerCaption { font-size: 1.25em; }
+  .buttonResponsive { font-size: 1em; }
+  .input { font-size: 0.875em; }
+  .searchTrigger { font-size: 0.875em; }
+
+  .heroTitle { font-size: clamp(2.5em, 4.5vw, 3.375em); }
+  .heroDescription { font-size: 1em; }
+  .categoryTitle { font-size: 1.5em; }
+  .directoryTitle { font-size: 3em; }
+  .directoryNumber { font-size: 1em; }
+}
+
+@media (width >= theme(--breakpoint-desktop1250)) {
+  .heroTitle { font-size: clamp(2.5em, 3.34vw, 4em); }
+  .heroDescription {
+    font-size: clamp(0.875em, 1.05vw, 1.25em);
+    line-height: normal;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop1350)) {
+  .navigation { font-size: 1.125em; }
+}
+
+@media (width >= theme(--breakpoint-desktop1450)) {
+  .directoryTitle {
+    font-size: clamp(3em, 3.34vw, 4em);
+    white-space: nowrap;
+  }
+}
+
+:global(html[data-a11y-enabled="true"]) .navigation,
+:global(html[data-a11y-enabled="true"]) .directoryTitle {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,362 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.heroSection {
+  padding: 21px 16px 0;
+}
+
+.hero {
+  display: flex;
+  min-height: 420px;
+  max-width: 1840px;
+  margin-inline: auto;
+  align-items: center;
+  justify-content: center;
+  padding: 230px 20px 64px;
+  border-radius: 32px;
+  background: linear-gradient(249.78deg, #01211e 3.44%, #02534a 93.72%);
+  color: #fff;
+  text-align: center;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.breadcrumbSeparator {
+  display: flex;
+  align-items: center;
+}
+
+.documentsSection {
+  padding-block: 48px 72px;
+}
+
+.container {
+  width: 100%;
+  padding-inline: 24px;
+}
+
+.documentsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: var(--card);
+}
+
+.documentGroup {
+  min-width: 0;
+}
+
+.divider {
+  height: 1px;
+  margin-bottom: 24px;
+  background: var(--border);
+}
+
+.groupTitle {
+  margin-bottom: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.documentList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.documentRow {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding-block: 4px;
+}
+
+.fileIcon {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--muted);
+  color: var(--foreground);
+}
+
+.documentInfo {
+  min-width: 0;
+}
+
+.documentTitle {
+  overflow: hidden;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.documentMetadata {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+  color: var(--muted-foreground);
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.downloadAction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-left: 8px;
+}
+
+.downloadLabel {
+  color: #3d3d3d;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.downloadButton {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 999px;
+  background: var(--muted);
+  color: #3d3d3d;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.downloadButton:hover {
+  background: var(--secondary);
+  transform: translateY(-1px);
+}
+
+.downloadButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+@media (width >= theme(--breakpoint-mobile)) {
+  .heroSection {
+    padding-inline: 40px;
+  }
+
+  .divider {
+    margin-bottom: 32px;
+  }
+
+  .hero {
+    min-height: 480px;
+  }
+
+  .documentsSection {
+    padding-block: 64px 96px;
+  }
+
+  .container {
+    padding-inline: 40px;
+  }
+
+  .documentsPanel {
+    gap: 32px;
+    padding: 32px 28px;
+  }
+
+  .documentRow {
+    gap: 16px;
+  }
+
+  .documentList {
+    gap: 8px;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop)) {
+  .documentsPanel {
+    gap: 45px;
+  }
+
+  .divider {
+    margin-bottom: 45px;
+  }
+}
+
+@media (width >= theme(--breakpoint-desktop1250)) {
+  .hero {
+    min-height: 600px;
+    padding: 0 40px;
+  }
+
+  .heroContent {
+    transform: translateY(31px);
+  }
+
+  .documentsSection {
+    padding-block: 64px 120px;
+  }
+
+  .container {
+    padding-inline: 56px;
+  }
+
+  .documentsPanel {
+    padding: 28px 28px 32px;
+  }
+
+  .documentList {
+    gap: 8px;
+  }
+}
+
+:global(html[data-a11y-enabled="true"]) .hero,
+:global(html[data-text-mode="true"]) .hero {
+  min-height: 0;
+  padding: 48px 24px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+:global(html[data-a11y-enabled="true"]) .heroContent,
+:global(html[data-text-mode="true"]) .heroContent {
+  transform: none;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbs,
+:global(html[data-text-mode="true"]) .breadcrumbs {
+  font-size: 1rem;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator img {
+  display: none;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator span,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator span {
+  display: inline;
+}
+
+:global(html[data-a11y-enabled="true"]) .documentsPanel,
+:global(html[data-text-mode="true"]) .documentsPanel {
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+
+:global(html[data-a11y-enabled="true"]) .documentTitle,
+:global(html[data-text-mode="true"]) .documentTitle {
+  overflow: visible;
+  white-space: normal;
+}
+
+:global(html[data-a11y-enabled="true"]) .documentRow,
+:global(html[data-text-mode="true"]) .documentRow {
+  align-items: start;
+}
+
+:global(html[data-a11y-enabled="true"]) .documentMetadata,
+:global(html[data-text-mode="true"]) .documentMetadata,
+:global(html[data-a11y-enabled="true"]) .downloadLabel,
+:global(html[data-text-mode="true"]) .downloadLabel {
+  font-size: 1rem;
+}
+
+:global(html[data-a11y-enabled="true"]) .fileIcon,
+:global(html[data-text-mode="true"]) .fileIcon,
+:global(html[data-text-mode="true"]) .fileIcon {
+  border: 1px solid var(--border);
+  background: var(--background);
+}
+
+:global(html[data-a11y-enabled="true"]) .downloadButton,
+:global(html[data-text-mode="true"]) .downloadButton {
+  border: 1px solid var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+
+@media (width <= 520px) {
+  .container {
+    padding-inline: 16px;
+  }
+
+  .documentsPanel {
+    gap: 22px;
+    padding: 22px 16px;
+    border-radius: 20px;
+  }
+
+  .groupTitle,
+  .documentTitle {
+    font-size: 20px;
+  }
+
+  .documentMetadata,
+  .downloadLabel {
+    font-size: 16px;
+  }
+
+  .documentRow {
+    grid-template-columns: 36px minmax(0, 1fr) 40px;
+    gap: 10px;
+  }
+
+  .fileIcon,
+  .downloadButton {
+    width: 36px;
+    height: 36px;
+  }
+
+  .downloadButton {
+    width: 40px;
+    height: 40px;
+  }
+
+  .downloadAction {
+    padding-left: 0;
+  }
+
+  .downloadLabel {
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+}

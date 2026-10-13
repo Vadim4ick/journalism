@@ -1,0 +1,17 @@
+.breadcrumbSeparator {
+  display: inline-flex;
+  align-items: center;
+  transform: rotate(-90deg);
+}
+
+.breadcrumbSeparator img {
+  filter: invert(1);
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img {
+  display: none;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator .text-mode-only {
+  display: inline;
+}
