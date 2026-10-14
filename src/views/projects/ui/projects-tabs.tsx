@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { SiteImage } from "@/components/site-image";
 import type { ProjectCardData } from "@/components/project-card";
+import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
 import { COMPLETED_PROJECTS, CURRENT_PROJECTS } from "../model/projects";
 import styles from "./projects-page.module.css";
@@ -95,31 +96,33 @@ export function ProjectsTabs() {
 
   return (
     <div>
-      <div
-        role="tablist"
-        aria-label="Состояние проектов"
-        className={styles.tabs}
-      >
-        {tabs.map((tab, index) => (
-          <button
-            key={tab.id}
-            ref={(node) => {
-              tabRefs.current[index] = node;
-            }}
-            type="button"
-            role="tab"
-            id={`projects-tab-${tab.id}`}
-            aria-controls={`projects-panel-${tab.id}`}
-            aria-selected={activeTab === index}
-            tabIndex={activeTab === index ? 0 : -1}
-            onClick={() => setActiveTab(index)}
-            onKeyDown={(event) => handleTabKeyDown(event, index)}
-            className={styles.tab}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <ScrollReveal>
+        <div
+          role="tablist"
+          aria-label="Состояние проектов"
+          className={styles.tabs}
+        >
+          {tabs.map((tab, index) => (
+            <button
+              key={tab.id}
+              ref={(node) => {
+                tabRefs.current[index] = node;
+              }}
+              type="button"
+              role="tab"
+              id={`projects-tab-${tab.id}`}
+              aria-controls={`projects-panel-${tab.id}`}
+              aria-selected={activeTab === index}
+              tabIndex={activeTab === index ? 0 : -1}
+              onClick={() => setActiveTab(index)}
+              onKeyDown={(event) => handleTabKeyDown(event, index)}
+              className={styles.tab}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </ScrollReveal>
       {tabs.map((tab, index) => (
         <div
           key={tab.id}
@@ -134,14 +137,16 @@ export function ProjectsTabs() {
             <ul data-a11y-content-grid className={styles.grid}>
               {tab.projects.map((project) => (
                 <li key={project.id}>
-                  <ProjectItem project={project} />
+                  <ScrollReveal className="h-full"><ProjectItem project={project} /></ScrollReveal>
                 </li>
               ))}
             </ul>
           ) : (
-            <Typography variant="body" className={styles.emptyState}>
-              Информация о завершённых проектах пока не добавлена.
-            </Typography>
+            <ScrollReveal>
+              <Typography variant="body" className={styles.emptyState}>
+                Информация о завершённых проектах пока не добавлена.
+              </Typography>
+            </ScrollReveal>
           )}
         </div>
       ))}

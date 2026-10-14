@@ -26,9 +26,11 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
         "z-20 py-5 text-white",
         variant === "default"
           ? "absolute inset-x-4 top-5 mobile:inset-x-10"
-          : variant === "inner" || variant === "account"
-            ? "relative mx-4 mt-5 w-[calc(100%-2rem)] max-w-[1835px] rounded-[24px] bg-[linear-gradient(249.78deg,#01211E_3.44%,#02534A_93.72%)] mobile:mx-6 mobile:w-[calc(100%-3rem)] mobile:rounded-[32px] desktop1250:mx-auto desktop1250:mt-5"
-            : "relative mx-4 mt-5 rounded-[24px] bg-[linear-gradient(90deg,#01211E_0%,#01211E_18%,#013E37_55%,#013E37_100%)] mobile:mx-6 mobile:rounded-[32px] desktop1250:absolute desktop1250:inset-x-10 desktop1250:top-5 desktop1250:mx-0 desktop1250:mt-0",
+          : variant === "inner"
+            ? "relative mx-4 mt-5 w-[calc(100%-2rem)] max-w-[1840px] rounded-[24px] bg-[linear-gradient(249.78deg,#01211E_3.44%,#02534A_93.72%)] mobile:mx-10 mobile:w-[calc(100%-5rem)] mobile:rounded-[32px] desktop1250:mx-auto"
+            : variant === "account"
+              ? "relative mx-4 mt-5 w-[calc(100%-2rem)] max-w-[1835px] rounded-[24px] bg-[linear-gradient(249.78deg,#01211E_3.44%,#02534A_93.72%)] mobile:mx-6 mobile:w-[calc(100%-3rem)] mobile:rounded-[32px] desktop1250:mx-auto desktop1250:mt-5"
+              : "relative mx-4 mt-5 rounded-[24px] bg-[linear-gradient(90deg,#01211E_0%,#01211E_18%,#013E37_55%,#013E37_100%)] mobile:mx-6 mobile:rounded-[32px] desktop1250:absolute desktop1250:inset-x-10 desktop1250:top-5 desktop1250:mx-0 desktop1250:mt-0",
       )}
     >
       <Container className={cn(

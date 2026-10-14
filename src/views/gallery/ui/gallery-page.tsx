@@ -61,20 +61,23 @@ export function GalleryPage({ page }: { page?: string | string[] }) {
   return (
     <>
       <section aria-labelledby="gallery-heading" className={styles.heroSection}>
-        <Container className="w-full max-w-[1840px] px-0">
-          <div className={styles.hero}>
+        <div className={styles.hero}>
+          <div className={styles.heroContent}>
             <nav aria-label="Хлебные крошки" className={styles.breadcrumbs}>
               <Link href="/" className="underline-offset-4 hover:underline focus-visible:underline">
                 Главная
               </Link>
-              <span aria-hidden="true">›</span>
+              <span aria-hidden="true" className={styles.breadcrumbSeparator}>
+                <SiteImage src="/images/news/breadcrumb.svg" alt="" width={15} height={15} className="-rotate-90" />
+                <span className="text-mode-only">›</span>
+              </span>
               <span aria-current="page">Фотогалерея</span>
             </nav>
             <Typography as="h1" variant="hero-title" id="gallery-heading" className={styles.title}>
               Фотогалерея
             </Typography>
           </div>
-        </Container>
+        </div>
       </section>
 
       <section aria-labelledby="albums-heading" className={styles.albumsSection}>
@@ -89,42 +92,46 @@ export function GalleryPage({ page }: { page?: string | string[] }) {
               </li>
             ))}
           </ul>
-          {visibleAlbums.length === 0 && <p>Фотоальбомов пока нет.</p>}
+          {visibleAlbums.length === 0 && (
+            <ScrollReveal><p>Фотоальбомов пока нет.</p></ScrollReveal>
+          )}
           {pageCount > 1 && (
-            <nav aria-label="Страницы фотоальбомов" className={styles.pagination}>
-              {currentPage > 1 ? (
-                <Link href={pageHref(currentPage - 1)} aria-label="Предыдущая страница" className={styles.pageArrow}>
-                  <ChevronLeft aria-hidden="true" size={18} />
-                </Link>
-              ) : (
-                <span aria-hidden="true" className={styles.pageArrowDisabled}>
-                  <ChevronLeft size={18} />
-                </span>
-              )}
-              {Array.from({ length: pageCount }, (_, index) => {
-                const pageNumber = index + 1;
-                return (
-                  <Link
-                    key={pageNumber}
-                    href={pageHref(pageNumber)}
-                    aria-label={`Страница ${pageNumber}`}
-                    aria-current={pageNumber === currentPage ? "page" : undefined}
-                    className={styles.pageNumber}
-                  >
-                    {pageNumber}
+            <ScrollReveal>
+              <nav aria-label="Страницы фотоальбомов" className={styles.pagination}>
+                {currentPage > 1 ? (
+                  <Link href={pageHref(currentPage - 1)} aria-label="Предыдущая страница" className={styles.pageArrow}>
+                    <ChevronLeft aria-hidden="true" size={18} />
                   </Link>
-                );
-              })}
-              {currentPage < pageCount ? (
-                <Link href={pageHref(currentPage + 1)} aria-label="Следующая страница" className={styles.pageArrow}>
-                  <ChevronRight aria-hidden="true" size={18} />
-                </Link>
-              ) : (
-                <span aria-hidden="true" className={styles.pageArrowDisabled}>
-                  <ChevronRight size={18} />
-                </span>
-              )}
-            </nav>
+                ) : (
+                  <span aria-hidden="true" className={styles.pageArrowDisabled}>
+                    <ChevronLeft size={18} />
+                  </span>
+                )}
+                {Array.from({ length: pageCount }, (_, index) => {
+                  const pageNumber = index + 1;
+                  return (
+                    <Link
+                      key={pageNumber}
+                      href={pageHref(pageNumber)}
+                      aria-label={`Страница ${pageNumber}`}
+                      aria-current={pageNumber === currentPage ? "page" : undefined}
+                      className={styles.pageNumber}
+                    >
+                      {pageNumber}
+                    </Link>
+                  );
+                })}
+                {currentPage < pageCount ? (
+                  <Link href={pageHref(currentPage + 1)} aria-label="Следующая страница" className={styles.pageArrow}>
+                    <ChevronRight aria-hidden="true" size={18} />
+                  </Link>
+                ) : (
+                  <span aria-hidden="true" className={styles.pageArrowDisabled}>
+                    <ChevronRight size={18} />
+                  </span>
+                )}
+              </nav>
+            </ScrollReveal>
           )}
         </Container>
       </section>

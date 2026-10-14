@@ -6,6 +6,7 @@ import { HOME_NEWS } from "@/modules/home/home-news/model/news";
 import { ArrowUpRight } from "@/shared/icons/arrow-up-right";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
+import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
 import type { NewsArticle } from "../model/article";
 import { NewsGallery } from "./news-gallery";
@@ -37,48 +38,56 @@ export function NewsDetailPage({ article }: { article: NewsArticle }) {
             <Typography as="h1" variant="heading-medium" className={styles.title}>{article.title}</Typography>
           </header>
 
-          <NewsGallery images={article.gallery} />
+          <ScrollReveal><NewsGallery images={article.gallery} /></ScrollReveal>
 
-          <div className={styles.body}>
-            <Typography variant="body" className={styles.lead}>{article.lead}</Typography>
-            {article.paragraphs.map((paragraph) => (
-              <Typography key={paragraph} variant="body" className={styles.paragraph}>{paragraph}</Typography>
-            ))}
-          </div>
+          <ScrollReveal>
+            <div className={styles.body}>
+              <Typography variant="body" className={styles.lead}>{article.lead}</Typography>
+              {article.paragraphs.map((paragraph) => (
+                <Typography key={paragraph} variant="body" className={styles.paragraph}>{paragraph}</Typography>
+              ))}
+            </div>
+          </ScrollReveal>
 
-          <ul aria-label="Темы новости" className={styles.tags}>
-            {article.tags.map((tag) => (
-              <li key={tag.label} className={styles[tag.tone]}>{tag.label}</li>
-            ))}
-          </ul>
+          <ScrollReveal>
+            <ul aria-label="Темы новости" className={styles.tags}>
+              {article.tags.map((tag) => (
+                <li key={tag.label} className={styles[tag.tone]}>{tag.label}</li>
+              ))}
+            </ul>
+          </ScrollReveal>
 
-          <section aria-label="Социальные сети" className={styles.socialSection}>
-            <Typography variant="caption" className={styles.socialLabel}>Мы в социальных сетях:</Typography>
-            <SocialLinks size="small" whiteIcons />
-          </section>
+          <ScrollReveal>
+            <section aria-label="Социальные сети" className={styles.socialSection}>
+              <Typography variant="caption" className={styles.socialLabel}>Мы в социальных сетях:</Typography>
+              <SocialLinks size="small" whiteIcons />
+            </section>
+          </ScrollReveal>
         </article>
       </Container>
 
       <section aria-labelledby="latest-news-heading" className={styles.latestSection} data-text-flow>
         <Container>
-          <div className={styles.latestHeading}>
-            <Typography as="h2" variant="section-title" id="latest-news-heading">Последние новости</Typography>
-            <Button
-              variant="pill"
-              nativeButton={false}
-              render={<Link href="/news" />}
-              addonRight={
-                <span data-text-decorative className={styles.allNewsIcon}>
-                  <ArrowUpRight aria-hidden="true" className="size-[22px]" />
-                </span>
-              }
-            >
-              Все новости
-            </Button>
-          </div>
+          <ScrollReveal>
+            <div className={styles.latestHeading}>
+              <Typography as="h2" variant="section-title" id="latest-news-heading">Последние новости</Typography>
+              <Button
+                variant="pill"
+                nativeButton={false}
+                render={<Link href="/news" />}
+                addonRight={
+                  <span data-text-decorative className={styles.allNewsIcon}>
+                    <ArrowUpRight aria-hidden="true" className="size-[22px]" />
+                  </span>
+                }
+              >
+                Все новости
+              </Button>
+            </div>
+          </ScrollReveal>
           <ul data-a11y-content-grid className={styles.latestGrid}>
             {HOME_NEWS.map((news) => (
-              <li key={news.id}><NewsCard news={news} headingLevel="h3" /></li>
+              <li key={news.id}><ScrollReveal><NewsCard news={news} headingLevel="h3" /></ScrollReveal></li>
             ))}
           </ul>
         </Container>

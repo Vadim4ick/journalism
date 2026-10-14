@@ -34,6 +34,11 @@
   font-weight: 500;
 }
 
+.breadcrumbSeparator {
+  display: flex;
+  align-items: center;
+}
+
 .breadcrumbs a:hover {
   text-decoration: underline;
 }
@@ -311,6 +316,16 @@
 :global(html[data-a11y-enabled="true"]) .breadcrumbs,
 :global(html[data-text-mode="true"]) .breadcrumbs {
   font-size: 1rem;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator img {
+  display: none;
+}
+
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator span,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator span {
+  display: inline;
 }
 
 :global(html[data-a11y-enabled="true"]) .tab[aria-selected="true"] {

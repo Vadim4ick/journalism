@@ -16,6 +16,7 @@
 }
 .heroContent { display: flex; flex-direction: column; align-items: center; gap: 22px; }
 .breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.breadcrumbSeparator { display: flex; align-items: center; }
 .catalogSection { padding-block: 48px 80px; }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px 16px; }
 .card { display: block; min-width: 0; height: 100%; border-radius: 20px; color: var(--foreground); outline: none; }
@@ -50,6 +51,10 @@
 :global(html[data-a11y-enabled="true"]) .heroContent,
 :global(html[data-text-mode="true"]) .heroContent { transform: none; }
 :global(html[data-a11y-enabled="true"]) .breadcrumbs { font-size: 1rem; }
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator img { display: none; }
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator span,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator span { display: inline; }
 :global(html[data-a11y-enabled="true"]) .logoPanel { display: none; }
 :global(html[data-text-mode="true"]) .grid { grid-template-columns: minmax(0, 1fr); }
 :global(html[data-text-mode="true"]) .cardTitle { margin: 0; }

@@ -6,17 +6,17 @@
   min-height: 420px;
   max-width: 1840px;
   margin-inline: auto;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  padding: 190px 20px 48px;
+  padding: 230px 20px 64px;
   border-radius: 32px;
   background: linear-gradient(249.78deg, #01211e 3.44%, #02534a 93.72%);
   color: #fff;
   text-align: center;
 }
-.breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.heroContent { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.breadcrumbs { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.breadcrumbSeparator { display: flex; align-items: center; }
 .title { text-transform: uppercase; }
 .albumsSection { padding-block: 32px 64px; }
 .albumsGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
@@ -79,6 +79,7 @@
 
 @media (width >= theme(--breakpoint-desktop1250)) {
   .hero { min-height: 600px; padding: 0 40px; }
+  .heroContent { transform: translateY(31px); }
   .albumsSection { padding-block: 64px 96px; }
 }
 
@@ -94,8 +95,14 @@
   background: var(--background);
   color: var(--foreground);
 }
+:global(html[data-a11y-enabled="true"]) .heroContent,
+:global(html[data-text-mode="true"]) .heroContent { transform: none; }
 :global(html[data-a11y-enabled="true"]) .breadcrumbs,
 :global(html[data-text-mode="true"]) .breadcrumbs { flex-wrap: wrap; font-size: 1rem; }
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator img { display: none; }
+:global(html[data-a11y-enabled="true"]) .breadcrumbSeparator span,
+:global(html[data-text-mode="true"]) .breadcrumbSeparator span { display: inline; }
 :global(html[data-a11y-enabled="true"]) .albumCard { height: auto; min-height: 400px; color: var(--foreground); background: var(--card); }
 :global(html[data-a11y-enabled="true"]) .albumShade,
 :global(html[data-text-mode="true"]) .albumShade { display: none; }
