@@ -22,16 +22,6 @@ const raleway = Raleway({
 export const metadata: Metadata = {
   title: "Дом журналистики",
   description: "Медиацентр «Дом журналистики»",
-
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: {
-      index: false,
-      follow: false,
-      noimageindex: true,
-    },
-  },
 };
 
 const accessibilityInitScript = `
@@ -64,11 +54,7 @@ const accessibilityInitScript = `
 })();
 `;
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="ru"
@@ -96,7 +82,7 @@ export default function RootLayout({
               tabIndex={-1}
               className="flex flex-1 flex-col"
             >
-              {children}
+            {children}
             </main>
           </div>
         </Providers>

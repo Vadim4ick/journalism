@@ -19,6 +19,8 @@ export function SiteHeader() {
         pathname === "/projects" ||
         pathname === "/about"
           ? "default"
+          : pathname === "/account"
+            ? "account"
           : "inner"
       }
     />
