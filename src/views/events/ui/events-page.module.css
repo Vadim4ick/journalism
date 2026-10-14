@@ -43,7 +43,7 @@
 }
 
 @media (width >= theme(--breakpoint-mobile)) {
-  .heroSection { padding-inline: 40px; }
+  .heroSection { padding-inline: 16px; }
   .hero { min-height: 480px; }
 }
 

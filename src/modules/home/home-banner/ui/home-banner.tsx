@@ -19,7 +19,7 @@ function HomeBanner() {
     <section
       id="home-about"
       aria-labelledby="home-banner-heading"
-      className="px-4 pt-5 mobile:px-10"
+      className="px-4 pt-5"
     >
       <Container className="w-full max-w-[1840px] px-0">
         <div className={`${styles.hero} ${accessible ? styles.accessible : ""}`}>

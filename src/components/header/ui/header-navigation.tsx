@@ -56,8 +56,8 @@ function NavigationItems({ floating = false }: { floating?: boolean }) {
       {floating && <MobileNavigation />}
       <ul
         className={cn(
-          "hidden items-center justify-center gap-0.5 desktop1250:flex desktop1350:gap-2",
-          enabled && "flex-wrap gap-2 desktop1350:gap-2",
+          "hidden items-center justify-center gap-0.5 desktop1250:flex desktop1450:gap-2",
+          enabled && "flex-wrap gap-2",
         )}
       >
         {nav.map((section, index) => {
@@ -81,7 +81,7 @@ function NavigationItems({ floating = false }: { floating?: boolean }) {
                 <Typography
                   as="span"
                   variant="navigation"
-                  className={`block rounded-full px-2 py-2${active ? " underline underline-offset-4" : ""}`}
+                  className={`block rounded-full px-1 py-2 desktop1450:px-2${active ? " underline underline-offset-4" : ""}`}
                 >
                   {section.name}
                 </Typography>
