@@ -36,7 +36,7 @@ function ProjectItem({ project }: { project: ProjectCardData }) {
           textLinkLabel={`Изображение проекта: ${project.title}`}
           textModeLink={false}
           fill
-          sizes="(min-width: 768px) calc((min(100vw, 1792px) - 62px) / 2), calc(100vw - 56px)"
+          sizes="(min-width: 1250px) calc((min(100vw, 1792px) - 134px) / 2), (min-width: 768px) calc((100vw - 124px) / 2), calc(100vw - 72px)"
           className={isLogo ? styles.logoImage : styles.photoImage}
         />
       </div>

@@ -30,7 +30,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
           textLinkLabel={`Изображение проекта: ${project.imageAlt || project.title}`}
           textModeLink={false}
           fill
-          sizes="(min-width: 1150px) calc((100vw - 100px) / 3), (min-width: 768px) calc((100vw - 72px) / 2), calc(100vw - 56px)"
+          sizes="(min-width: 1150px) calc((min(100vw, 1792px) - 204px) / 3), (min-width: 768px) calc((100vw - 132px) / 2), calc(100vw - 72px)"
           className={logoProject ? "object-contain" : "object-cover"}
         />
       </div>

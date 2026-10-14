@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent, type ReactNode } from "react";
-import Link from "next/link";
 import { Check } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
@@ -12,23 +11,20 @@ import {
   getAuthFieldErrors,
   loginSchema,
   recoverySchema,
-  registerSchema,
   type AuthFieldErrors,
 } from "../model/auth.schema";
 import { AuthField } from "./auth-field";
 import { PasswordInput } from "./password-input";
 
-type AuthMode = "register" | "login" | "recovery";
+type AuthMode = "login" | "recovery";
 
 export function AuthPage() {
   const [mode, setMode] = useState<AuthMode>("login");
   const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<AuthFieldErrors>({});
   const [message, setMessage] = useState("");
 
-  const isRegister = mode === "register";
   const isRecovery = mode === "recovery";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -37,11 +33,7 @@ export function AuthPage() {
 
     const formData = new FormData(event.currentTarget);
     const values = Object.fromEntries(formData.entries());
-    const schema = isRecovery
-      ? recoverySchema
-      : isRegister
-        ? registerSchema
-        : loginSchema;
+    const schema = isRecovery ? recoverySchema : loginSchema;
     const result = schema.safeParse(values);
 
     if (!result.success) {
@@ -53,9 +45,7 @@ export function AuthPage() {
     setMessage(
       isRecovery
         ? "Сервис восстановления пока не подключён: письмо не отправлено."
-        : isRegister
-          ? "Сервис регистрации пока не подключён: данные не отправлены."
-          : "Сервис входа пока не подключён.",
+        : "Сервис входа пока не подключён.",
     );
   }
 
@@ -65,11 +55,7 @@ export function AuthPage() {
     setMessage("");
   }
 
-  const title = isRecovery
-    ? "Восстановление доступа"
-    : isRegister
-      ? "Регистрация"
-      : "Вход в систему";
+  const title = isRecovery ? "Восстановление доступа" : "Вход в систему";
 
   return (
     <section
@@ -98,9 +84,8 @@ export function AuthPage() {
                   {title}
                 </Typography>
                 <Typography className="text-[18px] text-foreground">
-                  Введите адрес электронной почты, который вы указывали при
-                  регистрации. На него придёт письмо с инструкцией по смене
-                  пароля.
+                  Введите адрес электронной почты вашего аккаунта. На него
+                  придёт письмо с инструкцией по смене пароля.
                 </Typography>
               </div>
             )}
@@ -146,7 +131,7 @@ export function AuthPage() {
                     id="auth-password"
                     label="Пароль"
                     name="password"
-                    autoComplete={isRegister ? "new-password" : "current-password"}
+                    autoComplete="current-password"
                     placeholder="Введите пароль"
                     error={errors.password}
                     visible={showPassword}
@@ -154,23 +139,6 @@ export function AuthPage() {
                     onChange={() =>
                       errors.password &&
                       setErrors((current) => ({ ...current, password: undefined }))
-                    }
-                  />
-                )}
-
-                {isRegister && (
-                  <PasswordInput
-                    id="auth-password-confirm"
-                    label="Введите пароль ещё раз"
-                    name="passwordConfirm"
-                    autoComplete="new-password"
-                    placeholder="Повторите пароль"
-                    error={errors.passwordConfirm}
-                    visible={showPasswordConfirm}
-                    onVisibilityChange={setShowPasswordConfirm}
-                    onChange={() =>
-                      errors.passwordConfirm &&
-                      setErrors((current) => ({ ...current, passwordConfirm: undefined }))
                     }
                   />
                 )}
@@ -206,67 +174,23 @@ export function AuthPage() {
               <div className="mt-8 flex flex-col items-center gap-4">
                 <Button
                   type="submit"
-                  variant={isRegister ? "register" : "default"}
-                  className={
-                    isRegister
-                      ? "h-12 w-full min-w-0 flex-none rounded-full text-[15px] font-semibold"
-                      : "h-12 w-full rounded-full text-[15px] font-semibold"
-                  }
+                  className="h-12 w-full rounded-full text-[15px] font-semibold"
                 >
-                  {isRecovery
-                    ? "Восстановить пароль"
-                    : isRegister
-                      ? "Зарегистрироваться"
-                      : "Войти"}
+                  {isRecovery ? "Восстановить пароль" : "Войти"}
                 </Button>
-
-                {isRegister && (
-                  <Typography variant="small" className="text-xs! leading-5!">
-                    Нажимая кнопку «Зарегистрироваться», я подтверждаю, что
-                    ознакомился с{" "}
-                    <Link
-                      href="/"
-                      className="cursor-pointer underline underline-offset-2"
-                    >
-                      Политикой конфиденциальности
-                    </Link>{" "}
-                    и{" "}
-                    <Link
-                      href="/"
-                      className="cursor-pointer underline underline-offset-2"
-                    >
-                      договором оферты
-                    </Link>
-                  </Typography>
-                )}
               </div>
 
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-[0.35rem] border-t border-border pt-4 text-center">
-                {isRecovery ? (
+              {isRecovery && (
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-[0.35rem] border-t border-border pt-4 text-center">
                   <button
                     type="button"
-                    className="cursor-pointer text-xs text-brand underline underline-offset-2"
+                    className="cursor-pointer text-xs text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     onClick={() => switchMode("login")}
                   >
                     Вернуться на страницу входа
                   </button>
-                ) : (
-                  <>
-                    <span className="text-xs text-foreground">
-                      {isRegister ? "Уже регистрировались?" : "Нет аккаунта?"}
-                    </span>
-                    <button
-                      type="button"
-                      className="cursor-pointer text-xs text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      onClick={() =>
-                        switchMode(isRegister ? "login" : "register")
-                      }
-                    >
-                      {isRegister ? "Вход в систему" : "Зарегистрироваться"}
-                    </button>
-                  </>
-                )}
-              </div>
+                </div>
+              )}
 
               {message && (
                 <p

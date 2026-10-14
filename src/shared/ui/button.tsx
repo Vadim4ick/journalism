@@ -13,8 +13,6 @@ const buttonVariants = cva(
           "rounded-full border-border bg-background text-foreground hover:not(:disabled):border-primary hover:not(:disabled):shadow-md",
           typographyVariants["button-pill"],
         ],
-        register:
-          "h-12 w-full rounded-full bg-primary text-[15px] font-semibold text-primary-foreground hover:bg-primary/80",
         default: "bg-primary text-primary-foreground hover:bg-primary/80",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
