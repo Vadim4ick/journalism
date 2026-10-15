@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { SiteImage } from "@/components/site-image";
 import { Container } from "@/shared/ui/container";
-import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
+import { GalleryPhotos } from "./gallery-photos";
 import type { GalleryAlbum } from "../model/albums";
 import styles from "./gallery-album-page.module.css";
 
@@ -43,26 +42,7 @@ export function GalleryAlbumPage({ album }: { album: GalleryAlbum }) {
         </header>
 
         <section aria-labelledby="album-heading">
-          <ul data-a11y-content-grid className={styles.photosGrid}>
-            {album.photos.map((photo, index) => (
-              <li key={photo.id}>
-                <ScrollReveal>
-                  <figure className={styles.photoFrame}>
-                    <SiteImage
-                      src={photo.src}
-                      alt={photo.alt}
-                      textLinkLabel={"Фотография из альбома «" + album.title + "»: " + photo.alt}
-                      fill
-                      priority={index === 0}
-                      sizes="(min-width: 1792px) 582px, (min-width: 1150px) calc((100vw - 80px) / 3), (min-width: 768px) calc((100vw - 56px) / 2), calc(100vw - 32px)"
-                      className={styles.photo}
-                    />
-                    <figcaption className="sr-only">{photo.alt}</figcaption>
-                  </figure>
-                </ScrollReveal>
-              </li>
-            ))}
-          </ul>
+          <GalleryPhotos album={album} />
         </section>
       </article>
     </Container>

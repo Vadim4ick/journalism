@@ -32,7 +32,7 @@ export const CONTACTS = {
     },
     {
       name: "Дзен",
-      href: null,
+      href: "https://dzen.ru/id/69f0a47335dd684241cfea57",
       Icon: Yd,
     },
   ],

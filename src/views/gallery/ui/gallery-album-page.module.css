@@ -26,6 +26,74 @@
   background: var(--muted);
 }
 .photo { object-fit: cover; }
+.photoOpen { position: absolute; inset: 0; display: block; width: 100%; cursor: zoom-in; }
+.photoOpen:focus-visible { outline: 3px solid var(--ring); outline-offset: -3px; border-radius: 16px; }
+.photoDownload {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 20%);
+  transition: opacity 220ms ease;
+}
+.photoDownloadLabel { display: none; }
+.photoDownload:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .photoDownload { opacity: 0; pointer-events: none; }
+  .photoFrame:hover .photoDownload,
+  .photoDownload:focus-visible { opacity: 1; pointer-events: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photoDownload { transition: none; }
+}
+.textPhotoLink { display: block; }
+.lightbox { display: flex; flex-direction: column; background: #111; color: #fff; }
+.lightboxHeader {
+  display: flex;
+  min-height: 68px;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 8px max(12px, env(safe-area-inset-left));
+}
+.lightboxHeading { min-width: 0; }
+.lightboxTitle { overflow: hidden; font-size: 16px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.lightboxCount { font-size: 13px; }
+.lightboxActions { display: flex; flex: none; align-items: center; gap: 8px; }
+.lightboxDownload, .lightboxClose, .lightboxPrevious, .lightboxNext {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  cursor: pointer;
+}
+.lightboxDownload { padding: 8px 12px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.lightboxClose, .lightboxPrevious, .lightboxNext { padding: 8px; }
+.lightboxDownload:hover, .lightboxClose:hover, .lightboxPrevious:hover, .lightboxNext:hover { background: rgb(255 255 255 / 16%); }
+.lightboxDownload:focus-visible, .lightboxClose:focus-visible, .lightboxPrevious:focus-visible, .lightboxNext:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+.lightboxBody { display: grid; min-height: 0; flex: 1; grid-template-columns: 52px minmax(0, 1fr) 52px; grid-template-rows: minmax(0, 1fr); align-items: center; }
+.lightboxImageWrap { position: relative; grid-column: 1 / -1; grid-row: 1; width: 100%; height: 100%; min-height: 0; }
+.lightboxImage { object-fit: contain; }
+.lightboxPrevious, .lightboxNext { z-index: 1; grid-row: 1; margin: 4px; background: rgb(0 0 0 / 65%); }
+.lightboxPrevious { grid-column: 1; }
+.lightboxNext { grid-column: 3; }
+.lightboxCaption { flex: none; padding: 8px 16px max(16px, env(safe-area-inset-bottom)); text-align: center; font-size: 14px; }
 
 @media (width >= theme(--breakpoint-mobile)) {
   .article { margin-block: 32px 80px; }
@@ -39,3 +107,13 @@
 
 :global(html[data-a11y-enabled="true"]) .breadcrumbs { font-size: 1rem; }
 :global(html[data-text-mode="true"]) .photoFrame { height: auto; overflow: visible; border: 0; background: transparent; }
+:global(html[data-text-mode="true"]) .photoDownload { position: static; width: auto; margin-top: 12px; padding: 8px 14px; gap: 8px; opacity: 1; pointer-events: auto; box-shadow: none; }
+:global(html[data-text-mode="true"]) .photoDownloadLabel { display: inline; }
+:global(html[data-a11y-enabled="true"]) .photoDownload { opacity: 1; pointer-events: auto; }
+:global(html[data-a11y-enabled="true"]) .lightbox { background: var(--background); color: var(--foreground); }
+:global(html[data-a11y-enabled="true"]) .lightboxPrevious,
+:global(html[data-a11y-enabled="true"]) .lightboxNext { background: var(--background); }
+:global(html[data-a11y-enabled="true"]) .lightboxDownload:hover,
+:global(html[data-a11y-enabled="true"]) .lightboxClose:hover,
+:global(html[data-a11y-enabled="true"]) .lightboxPrevious:hover,
+:global(html[data-a11y-enabled="true"]) .lightboxNext:hover { background: var(--muted); }

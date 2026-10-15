@@ -17,12 +17,14 @@ type Detail = {
 const generalDetails: Detail[] = [
   {
     label: "Полное наименование",
-    value: "Государственное казенное учреждение Краснодарского края «Медиацентр „Дом журналистики“»",
+    value:
+      "Государственное казенное учреждение Краснодарского края «Медиацентр „Дом журналистики“»",
   },
   { label: "Сокращенное наименование", value: "ГКУ КК «Дом журналистики»" },
   {
-    label: "Почтовый адрес",
-    value: "350014, Российская Федерация, Краснодарский край, город Краснодар, ул. Красная, д. 35",
+    label: "Юридический адрес",
+    value:
+      "350014, Российская Федерация, Краснодарский край, город Краснодар, ул. Красная, д. 35",
   },
   {
     label: "Фактический адрес",
@@ -41,7 +43,7 @@ const registrationDetails: Detail[] = [
 
 const managementDetails: Detail[] = [
   { label: "Директор", value: "Косарева Анна Владимировна" },
-  { label: "Заместитель директора", value: "Лукинская Ирина Владимировна" },
+  { label: "Заместитель директора", value: "Чебыкина Екатерина Владимировна" },
 ];
 
 const founderDetails: Detail[] = [
@@ -49,9 +51,16 @@ const founderDetails: Detail[] = [
     label: "Наименование",
     value: "Департамент информационной политики Краснодарского края",
   },
-  { label: "Email", value: "dsmi@krasnodar.ru", href: "mailto:dsmi@krasnodar.ru" },
+  {
+    label: "Email",
+    value: "dsmi@krasnodar.ru",
+    href: "mailto:dsmi@krasnodar.ru",
+  },
   { label: "Телефон", value: "8 (861) 214-58-34", href: "tel:+78612145834" },
-  { label: "Руководитель департамента", value: "Навазова Галина Александровна" },
+  {
+    label: "Руководитель департамента",
+    value: "Навазова Галина Александровна",
+  },
 ];
 
 function DetailList({ items }: { items: Detail[] }) {
@@ -77,33 +86,50 @@ export function ContactsPage() {
       </nav>
 
       <section aria-labelledby="contacts-heading">
-        <Typography as="h1" variant="section-title" id="contacts-heading" className={styles.heading}>
+        <Typography
+          as="h1"
+          variant="section-title"
+          id="contacts-heading"
+          className={styles.heading}
+        >
           Контакты
         </Typography>
         <div className={styles.contactsGrid} data-a11y-content-grid>
           <ScrollReveal className={styles.contactInfo}>
             <div>
-              <Typography variant="small" className={styles.label}>Режим работы учреждения:</Typography>
+              <Typography variant="small" className={styles.label}>
+                Режим работы учреждения:
+              </Typography>
               <ul className={styles.hours}>
-                {CONTACTS.hours.map((line) => <li key={line}>{line}</li>)}
+                {CONTACTS.hours.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
               </ul>
             </div>
             <div className={styles.quickContacts}>
               <div>
-                <Typography variant="small" className={styles.label}>Телефон:</Typography>
+                <Typography variant="small" className={styles.label}>
+                  Телефон:
+                </Typography>
                 <a href={CONTACTS.phoneHref}>{CONTACTS.phone}</a>
               </div>
               <div>
-                <Typography variant="small" className={styles.label}>Почта:</Typography>
+                <Typography variant="small" className={styles.label}>
+                  Почта:
+                </Typography>
                 <a href={`mailto:${CONTACTS.email}`}>{CONTACTS.email}</a>
               </div>
             </div>
             <div>
-              <Typography variant="small" className={styles.label}>Адрес:</Typography>
+              <Typography variant="small" className={styles.label}>
+                Адрес:
+              </Typography>
               <p>{CONTACTS.address}</p>
             </div>
             <div>
-              <Typography variant="small" className={styles.label}>Мы в соцсетях:</Typography>
+              <Typography variant="small" className={styles.label}>
+                Мы в соцсетях:
+              </Typography>
               <SocialLinks size="small" whiteIcons className={styles.socials} />
             </div>
           </ScrollReveal>
@@ -114,8 +140,17 @@ export function ContactsPage() {
         </div>
       </section>
 
-      <section aria-labelledby="requisites-heading" id="requisites" className={styles.requisitesSection}>
-        <Typography as="h2" variant="section-title" id="requisites-heading" className={styles.heading}>
+      <section
+        aria-labelledby="requisites-heading"
+        id="requisites"
+        className={styles.requisitesSection}
+      >
+        <Typography
+          as="h2"
+          variant="section-title"
+          id="requisites-heading"
+          className={styles.heading}
+        >
           Реквизиты учреждения
         </Typography>
         <ScrollReveal className={styles.requisitesPanel}>
