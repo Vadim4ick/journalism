@@ -11,6 +11,7 @@ import { HeaderNavigation } from "./header-navigation";
 import { MobileNavigation } from "./mobile-navigation";
 import { AccountMenu } from "./account-menu";
 import { AccessibilityPanel } from "@/components/accessibility-panel";
+import { SiteSearch } from "@/components/site-search";
 import { cn } from "@/shared/lib/utils";
 
 type HeaderProps = {
@@ -34,7 +35,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
       )}
     >
       <Container className={cn(
-        "grid grid-cols-[auto_1fr] items-start gap-x-5 gap-y-6 desktop1250:grid-cols-12 desktop1250:gap-x-7.5",
+        "grid grid-cols-[auto_1fr] items-start gap-x-3 gap-y-6 px-4 mobile:gap-x-5 mobile:px-6 desktop1250:grid-cols-12 desktop1250:gap-x-7.5",
         variant === "account" && "desktop1250:grid-cols-[124px_minmax(0,1fr)_auto]",
       )}>
         <Link
@@ -53,7 +54,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
                 "h-auto",
                 variant === "auth"
                   ? "w-[76px] mobile:w-[100px] desktop1250:w-[124px]"
-                  : "w-16 mobile:w-20 desktop1250:w-[124px]",
+                  : "w-14 mobile:w-20 desktop1250:w-[124px]",
               )}
             />
           </span>
@@ -64,9 +65,9 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
           "col-span-2 row-start-2 flex min-w-0 flex-col items-center gap-4 desktop1250:col-span-8 desktop1250:col-start-3 desktop1250:row-start-1 desktop1250:gap-8",
           variant === "account" && "desktop1250:col-span-1 desktop1250:col-start-2",
         )}>
-          <div className="flex w-full max-w-[28.75rem] items-center gap-2">
+          <span className="hidden w-full max-w-[28.75rem] items-center gap-2 desktop1250:flex">
             {search}
-          </div>
+          </span>
           <HeaderNavigation />
         </div>
 
@@ -74,11 +75,14 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
           "col-start-2 row-start-1 justify-self-end desktop1250:col-span-2 desktop1250:col-start-11",
           variant === "account"
             ? "flex flex-col items-end gap-3 desktop1250:col-span-1 desktop1250:col-start-3"
-            : "grid grid-cols-3 items-center justify-items-end gap-2 desktop1250:flex",
+            : "grid grid-cols-4 items-center justify-items-end gap-1 mobile:gap-2 desktop1250:flex",
         )}>
           {variant === "account" ? (
             <>
               <div className="flex items-center gap-2">
+                <span className="desktop1250:hidden">
+                  <SiteSearch compact />
+                </span>
                 <TextModeToggle />
                 <AccessibilityPanel triggerClassName="size-11 rounded-full desktop1250:size-13" />
                 <div className="text-mode-hidden desktop1250:hidden">
@@ -89,6 +93,9 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
             </>
           ) : (
             <>
+              <span className="desktop1250:hidden">
+                <SiteSearch compact />
+              </span>
               <TextModeToggle />
               <AccessibilityPanel triggerClassName="size-11 rounded-full desktop1250:size-13" />
               <div className="text-mode-hidden desktop1250:hidden">
@@ -98,7 +105,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
                 variant="secondary"
                 nativeButton={false}
                 render={<Link href="/login" aria-label="Войти в аккаунт" />}
-                className={`${typographyVariants["button-login"]} col-span-3 min-h-11 gap-3 rounded-full py-2 pr-1 pl-4 disabled:opacity-100 desktop1250:min-h-13 desktop1250:gap-4 desktop1250:py-1.5 desktop1250:pr-1.5`}
+                className={`${typographyVariants["button-login"]} col-span-4 min-h-11 gap-3 rounded-full py-2 pr-1 pl-4 disabled:opacity-100 desktop1250:min-h-13 desktop1250:gap-4 desktop1250:py-1.5 desktop1250:pr-1.5`}
               >
                 Войти
                 <span

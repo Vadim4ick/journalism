@@ -21,7 +21,7 @@ export type EventCardData = {
   dateTime?: string;
 };
 
-export function EventCard({ event }: { event: EventCardData }) {
+export function EventCard({ event, imageSizes }: { event: EventCardData; imageSizes?: string }) {
   return (
     <Link
       href={`/events/${event.slug}`}
@@ -35,7 +35,7 @@ export function EventCard({ event }: { event: EventCardData }) {
           textLinkLabel={`Фото события: ${event.title}`}
           textModeLink={false}
           fill
-          sizes="(min-width: 1150px) calc((min(100vw, 1792px) - 204px) / 3), (min-width: 768px) calc((100vw - 132px) / 2), calc(100vw - 72px)"
+          sizes={imageSizes ?? "(min-width: 1150px) calc((min(100vw, 1792px) - 204px) / 3), (min-width: 768px) calc((100vw - 132px) / 2), calc(100vw - 72px)"}
           quality={60}
           className="object-cover transition-[opacity,scale] duration-1000 ease-out motion-safe:group-hover:scale-[1.045] motion-reduce:transition-none"
         />

@@ -90,7 +90,6 @@
 }
 
 .tab:focus-visible,
-.partnerLink:focus-visible,
 .breadcrumbs a:focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
@@ -205,41 +204,15 @@
   outline-offset: 3px;
 }
 
-.partnerLink {
-  position: relative;
-  z-index: 2;
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 5px 4px 16px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--background);
-  color: var(--foreground);
-  font-size: 12px;
-  font-weight: 600;
-  text-decoration: none;
+.partnerButton {
+  align-self: flex-start;
 }
 
-.partnerLink:hover {
-  border-color: var(--primary);
-}
-
-.partnerIcon {
-  display: flex;
-  width: 34px;
-  height: 34px;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--primary);
-  color: var(--primary-foreground);
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 1;
+@media (width < theme(--breakpoint-mobile)) {
+  .cardHeading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .cardDescription {

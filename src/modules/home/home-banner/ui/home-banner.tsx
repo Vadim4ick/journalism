@@ -22,7 +22,9 @@ function HomeBanner() {
       className="px-4 pt-5"
     >
       <Container className="w-full max-w-[1840px] px-0">
-        <div className={`${styles.hero} ${accessible ? styles.accessible : ""}`}>
+        <div
+          className={`${styles.hero} ${accessible ? styles.accessible : ""}`}
+        >
           <div className={styles.content}>
             <Typography
               as="h1"
@@ -31,11 +33,17 @@ function HomeBanner() {
               className={styles.title}
             >
               Медиацентр
-              <br />«Дом журналистики»
+              <br />
+              «Дом журналистики»
             </Typography>
-            <Typography as="p" variant="hero-description" className={styles.description}>
+            <Typography
+              as="p"
+              variant="hero-description"
+              className={styles.description}
+            >
               Пространство для вдохновения, общения
-              <br />и повышения мастерства журналистов всех уровней
+              <br className="max-mobile:hidden" />и повышения мастерства
+              журналистов всех уровней
             </Typography>
           </div>
           {showIllustration && (

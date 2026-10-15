@@ -84,7 +84,9 @@ function MobileNavigation() {
       <SheetContent
         className={cn(
           "flex flex-col px-6 pt-[max(24px,env(safe-area-inset-top))] pb-[max(24px,env(safe-area-inset-bottom))] mobileSmall:px-10",
-          enabled ? "bg-background text-foreground" : "bg-foreground text-white",
+          enabled
+            ? "bg-background text-foreground"
+            : "bg-[linear-gradient(249.78deg,#01211E_3.44%,#02534A_93.72%)] text-white",
         )}
       >
         <SheetTitle className="sr-only">Навигация по сайту</SheetTitle>
@@ -132,16 +134,8 @@ function MobileNavigation() {
                   href={item.link}
                   onClick={() => setOpen(false)}
                   aria-current={active ? "page" : undefined}
-                  className={`${effects.link} ${effects.menu} group flex items-baseline gap-5 rounded-xl px-3 py-3`}
+                  className={`${effects.link} ${effects.menu} group flex items-baseline rounded-xl px-3 py-3`}
                 >
-                  <Typography
-                    as="span"
-                    variant="caption"
-                    aria-hidden="true"
-                    className={enabled ? "text-muted-foreground" : "text-white/40"}
-                  >
-                    {["I", "II", "III", "IV", "V", "VI", "VII", "VIII"][index]}
-                  </Typography>
                   <Typography
                     as="span"
                     variant="navigation-mobile"

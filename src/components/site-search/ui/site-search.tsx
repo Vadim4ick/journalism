@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import { motion } from "motion/react";
 import { SiteImage as Image } from "@/components/site-image";
-import { X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { searchItems, searchSections } from "../model/search-data";
@@ -17,7 +17,7 @@ import { cn } from "@/shared/lib/utils";
 
 const placeholder = "Поиск мероприятий, афиши, события";
 
-function SiteSearch() {
+function SiteSearch({ compact = false }: { compact?: boolean }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [section, setSection] =
@@ -37,8 +37,8 @@ function SiteSearch() {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <div data-text-search className="relative min-h-13 w-full max-w-[25rem]">
-        {!enabled && !textMode && (
+      <span data-text-search className={compact && !textMode ? "relative block size-11 shrink-0" : "relative block min-h-13 w-full max-w-[25rem]"}>
+        {!compact && !enabled && !textMode && (
           <Image
             src="/images/header/search.svg"
             alt=""
@@ -47,7 +47,15 @@ function SiteSearch() {
             className="pointer-events-none absolute top-4 left-4 z-10 size-5"
           />
         )}
-        {textMode || enabled ? (
+        {compact && !textMode ? (
+          <Dialog.Trigger
+            render={<Button variant="secondary" size="icon" />}
+            aria-label="Поиск по сайту"
+            className="size-11 rounded-full"
+          >
+            <Search aria-hidden="true" className="size-5" />
+          </Dialog.Trigger>
+        ) : textMode || enabled ? (
           <Dialog.Trigger
             render={
               <Button
@@ -67,7 +75,7 @@ function SiteSearch() {
             className={`${typographyVariants["search-trigger"]} min-h-13 cursor-pointer rounded-full border-0 bg-secondary py-3 pr-4 pl-13 text-primary placeholder:text-search-placeholder focus-visible:ring-2 focus-visible:ring-ring desktop1250:pl-17`}
           />
         )}
-      </div>
+      </span>
       <Dialog.Portal>
         <Dialog.Backdrop className="fixed inset-0 z-[60] bg-foreground/30 backdrop-blur-lg transition-opacity duration-200 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 motion-reduce:transition-none" />
         <Dialog.Popup

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { SiteImage } from "@/components/site-image";
+import { PartnerInquiry } from "@/components/partner-inquiry";
 import type { ProjectCardData } from "@/components/project-card";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -45,16 +46,7 @@ function ProjectItem({ project }: { project: ProjectCardData }) {
           <Typography as="h2" variant="heading-medium" id={titleId} className={styles.cardTitle}>
             <span className={styles.projectLink}>{project.title}</span>
           </Typography>
-          <Link
-            href="/contacts"
-            className={styles.partnerLink}
-            aria-label={`Стать партнёром проекта ${project.title} — контакты`}
-          >
-            <span>Стать партнёром</span>
-            <span aria-hidden="true" className={styles.partnerIcon}>
-              +
-            </span>
-          </Link>
+          <PartnerInquiry project={project.title} className={styles.partnerButton} />
         </div>
         <Typography
           as="p"

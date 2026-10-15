@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ProjectCardData } from "@/components/project-card";
 import { SiteImage } from "@/components/site-image";
+import { PartnerInquiry } from "@/components/partner-inquiry";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -9,18 +10,7 @@ import { ProjectGallery } from "./project-gallery";
 import styles from "./project-detail-page.module.css";
 
 function PartnerLink({ project }: { project: ProjectCardData }) {
-  return (
-    <Link
-      href="/contacts"
-      aria-label={`Стать партнёром проекта ${project.title} — контакты`}
-      className={styles.partnerLink}
-    >
-      <span>Стать партнёром</span>
-      <span aria-hidden="true" className={styles.partnerIcon}>
-        +
-      </span>
-    </Link>
-  );
+  return <PartnerInquiry project={project.title} className={styles.partnerButton} />;
 }
 
 export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
@@ -41,6 +31,9 @@ export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
           <Typography as="h1" variant="body" className={styles.title}>
             {title}
           </Typography>
+          <div className={styles.partnerPlacement}>
+            <PartnerLink project={project} />
+          </div>
           <ScrollReveal>
             <figure className={styles.heroFigure}>
               <div className={neighbors ? styles.logoFrame : styles.photoFrame}>
@@ -81,7 +74,6 @@ export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
                 ))}
             </div>
           </ScrollReveal>
-          <ScrollReveal><PartnerLink project={project} /></ScrollReveal>
         </article>
       </Container>
 
