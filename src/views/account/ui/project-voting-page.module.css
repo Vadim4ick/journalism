@@ -115,14 +115,16 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .projectTitle {
-  margin-top: 12px;
   font-size: clamp(24px, 2.5vw, 34px);
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+
+.eyebrow + .projectTitle {
+  margin-top: 12px;
 }
 
 .projectDescription {
@@ -130,19 +132,6 @@
   margin-top: 18px;
   font-size: 17px;
   line-height: 1.6;
-}
-
-.detailsLink {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 6px;
-  margin-top: 18px;
-  color: var(--primary);
-  font-size: 15px;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 .form {
@@ -284,16 +273,8 @@
   color: var(--foreground);
 }
 
-.status {
-  margin-top: 16px;
-  color: var(--foreground);
-  font-size: 15px;
-  font-weight: 600;
-}
-
 .backLink:focus-visible,
 .projectLink:focus-visible,
-.detailsLink:focus-visible,
 .scoreInput:focus-visible,
 .voteButton:focus-visible {
   outline: 3px solid var(--ring);

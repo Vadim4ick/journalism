@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { ArrowRight } from "lucide-react";
+import { useRef, useState, type FormEvent } from "react";
+import { ArrowRight, Pencil } from "lucide-react";
 import styles from "./project-voting-page.module.css";
 
 const criteria = [
@@ -44,19 +44,20 @@ const criteria = [
 ] as const;
 
 export function ProjectVotingForm() {
-  const [status, setStatus] = useState<string | null>(null);
+  const [showEditButton, setShowEditButton] = useState(false);
   const [scores, setScores] = useState<Record<string, string>>({});
+  const firstScoreInputRef = useRef<HTMLInputElement>(null);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setStatus("Отправка голосов пока не подключена. Оценки не сохранены.");
+    setShowEditButton(true);
   }
 
   return (
     <form
       className={styles.form}
       onSubmit={handleSubmit}
-      onChange={() => setStatus(null)}
+      onChange={() => setShowEditButton(false)}
     >
       <fieldset>
         <legend className={styles.formTitle}>Критерии оценки</legend>
@@ -81,6 +82,7 @@ export function ProjectVotingForm() {
                 </p>
               </div>
               <input
+                ref={index === 0 ? firstScoreInputRef : undefined}
                 id={`score-${criterion.id}`}
                 name={criterion.id}
                 className={styles.scoreInput}
@@ -106,18 +108,21 @@ export function ProjectVotingForm() {
 
       <div className={styles.formFooter}>
         <p className={styles.demoNotice}></p>
-        <button type="submit" className={styles.voteButton}>
-          Проголосовать
+        <button
+          type={showEditButton ? "button" : "submit"}
+          className={styles.voteButton}
+          onClick={showEditButton ? (event) => {
+            event.preventDefault();
+            setShowEditButton(false);
+            firstScoreInputRef.current?.focus();
+          } : undefined}
+        >
+          {showEditButton ? "Редактировать" : "Проголосовать"}
           <span className={styles.voteArrow} aria-hidden="true">
-            <ArrowRight size={19} />
+            {showEditButton ? <Pencil size={19} /> : <ArrowRight size={19} />}
           </span>
         </button>
       </div>
-      {status && (
-        <p className={styles.status} role="status">
-          {status}
-        </p>
-      )}
     </form>
   );
 }
