@@ -35,11 +35,14 @@ export function NewspapersPage() {
             {NEWSPAPERS.map((newspaper) => (
               <li key={newspaper.slug}>
                 <ScrollReveal>
-                  <Link href={`/newspapers/${newspaper.slug}`} className={styles.card}>
+                  <Link href={`/newspapers/${newspaper.slug}`} aria-label={newspaper.name} className={styles.card}>
                     <span data-text-decorative className={styles.logoPanel}>
                       <NewspaperLogo newspaper={newspaper} />
                     </span>
-                    <Typography as="h2" variant="small" className={styles.cardTitle}>{newspaper.name}</Typography>
+                    <Typography as="h2" variant="small" aria-label={newspaper.name} className={styles.cardTitle}>
+                      <span aria-hidden="true" className={styles.shortName}>{newspaper.shortName}</span>
+                      <span className={styles.fullName}>{newspaper.name}</span>
+                    </Typography>
                   </Link>
                 </ScrollReveal>
               </li>

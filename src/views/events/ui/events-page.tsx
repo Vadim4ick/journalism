@@ -1,10 +1,9 @@
 import Link from "next/link";
-import { EventCard } from "@/components/event-card";
 import { Container } from "@/shared/ui/container";
-import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
 import { SiteImage } from "@/components/site-image";
 import { HOME_EVENTS } from "@/modules/home/home-events/model/events";
+import { EventsCards } from "./events-cards";
 import styles from "./events-page.module.css";
 
 export function EventsPage() {
@@ -38,13 +37,7 @@ export function EventsPage() {
       <section aria-label="Список предстоящих событий" className="py-10 mobile:py-12 desktop:py-16">
         <Container>
           {HOME_EVENTS.length > 0 ? (
-            <ul data-a11y-content-grid className="grid gap-5 mobile:grid-cols-2 desktop:grid-cols-3 desktop:gap-[30px]">
-              {HOME_EVENTS.map((event) => (
-                <li key={event.slug}>
-                  <ScrollReveal><EventCard event={event} /></ScrollReveal>
-                </li>
-              ))}
-            </ul>
+            <EventsCards events={HOME_EVENTS} />
           ) : (
             <Typography variant="body" className="text-muted-foreground">
               Пока нет предстоящих событий.

@@ -42,9 +42,31 @@
   letter-spacing: 0.07em;
 }
 
+.eventsList {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 4px 4px 12px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.eventsList > li {
+  flex: 0 0 min(88%, 360px);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
 @media (width >= theme(--breakpoint-mobile)) {
   .heroSection { padding-inline: 16px; }
   .hero { min-height: 480px; }
+  .eventsList { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow-x: visible; padding: 0; scroll-snap-type: none; }
+  .eventsList > li { scroll-snap-align: none; }
+}
+
+@media (width >= theme(--breakpoint-desktop)) {
+  .eventsList { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 30px; }
 }
 
 @media (width >= theme(--breakpoint-desktop1250)) {
@@ -63,6 +85,10 @@
 
 :global(html[data-a11y-enabled="true"]) .content,
 :global(html[data-text-mode="true"]) .content { transform: none; }
+:global(html[data-a11y-enabled="true"]) .eventsList,
+:global(html[data-text-mode="true"]) .eventsList { display: grid; grid-template-columns: minmax(0, 1fr); overflow-x: visible; padding: 0; scroll-snap-type: none; }
+:global(html[data-a11y-enabled="true"]) .eventsList > li,
+:global(html[data-text-mode="true"]) .eventsList > li { scroll-snap-align: none; }
 :global(html[data-a11y-enabled="true"]) .breadcrumbs,
 :global(html[data-text-mode="true"]) .breadcrumbs { flex-wrap: wrap; font-size: 1rem; }
 :global(html[data-a11y-enabled="true"]) .breadcrumbSeparator img,
