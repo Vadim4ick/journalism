@@ -1,0 +1,389 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.container {
+  width: 100%;
+  max-width: 1450px;
+  padding-top: 42px;
+  padding-bottom: 100px;
+  color: var(--foreground);
+}
+
+.backLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pageTitle {
+  margin-top: 12px;
+  font-size: clamp(30px, 3.5vw, 48px);
+  line-height: 1.1;
+}
+
+.pageIntro {
+  margin-top: 12px;
+  color: var(--muted-foreground);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(245px, 300px) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+  margin-top: 36px;
+}
+
+.sidebar {
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+  padding: 24px 14px 14px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--card);
+}
+
+.sidebarTitle {
+  padding-inline: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.projectList {
+  display: grid;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.projectLink {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  color: var(--foreground);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.projectLink:hover {
+  background: var(--secondary);
+}
+
+.projectLink[aria-current="page"],
+.projectLink[aria-current="page"]:hover {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.projectNumber {
+  align-self: start;
+  padding-top: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.projectArrow {
+  justify-self: end;
+}
+
+.content {
+  min-width: 0;
+  padding: clamp(22px, 3vw, 42px);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: var(--card);
+}
+
+.eyebrow {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.projectTitle {
+  margin-top: 12px;
+  font-size: clamp(24px, 2.5vw, 34px);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.projectDescription {
+  max-width: 780px;
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.detailsLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 6px;
+  margin-top: 18px;
+  color: var(--primary);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form {
+  margin-top: 34px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.form fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.formTitle {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.formHint {
+  margin-top: 8px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.criteriaList {
+  margin-top: 22px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.criterion {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  padding: 17px 20px;
+  background: var(--background);
+}
+
+.criterion + .criterion {
+  border-top: 1px solid var(--border);
+}
+
+.criterionNumber {
+  align-self: start;
+  padding-top: 3px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.criterionText {
+  min-width: 0;
+}
+
+.criterionTitle {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.criterionDescription {
+  margin-top: 3px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.scoreInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--foreground);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.scoreInput::placeholder {
+  color: var(--muted-foreground);
+  font-weight: 400;
+  opacity: 1;
+}
+
+.formFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.demoNotice {
+  max-width: 430px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.voteButton {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 6px 6px 20px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+.voteButton:hover {
+  background: color-mix(in oklch, var(--primary), var(--foreground) 12%);
+  transform: translateY(-2px);
+}
+
+.voteArrow {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.status {
+  margin-top: 16px;
+  color: var(--foreground);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.backLink:focus-visible,
+.projectLink:focus-visible,
+.detailsLink:focus-visible,
+.scoreInput:focus-visible,
+.voteButton:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+@media (width < 1050px) {
+  .layout {
+    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .sidebar {
+    padding-inline: 10px;
+  }
+
+  .content {
+    padding: 24px;
+  }
+}
+
+@media (width < 768px) {
+  .container {
+    padding-top: 28px;
+    padding-bottom: 64px;
+  }
+
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .projectList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (width < 520px) {
+  .pageIntro {
+    font-size: 15px;
+  }
+
+  .projectList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .content {
+    padding: 20px 16px;
+  }
+
+  .criterion {
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 8px 10px;
+    padding: 16px 12px;
+  }
+
+  .scoreInput {
+    grid-column: 2;
+    width: 96px;
+    margin-top: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .projectLink,
+  .voteButton {
+    transition: none;
+  }
+
+  .voteButton:hover {
+    transform: none;
+  }
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .projectLink,
+:global(html[data-a11y-reduce-motion="true"]) .voteButton,
+:global(html[data-text-mode="true"]) .projectLink,
+:global(html[data-text-mode="true"]) .voteButton {
+  transition: none;
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .voteButton:hover,
+:global(html[data-text-mode="true"]) .voteButton:hover {
+  transform: none;
+}
+
+:global(html[data-text-mode="true"]) .sidebar {
+  position: static;
+  margin-bottom: 2rem;
+}

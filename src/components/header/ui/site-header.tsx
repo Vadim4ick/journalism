@@ -19,7 +19,7 @@ export function SiteHeader() {
         pathname === "/projects" ||
         pathname === "/about"
           ? "default"
-          : pathname === "/account"
+        : pathname === "/account" || pathname.startsWith("/account/voting/")
             ? "account"
           : "inner"
       }
