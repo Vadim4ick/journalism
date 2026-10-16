@@ -22,8 +22,6 @@ const statistics = [
   { label: "Осталось дней", value: 10, icon: LeftDay },
 ];
 
-type AccountTab = "overview" | "voting";
-
 function AnimatedRules({ children, reducedMotion }: { children: ReactNode; reducedMotion: boolean }) {
   const isPresent = useIsPresent();
 
@@ -44,44 +42,15 @@ function AnimatedRules({ children, reducedMotion }: { children: ReactNode; reduc
 }
 
 export function AccountPage() {
-  const [activeTab, setActiveTab] = useState<AccountTab>("overview");
   const [selectedProjectSlug, setSelectedProjectSlug] = useState<string | null>(null);
   const selectedProject = CURRENT_PROJECTS.find((project) => project.slug === selectedProjectSlug);
   const reducedMotion = useEffectiveReducedMotion();
 
   return (
     <Container className={styles.container}>
-      <nav className={styles.tabs} aria-label="Разделы личного кабинета">
-        <button
-          id="account-overview-tab"
-          type="button"
-          aria-pressed={activeTab === "overview"}
-          aria-controls="account-overview-panel"
-          className={styles.tab}
-          onClick={() => setActiveTab("overview")}
-        >
-          Личный кабинет
-        </button>
-        <button
-          id="account-voting-tab"
-          type="button"
-          aria-pressed={activeTab === "voting"}
-          aria-controls="account-voting-panel"
-          className={styles.tab}
-          onClick={() => setActiveTab("voting")}
-        >
-          Голосование (66)
-        </button>
-      </nav>
-
-      <section
-        id="account-overview-panel"
-        aria-labelledby="account-overview-tab"
-        hidden={activeTab !== "overview"}
-        className={styles.panel}
-      >
-        <header className={styles.intro}>
-          <Typography as="h1" variant="heading-medium" className={styles.heading}>
+      <section aria-labelledby="account-heading">
+        <header>
+          <Typography as="h1" variant="heading-medium" id="account-heading" className={styles.heading}>
             Анна, добро пожаловать!
           </Typography>
           <Typography as="p" variant="body" className={styles.subtitle}>
@@ -203,20 +172,6 @@ export function AccountPage() {
             )}
           </AnimatePresence>
         </div>
-      </section>
-
-      <section
-        id="account-voting-panel"
-        aria-labelledby="account-voting-tab"
-        hidden={activeTab !== "voting"}
-        className={`${styles.panel} ${styles.votingPanel}`}
-      >
-        <Typography as="h1" variant="heading-medium" className={styles.heading}>
-          Голосование
-        </Typography>
-        <p className={styles.unavailable}>
-          Список номинантов и отправка оценок пока недоступны. Данные голосования не подключены.
-        </p>
       </section>
     </Container>
   );

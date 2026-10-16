@@ -8,52 +8,11 @@
   color: var(--foreground);
 }
 
-.tabs {
-  display: flex;
-  gap: 24px;
-  border-bottom: 2px solid var(--border);
-}
-
-.tab {
-  min-height: 44px;
-  margin-bottom: -2px;
-  padding: 0 0 14px;
-  border-bottom: 2px solid transparent;
-  color: #3d3d3d;
-  font-size: 18px;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.tab[aria-pressed="true"] {
-  border-color: #007c70;
-  color: #007c70;
-}
-
-.tab:hover {
-  color: #007c70;
-}
-
-.tab:focus-visible,
 .projectChoice:focus-visible,
 .votingButton:focus-visible,
 .rules a:focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
-}
-
-.panel[hidden],
-:global(html[data-text-mode="true"]) .panel[hidden] {
-  display: none !important;
-}
-
-.intro {
-  padding-top: 44px;
-}
-
-.votingPanel {
-  padding-top: 44px;
 }
 
 .heading {
@@ -259,13 +218,6 @@
   text-underline-offset: 2px;
 }
 
-.unavailable {
-  max-width: 680px;
-  margin-top: 20px;
-  font-size: 18px;
-  line-height: 1.5;
-}
-
 .backLink {
   display: inline-block;
   min-height: 44px;
@@ -294,22 +246,6 @@
   .container {
     padding-top: 28px;
     padding-bottom: 64px;
-  }
-
-  .tabs {
-    gap: 20px;
-  }
-
-  .tab {
-    font-size: 15px;
-  }
-
-  .intro {
-    padding-top: 32px;
-  }
-
-  .votingPanel {
-    padding-top: 32px;
   }
 
   .statistics {
@@ -349,16 +285,10 @@
   }
 }
 
-:global(html[data-a11y-enabled="true"]) .tab,
 :global(html[data-a11y-enabled="true"]) .subtitle,
 :global(html[data-a11y-enabled="true"]) .statisticLabel,
 :global(html[data-a11y-enabled="true"]) .statisticValue {
   color: var(--foreground);
-}
-
-:global(html[data-a11y-enabled="true"]) .tab[aria-pressed="true"] {
-  border-color: var(--primary);
-  color: var(--primary);
 }
 
 :global(html[data-a11y-enabled="true"]) .statistic {
