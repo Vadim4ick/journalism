@@ -15,14 +15,15 @@ function dateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-export function NewsCalendar({ dates, selected, onSelect }: {
+export function NewsCalendar({ dates, selected, initialDate, onSelect }: {
   dates: readonly string[];
   selected?: NewsDateRange;
+  initialDate: string;
   onSelect: (range?: NewsDateRange) => void;
 }) {
   // Open on the latest publication so the marked dates correspond to actual data.
   const latestDate = [...dates].sort().at(-1);
-  const [focused, setFocused] = useState(() => new Date(`${selected?.from ?? latestDate ?? "2027-10-01"}T12:00:00`));
+  const [focused, setFocused] = useState(() => new Date(`${selected?.from ?? latestDate ?? initialDate}T12:00:00`));
   const [month, setMonth] = useState(() => new Date(focused.getFullYear(), focused.getMonth(), 1));
   const calendarRef = useRef<HTMLTableElement>(null);
   const titleId = useId();
@@ -118,7 +119,7 @@ export function NewsCalendar({ dates, selected, onSelect }: {
           {!selected ? "Выберите начало и конец периода" : !selected.to ? "Теперь выберите конечную дату" : "Выберите дату, чтобы начать новый период"}
         </p>
       </div>
-      <span className="sr-only">Подчеркнуты даты с новостями. Стрелки перемещают фокус, Page Up и Page Down меняют месяц. Для одного дня выберите одну дату дважды.</span>
+      <span className="sr-only">Подчеркнуты даты новостей на текущей странице. Стрелки перемещают фокус, Page Up и Page Down меняют месяц. Для одного дня выберите одну дату дважды.</span>
     </div>
   );
 }

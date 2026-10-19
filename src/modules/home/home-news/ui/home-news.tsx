@@ -1,12 +1,14 @@
 import { Typography } from "@/shared/ui/typography";
 import { ArrowUpRight } from "@/shared/icons/arrow-up-right";
-import { NewsCard } from "@/components/news-card";
+import { NewsCard, newsCardData } from "@/components/news-card";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
-import { HOME_NEWS } from "../model/news";
+import type { ContentNews } from "@/shared/types/model/content.type";
 import Link from "next/link";
 
-export function HomeNews() {
+export function HomeNews({ news, error }: { news: ContentNews[]; error: boolean }) {
+  const cards = news.slice(0, 3).map(newsCardData);
+
   return (
     <section id="home-news" aria-labelledby="home-news-heading" className="pt-16 pb-0 mobile:pt-20 desktop:pt-[120px]">
       <Container>
@@ -27,9 +29,11 @@ export function HomeNews() {
             Все новости
           </Button>
         </div>
-        <div data-a11y-content-grid className="grid grid-cols-1 gap-x-5 gap-y-10 mobile:grid-cols-2 mobile:gap-y-16 desktop:grid-cols-3" data-text-flow>
-          {HOME_NEWS.map((news) => <NewsCard key={news.id} news={news} />)}
-        </div>
+        {error ? <p role="alert">Не удалось загрузить новости. Попробуйте обновить страницу.</p> : cards.length === 0 ? <p>Новостей пока нет.</p> : (
+          <div data-a11y-content-grid className="grid grid-cols-1 gap-x-5 gap-y-10 mobile:grid-cols-2 mobile:gap-y-16 desktop:grid-cols-3" data-text-flow>
+            {cards.map((item) => <NewsCard key={item.id} news={item} />)}
+          </div>
+        )}
       </Container>
     </section>
   );

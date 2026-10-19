@@ -6,7 +6,7 @@ import { SiteImage } from "@/components/site-image";
 
 type GalleryImage = { src: string; alt: string };
 
-export function EventGallery({ images, title }: { images: GalleryImage[]; title: string }) {
+export function EventGallery({ images, title, source }: { images: GalleryImage[]; title: string; source?: string }) {
   const [active, setActive] = useState(0);
   const image = images[active];
   const move = (direction: number) =>
@@ -21,13 +21,14 @@ export function EventGallery({ images, title }: { images: GalleryImage[]; title:
           alt={image.alt}
           textLinkLabel={`Фото события «${title}»: ${image.alt}`}
           fill
+          unoptimized={image.src.startsWith("http")}
           sizes="(min-width: 1232px) 1200px, calc(100vw - 32px)"
           className="object-cover"
           priority={active === 0}
         />
       </div>
       <div className="mt-5 flex items-center justify-between gap-4">
-        <figcaption className="text-xs text-muted-foreground">Источник: Медиацентр «Дом журналистики»</figcaption>
+        {source && <figcaption className="text-xs text-muted-foreground">Источник: {source}</figcaption>}
         {images.length > 1 && (
           <div className="flex shrink-0 gap-4" aria-label="Управление фотографиями">
             <button type="button" onClick={() => move(-1)} aria-label="Предыдущее фото" className="flex size-[52px] items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-reduce:transition-none">

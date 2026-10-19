@@ -1,22 +1,39 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { HOME_EVENTS } from "@/modules/home/home-events/model/events";
+import axios from "axios";
+import { cache } from "react";
+import { contentServices } from "@/shared/services/content";
 import { EventDetailPage } from "@/views/event-detail";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+const getEvent = cache(async (slug: string) => {
+  try {
+    const response = await contentServices.getEvent(slug);
+    if (response.status !== "success" || !response.data?.element) {
+      throw new Error("Некорректный ответ сервера при загрузке события");
+    }
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) return null;
+    throw error;
+  }
+});
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const event = HOME_EVENTS.find((item) => item.slug === slug);
-  return event
-    ? { title: `${event.title} — Дом журналистики`, description: event.description }
-    : { title: "Событие не найдено — Дом журналистики" };
+  const data = await getEvent(slug);
+  if (!data) return { title: "Событие не найдено — Дом журналистики" };
+  return {
+    title: data.seo?.meta_title || data.seo?.browser_title || `${data.element.title} — Дом журналистики`,
+    description: data.seo?.meta_description || data.element.description,
+  };
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const event = HOME_EVENTS.find((item) => item.slug === slug);
-  if (!event) notFound();
+  const data = await getEvent(slug);
+  if (!data) notFound();
 
-  return <EventDetailPage event={event} />;
+  return <EventDetailPage event={data.element} related={data.related ?? []} />;
 }

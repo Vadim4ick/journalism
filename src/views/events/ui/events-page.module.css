@@ -58,6 +58,14 @@
   scroll-snap-align: start;
 }
 
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 48px; }
+.pageArrow, .pageNumber { display: inline-flex; min-width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 50%; color: var(--foreground); }
+.pageArrow { border: 1px solid var(--border); }
+.pageNumber { background: var(--secondary); }
+.pageNumber[aria-current="page"] { background: var(--background); border: 1px solid var(--border); }
+.pagination a:hover { background: var(--muted); }
+.pagination a:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+
 @media (width >= theme(--breakpoint-mobile)) {
   .heroSection { padding-inline: 16px; }
   .hero { min-height: 480px; }

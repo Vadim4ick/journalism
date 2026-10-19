@@ -1,18 +1,24 @@
 import Link from "next/link";
-import { NewsCard } from "@/components/news-card";
+import { NewsCard, newsCardData } from "@/components/news-card";
 import { SiteImage } from "@/components/site-image";
 import { SocialLinks } from "@/components/social-links";
-import { HOME_NEWS } from "@/modules/home/home-news/model/news";
 import { ArrowUpRight } from "@/shared/icons/arrow-up-right";
+import { contentImageUrl } from "@/shared/lib/content-image-url";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
-import type { NewsArticle } from "../model/article";
+import type { ContentNews, ContentNewsDetail } from "@/shared/types/model/content.type";
 import { NewsGallery } from "./news-gallery";
 import styles from "./news-detail-page.module.css";
 
-export function NewsDetailPage({ article }: { article: NewsArticle }) {
+export function NewsDetailPage({ article, related }: { article: ContentNewsDetail; related: ContentNews[] }) {
+  const gallery = (article.images ?? [])
+    .map((image) => ({ src: contentImageUrl(image.url), alt: image.description || `Фото новости «${article.title}»` }))
+    .filter((image): image is { src: string; alt: string } => Boolean(image.src));
+  const cover = contentImageUrl(article.image);
+  if (gallery.length === 0 && cover) gallery.push({ src: cover, alt: `Фото новости «${article.title}»` });
+
   return (
     <>
       <Container>
@@ -33,29 +39,27 @@ export function NewsDetailPage({ article }: { article: NewsArticle }) {
 
           <header className={styles.articleHeader}>
             <div className={styles.dateLine}>
-              <time dateTime={article.publishedAt}>{article.dateLabel} <span className={styles.time}>{article.timeLabel}</span></time>
+              <time dateTime={article.published_at_iso}>
+                {article.published_at} <span className={styles.time}>{article.published_at_iso.slice(11, 16)}</span>
+              </time>
             </div>
             <Typography as="h1" variant="heading-medium" className={styles.title}>{article.title}</Typography>
           </header>
 
-          <ScrollReveal><NewsGallery images={article.gallery} /></ScrollReveal>
+          {gallery.length > 0 && <ScrollReveal><NewsGallery images={gallery} /></ScrollReveal>}
 
           <ScrollReveal>
             <div className={styles.body}>
-              <Typography variant="body" className={styles.lead}>{article.lead}</Typography>
-              {article.paragraphs.map((paragraph) => (
-                <Typography key={paragraph} variant="body" className={styles.paragraph}>{paragraph}</Typography>
-              ))}
+              {article.description && <Typography variant="body" className={styles.lead}>{article.description}</Typography>}
+              {article.detail_text && <div className={styles.paragraph} dangerouslySetInnerHTML={{ __html: article.detail_text }} />}
             </div>
           </ScrollReveal>
 
-          <ScrollReveal>
+          {article.tags?.length > 0 && <ScrollReveal>
             <ul aria-label="Темы новости" className={styles.tags}>
-              {article.tags.map((tag) => (
-                <li key={tag.label} className={styles[tag.tone]}>{tag.label}</li>
-              ))}
+              {article.tags.map((tag) => <li key={tag.id}>{tag.label}</li>)}
             </ul>
-          </ScrollReveal>
+          </ScrollReveal>}
 
           <ScrollReveal>
             <section aria-label="Социальные сети" className={styles.socialSection}>
@@ -66,32 +70,24 @@ export function NewsDetailPage({ article }: { article: NewsArticle }) {
         </article>
       </Container>
 
-      <section aria-labelledby="latest-news-heading" className={styles.latestSection} data-text-flow>
+      {related.length > 0 && <section aria-labelledby="latest-news-heading" className={styles.latestSection} data-text-flow>
         <Container>
           <ScrollReveal>
             <div className={styles.latestHeading}>
-              <Typography as="h2" variant="section-title" id="latest-news-heading">Последние новости</Typography>
-              <Button
-                variant="pill"
-                nativeButton={false}
-                render={<Link href="/news" />}
-                addonRight={
-                  <span data-text-decorative className={styles.allNewsIcon}>
-                    <ArrowUpRight aria-hidden="true" className="size-[22px]" />
-                  </span>
-                }
-              >
+              <Typography as="h2" variant="section-title" id="latest-news-heading">Читайте также</Typography>
+              <Button variant="pill" nativeButton={false} render={<Link href="/news" />}
+                addonRight={<span data-text-decorative className={styles.allNewsIcon}><ArrowUpRight aria-hidden="true" className="size-[22px]" /></span>}>
                 Все новости
               </Button>
             </div>
           </ScrollReveal>
           <ul data-a11y-content-grid className={styles.latestGrid}>
-            {HOME_NEWS.map((news) => (
-              <li key={news.id}><ScrollReveal><NewsCard news={news} headingLevel="h3" /></ScrollReveal></li>
+            {related.map((news) => (
+              <li key={news.id}><ScrollReveal><NewsCard news={newsCardData(news)} headingLevel="h3" /></ScrollReveal></li>
             ))}
           </ul>
         </Container>
-      </section>
+      </section>}
     </>
   );
 }

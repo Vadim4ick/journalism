@@ -74,11 +74,6 @@
   padding-block: 12px;
 }
 
-.caption {
-  color: var(--muted-foreground);
-  font-size: 12px;
-}
-
 .galleryControls {
   display: flex;
   gap: 12px;
@@ -114,6 +109,13 @@
   padding-top: 28px;
   border-top: 1px solid var(--border);
 }
+.body :global(p + p), .body :global(ul), .body :global(ol), .body :global(blockquote) { margin-top: 1rem; }
+.body :global(ul) { list-style: disc; padding-left: 1.5rem; }
+.body :global(ol) { list-style: decimal; padding-left: 1.5rem; }
+.body :global(a) { text-decoration: underline; text-underline-offset: 3px; }
+.body :global(a:focus-visible) { outline: 3px solid var(--ring); outline-offset: 3px; }
+.body :global(img) { max-width: 100%; height: auto; }
+.body { overflow-wrap: anywhere; }
 
 .lead {
   font-size: clamp(17px, 1.4vw, 20px);
@@ -139,13 +141,9 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1.25;
+  background: var(--secondary);
+  color: var(--foreground);
 }
-
-.green { background: #e4f1eb; color: #246c4e; }
-.violet { background: #eee8ff; color: #6953a8; }
-.blue { background: #e8eaff; color: #4d60b6; }
-.orange { background: #fff0e9; color: #a85832; }
-.pink { background: #fbe7eb; color: #a74358; }
 
 .socialSection {
   margin-top: 32px;

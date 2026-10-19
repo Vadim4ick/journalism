@@ -10,6 +10,33 @@ export interface ContentNewsParams extends ContentPaginationParams {
   date_to?: string;
 }
 
+export interface ContentNews {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  image: string | null;
+  published_at: string;
+  published_at_iso: string;
+  tags: { id: string; label: string }[];
+}
+
+export interface ContentNewsDetail extends ContentNews {
+  images: { url: string; description: string }[];
+  detail_text: string | null;
+}
+
+export type ContentNewsResponse = ApiSuccessResponse<{
+  items: ContentNews[];
+  pagination: Pagination;
+}>;
+
+export type ContentNewsDetailResponse = ApiSuccessResponse<{
+  element: ContentNewsDetail;
+  seo: SEO;
+  related: ContentNews[];
+}>;
+
 export interface ContentProjectsParams extends ContentPaginationParams {
   result?: "Y" | "N";
 }
@@ -49,3 +76,34 @@ export interface ContentDocumentsData {
 }
 
 export type ContentDocumentsResponse = ApiSuccessResponse<ContentDocumentsData>;
+
+export interface ContentEvent {
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  image: string | null;
+  published_at: string;
+  event_start_at: string | null;
+  event_end_at: string | null;
+  date: string;
+  place: string;
+  source: string;
+  format: string;
+}
+
+export interface ContentEventDetail extends ContentEvent {
+  images: { url: string; description: string }[];
+  detail_text: string | null;
+}
+
+export type ContentEventsResponse = ApiSuccessResponse<{
+  items: ContentEvent[];
+  pagination: Pagination;
+}>;
+
+export type ContentEventResponse = ApiSuccessResponse<{
+  element: ContentEventDetail;
+  seo: SEO;
+  related: ContentEvent[];
+}>;

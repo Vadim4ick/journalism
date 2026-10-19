@@ -7,12 +7,20 @@ import {
 } from "../lib/auth-token";
 import { useAuthStore } from "@/state/auth.store";
 import type { LoginResponse } from "../types/model/auth.type";
+import https from "node:https";
 
+const isDev = process.env.NODE_ENV === "development" && typeof window === "undefined";
 const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, "");
 const options = {
   baseURL: serverUrl ? `${serverUrl}/api/v1` : undefined,
   headers: { Accept: "application/json" },
   timeout: 15000,
+  withCredentials: true,
+  ...(isDev && {
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
+  }),
 };
 
 export const $api = axios.create(options);

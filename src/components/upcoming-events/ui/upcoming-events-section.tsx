@@ -10,12 +10,14 @@ type UpcomingEventsSectionProps = {
   events: EventCardData[];
   id?: string;
   className?: string;
+  error?: boolean;
 };
 
 export function UpcomingEventsSection({
   events,
   id = "upcoming-events",
   className,
+  error = false,
 }: UpcomingEventsSectionProps) {
   const headingId = `${id}-heading`;
 
@@ -45,7 +47,9 @@ export function UpcomingEventsSection({
           </Button>
         </div>
 
-        {events.length > 0 ? (
+        {error ? (
+          <Typography variant="body" role="alert">Не удалось загрузить события. Попробуйте обновить страницу.</Typography>
+        ) : events.length > 0 ? (
           <ul
             data-a11y-content-grid
             className="grid gap-5 mobile:grid-cols-2 desktop:grid-cols-3 desktop:gap-[30px]"

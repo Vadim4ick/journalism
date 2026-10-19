@@ -2,11 +2,12 @@ import Link from "next/link";
 import { Container } from "@/shared/ui/container";
 import { Typography } from "@/shared/ui/typography";
 import { SiteImage } from "@/components/site-image";
-import { NEWS } from "../model/news";
+import type { ContentNews } from "@/shared/types/model/content.type";
+import type { NewsDateRange } from "../model/date-range";
 import { NewsFeed } from "./news-feed";
 import styles from "./news-page.module.css";
 
-export function NewsPage() {
+export function NewsPage({ news, pagination, selected, error = false, calendarDate }: { news: ContentNews[]; pagination?: Pagination; selected?: NewsDateRange; error?: boolean; calendarDate: string }) {
   return (
     <>
       <section aria-labelledby="news-heading" className={styles.heroSection}>
@@ -25,7 +26,7 @@ export function NewsPage() {
         </div>
       </section>
       <section aria-label="Все новости" className={styles.feedSection}>
-        <Container><NewsFeed news={NEWS} /></Container>
+        <Container><NewsFeed key={`${pagination?.current_page ?? 1}:${selected?.from ?? ""}:${selected?.to ?? ""}`} news={news} pagination={pagination} selected={selected} error={error} calendarDate={calendarDate} /></Container>
       </section>
     </>
   );
