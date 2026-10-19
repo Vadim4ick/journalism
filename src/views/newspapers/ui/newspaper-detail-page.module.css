@@ -6,30 +6,31 @@
 .logoPanel { display: flex; min-height: 180px; align-items: center; justify-content: center; overflow: hidden; border-radius: 16px; background: var(--background); }
 .publisherContent { min-width: 0; }
 .title { margin-bottom: 24px; font-size: clamp(1.35rem, 2vw, 2rem); font-weight: 600; line-height: 1.25; }
+.description { margin-bottom: 24px; line-height: 1.5; }
 .publisherMeta { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
 .publisherMeta dt { margin-bottom: 10px; color: var(--muted-foreground); font-size: 0.875rem; }
 .publisherMeta dd { margin: 0; font-size: 1rem; font-weight: 500; overflow-wrap: anywhere; }
 .website { text-decoration: underline; text-underline-offset: 3px; }
 .website:hover { color: var(--primary); }
 .website:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
-.socials { display: flex; gap: 8px; }
-.socialNames { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
-.socialBadge { display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 50%; background: var(--foreground); color: var(--background); }
-.socialBadge svg { width: 24px; height: 24px; }
 .missingDetails { display: flex; width: min(100%, 560px); min-height: 76px; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 16px; background: var(--background); color: var(--foreground); }
 .missingDetailsIcon { display: inline-flex; width: 42px; height: 42px; flex: 0 0 42px; align-items: center; justify-content: center; border-radius: 12px; background: color-mix(in srgb, var(--primary) 10%, var(--background)); color: var(--primary); }
 .issuesSection { width: 100%; }
-.dateFilters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-.dateFilter { min-height: 44px; padding: 8px 18px; border: 1px solid transparent; border-radius: 12px; background: var(--secondary); color: var(--muted-foreground); font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: background-color 180ms ease-out, color 180ms ease-out; }
-.dateFilter:hover { background: var(--muted); color: var(--foreground); }
-.dateFilter[aria-pressed="true"] { background: var(--foreground); color: var(--background); }
-.dateFilter:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 .issuesGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 20px; }
 .issueCard { min-width: 0; }
 .coverStack { position: relative; width: min(100%, 230px); aspect-ratio: 672 / 726; margin: 0 auto 16px; }
 .coverImage { object-fit: contain; }
+.coverPlaceholder { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 12px; background: var(--secondary); color: var(--muted-foreground); }
 .issueTitle { display: block; font-size: 1rem; font-weight: 600; line-height: 1.35; }
+.issueNumber { display: block; margin-top: 6px; }
 .issueDate { display: block; margin-top: 8px; color: var(--muted-foreground); font-size: 0.875rem; }
+.issueDescription { margin-top: 8px; }
+.issueFile { display: inline-block; margin-top: 12px; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+.issueFile:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 48px; }
+.pageArrow, .pageNumber { display: inline-flex; min-width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; color: var(--foreground); }
+.pageNumber[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); }
+.pageArrow:focus-visible, .pageNumber:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 .emptyIssues { display: flex; min-height: 260px; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 40px 24px; border: 1px solid var(--border); border-radius: 24px; background: var(--secondary); text-align: center; }
 .emptyIssuesIcon { display: inline-flex; width: 72px; height: 72px; align-items: center; justify-content: center; border-radius: 50%; background: color-mix(in srgb, var(--primary) 10%, var(--background)); color: var(--primary); }
 .emptyIssuesText { max-width: 520px; color: var(--foreground); text-wrap: balance; }
@@ -43,10 +44,7 @@
 @media (width >= theme(--breakpoint-desktop)) {
   .publisherCard { grid-template-columns: 280px minmax(0, 1fr); padding: 32px; }
   .issuesGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 64px 32px; }
-  .dateFilters { justify-content: center; margin-bottom: 32px; }
 }
-@media (prefers-reduced-motion: reduce) { .dateFilter { transition: none; } }
-:global(html[data-a11y-reduce-motion="true"]) .dateFilter { transition: none; }
 :global(html[data-a11y-enabled="true"]) .breadcrumbs { font-size: 1rem; }
 :global(html[data-a11y-enabled="true"]) .publisherCard,
 :global(html[data-a11y-enabled="true"]) .publisherMeta { grid-template-columns: minmax(0, 1fr); }
@@ -57,12 +55,10 @@
 :global(html[data-a11y-enabled="true"]) .issueDate { color: var(--foreground); }
 :global(html[data-text-mode="true"]) .publisherCard { display: block; padding: 0; }
 :global(html[data-text-mode="true"]) .logoPanel { display: none; }
-:global(html[data-text-mode="true"]) .socialBadge { display: none; }
-:global(html[data-text-mode="true"]) .socialNames { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; }
 :global(html[data-text-mode="true"]) .publisherMeta { display: block; }
 :global(html[data-text-mode="true"]) .publisherMeta > div { margin-bottom: 1em; }
-:global(html[data-text-mode="true"]) .dateFilters { flex-wrap: wrap; }
 :global(html[data-text-mode="true"]) .issuesGrid { grid-template-columns: minmax(0, 1fr); }
-:global(html[data-text-mode="true"]) .coverStack { display: none; }
+:global(html[data-text-mode="true"]) .coverStack { width: auto; aspect-ratio: auto; margin: 0 0 1em; }
+:global(html[data-text-mode="true"]) .coverPlaceholder { display: none; }
 :global(html[data-text-mode="true"]) .missingDetails,
 :global(html[data-text-mode="true"]) .emptyIssues { border-color: var(--border); background: var(--background); }

@@ -10,12 +10,13 @@ export type ProjectCardData = {
   description: string;
   image: string;
   imageAlt: string;
+  detailAvailable?: boolean;
 };
 
 export function ProjectCard({ project }: { project: ProjectCardData }) {
   const titleId = `project-${project.id}-title`;
   const descriptionId = `project-${project.id}-description`;
-  const logoProject = project.id === "neighbors" || project.id === "rural-blogger";
+  const logoProject = project.id === "neighbors";
 
   return (
     <article
@@ -26,6 +27,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
       <div className="relative block aspect-[535/400] w-full shrink-0 overflow-hidden rounded-[20px] bg-background">
         <Image
           src={project.image}
+          unoptimized={project.image?.startsWith("http")}
           alt={project.imageAlt}
           textLinkLabel={`Изображение проекта: ${project.imageAlt || project.title}`}
           textModeLink={false}
@@ -52,11 +54,11 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
           {project.description}
         </Typography>
       </div>
-      <Link
+      {project.detailAvailable && <Link
         href={`/projects/${project.slug}`}
         aria-label={`О проекте ${project.title}`}
         className="absolute inset-0 z-10 rounded-3xl focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ring"
-      />
+      />}
     </article>
   );
 }

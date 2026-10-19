@@ -13,12 +13,6 @@ export async function getDocumentsAction(): Promise<{
       per_page: 100,
     });
     if (
-      process.env.NODE_ENV === "development" ||
-      process.env.NODE_ENV === "test"
-    ) {
-      console.log({ action: "getDocumentsAction", response }, { depth: null });
-    }
-    if (
       response.status !== "success" ||
       !Array.isArray(response.data?.sections) ||
       !response.data.sections.every((section) => Array.isArray(section.items))

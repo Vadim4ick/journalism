@@ -41,6 +41,11 @@ export function NewsFeed({ news, pagination, selected, error = false, calendarDa
               initialDate={calendarDate}
               selected={selected}
               onSelect={(range) => router.push(pageHref(1, range))}
+              onMonthChange={() => {
+                if (pagination && pagination.current_page > 1) {
+                  router.replace(pageHref(1, selected), { scroll: false });
+                }
+              }}
             />
             {selected && (
               <Button variant="outline" nativeButton={false} render={<Link href="/news" />} className={styles.reset}>

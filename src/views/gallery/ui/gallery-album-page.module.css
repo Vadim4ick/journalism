@@ -17,6 +17,7 @@
 .albumMeta { display: flex; flex-wrap: wrap; gap: 12px; color: var(--muted-foreground); }
 .albumMeta .metaText { font-size: 1rem; font-weight: 500; }
 .header .title { margin-top: 8px; font-size: 2rem; }
+.description { width: 100%; max-width: 1200px; margin: 0 auto 24px; line-height: 1.6; }
 .photosGrid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 .photoFrame {
   position: relative;

@@ -20,11 +20,17 @@
 .catalogSection { padding-block: 48px 80px; }
 .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 8px; }
 .card { display: block; min-width: 0; height: 100%; border-radius: 20px; color: var(--foreground); outline: none; }
-.logoPanel { display: block; height: clamp(80px, 25vw, 112px); overflow: hidden; border-radius: 12px; background: var(--secondary); transition: box-shadow 200ms ease-out, translate 200ms ease-out; }
+.logoPanel { position: relative; display: flex; height: clamp(80px, 25vw, 112px); align-items: center; justify-content: center; overflow: hidden; border-radius: 12px; background: var(--secondary); }
+.logoImage { object-fit: contain; padding: 12px; }
+.logoPlaceholder { padding: 12px; color: var(--muted-foreground); font-weight: 600; text-align: center; }
 .card:hover .logoPanel, .card:focus-visible .logoPanel { translate: 0 -4px; box-shadow: 0 12px 24px rgb(0 0 0 / 9%); }
 .cardTitle { display: block; margin: 8px 2px 0; overflow-wrap: anywhere; font-size: clamp(0.72rem, 3vw, 0.875rem); font-weight: 600; line-height: 1.25; }
 .fullName { display: none; }
 .card:focus-visible { outline: 3px solid var(--ring); outline-offset: 4px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 48px; }
+.pageArrow, .pageNumber { display: inline-flex; min-width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; color: var(--foreground); }
+.pageNumber[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); }
+.pageArrow:focus-visible, .pageNumber:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
 
 @media (width >= theme(--breakpoint-mobileSmall)) {
   .grid { gap: 32px 12px; }
@@ -47,8 +53,8 @@
   .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 56px 20px; }
   .catalogSection { padding-block: 64px 120px; }
 }
-@media (prefers-reduced-motion: reduce) { .logoPanel { transition: none; } .card:hover .logoPanel, .card:focus-visible .logoPanel { translate: none; } }
-:global(html[data-a11y-reduce-motion="true"]) .logoPanel { transition: none; }
+
+@media (prefers-reduced-motion: no-preference) { .logoPanel { transition: box-shadow 200ms ease-out, translate 200ms ease-out; } }
 :global(html[data-a11y-reduce-motion="true"]) .card:hover .logoPanel,
 :global(html[data-a11y-reduce-motion="true"]) .card:focus-visible .logoPanel { translate: none; }
 :global(html[data-a11y-enabled="true"]) .hero,

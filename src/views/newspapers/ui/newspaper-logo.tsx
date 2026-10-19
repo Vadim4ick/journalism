@@ -1,22 +1,20 @@
 import { SiteImage } from "@/components/site-image";
-import type { Newspaper } from "../model/newspapers";
+import type { ContentNewspaper } from "@/shared/types/model/content.type";
+import { contentImageUrl } from "@/shared/lib/content-image-url";
 import styles from "./newspaper-logo.module.css";
 
-export function NewspaperLogo({ newspaper }: { newspaper: Newspaper }) {
+export function NewspaperLogo({ newspaper }: { newspaper: ContentNewspaper }) {
+  const logo = contentImageUrl(newspaper.logo);
   return (
     <span aria-hidden="true" className={styles.logo}>
-      {newspaper.logo ? (
-        <SiteImage
-          src={newspaper.logo.src}
-          alt=""
-          width={newspaper.logo.width}
-          height={newspaper.logo.height}
-          sizes="(min-width: 1250px) 280px, (min-width: 768px) 33vw, 50vw"
-          className={styles.image}
-        />
-      ) : (
-        <span className={styles.placeholder}>{newspaper.shortName}</span>
-      )}
+      <SiteImage
+        src={logo}
+        unoptimized
+        alt=""
+        fill
+        sizes="(min-width: 1250px) 280px, (min-width: 768px) 33vw, 50vw"
+        className={styles.image}
+      />
     </span>
   );
 }

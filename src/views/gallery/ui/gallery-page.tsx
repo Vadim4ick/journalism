@@ -4,10 +4,9 @@ import { SiteImage } from "@/components/site-image";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
-import { GALLERY_ALBUMS, type GalleryAlbum } from "../model/albums";
+import { toGalleryAlbum, type GalleryAlbum } from "../model/album";
+import type { ContentMedia } from "@/shared/types/model/content.type";
 import styles from "./gallery-page.module.css";
-
-const PAGE_SIZE = 3;
 
 function pageHref(page: number) {
   return page === 1 ? "/gallery#albums-heading" : `/gallery?page=${page}#albums-heading`;
@@ -23,11 +22,12 @@ function AlbumCard({ album, priority = false }: { album: GalleryAlbum; priority?
   return (
     <Link
       href={"/gallery/" + album.slug}
-      aria-label={album.title + ", " + album.date + ", " + photoCountLabel(album.photos.length)}
+      aria-label={album.title + ", " + album.date + ", " + photoCountLabel(album.photoCount)}
       className={styles.albumCard}
     >
       <SiteImage
-        src={album.cover.src}
+        src={album.cover}
+        unoptimized={album.cover?.startsWith("http")}
         alt=""
         fill
         sizes="(min-width: 1792px) 582px, (min-width: 1150px) calc((100vw - 80px) / 3), (min-width: 768px) calc((100vw - 56px) / 2), calc(100vw - 32px)"
@@ -40,11 +40,13 @@ function AlbumCard({ album, priority = false }: { album: GalleryAlbum; priority?
           {album.title}
         </Typography>
         <span className={styles.albumMeta}>
-          <Typography as="time" variant="caption" dateTime={album.dateTime} className={styles.albumDate}>
-            {album.date}
-          </Typography>
+          {album.dateTime ? (
+            <Typography as="time" variant="caption" dateTime={album.dateTime} className={styles.albumDate}>{album.date}</Typography>
+          ) : (
+            <Typography as="span" variant="caption" className={styles.albumDate}>{album.date}</Typography>
+          )}
           <Typography as="span" variant="caption" className={styles.albumCount}>
-            {album.photos.length} фото
+            {album.photoCount} фото
           </Typography>
         </span>
       </div>
@@ -52,11 +54,10 @@ function AlbumCard({ album, priority = false }: { album: GalleryAlbum; priority?
   );
 }
 
-export function GalleryPage({ page }: { page?: string | string[] }) {
-  const pageCount = Math.ceil(GALLERY_ALBUMS.length / PAGE_SIZE);
-  const parsedPage = typeof page === "string" && /^[1-9]\d*$/.test(page) ? Number(page) : 1;
-  const currentPage = Math.min(Number.isSafeInteger(parsedPage) ? parsedPage : 1, Math.max(pageCount, 1));
-  const visibleAlbums = GALLERY_ALBUMS.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+export function GalleryPage({ albums, pagination, error = false }: { albums: ContentMedia[]; pagination?: Pagination; error?: boolean }) {
+  const visibleAlbums = albums.map(toGalleryAlbum);
+  const pageCount = pagination?.last_page ?? 1;
+  const currentPage = pagination?.current_page ?? 1;
 
   return (
     <>
@@ -85,17 +86,18 @@ export function GalleryPage({ page }: { page?: string | string[] }) {
           <Typography as="h2" variant="heading-medium" id="albums-heading" className="sr-only">
             Фотоальбомы
           </Typography>
-          <ul data-a11y-content-grid className={styles.albumsGrid}>
+          {error && <p role="alert">Не удалось загрузить фотоальбомы. Попробуйте обновить страницу.</p>}
+          {!error && <ul data-a11y-content-grid className={styles.albumsGrid}>
             {visibleAlbums.map((album, index) => (
               <li key={album.slug}>
                 <ScrollReveal><AlbumCard album={album} priority={index === 0} /></ScrollReveal>
               </li>
             ))}
-          </ul>
-          {visibleAlbums.length === 0 && (
+          </ul>}
+          {!error && visibleAlbums.length === 0 && (
             <ScrollReveal><p>Фотоальбомов пока нет.</p></ScrollReveal>
           )}
-          {pageCount > 1 && (
+          {!error && pageCount > 1 && (
             <ScrollReveal>
               <nav aria-label="Страницы фотоальбомов" className={styles.pagination}>
                 {currentPage > 1 ? (

@@ -229,6 +229,11 @@
   text-align: center;
 }
 
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 48px; }
+.pageArrow, .pageNumber { display: inline-flex; min-width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: 50%; color: var(--foreground); }
+.pageNumber[aria-current="page"] { background: var(--primary); color: var(--primary-foreground); }
+.pageArrow:focus-visible, .pageNumber:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+
 @media (width >= theme(--breakpoint-mobile)) {
   .heroSection {
     padding-inline: 16px;

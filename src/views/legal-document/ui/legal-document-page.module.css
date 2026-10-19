@@ -1,0 +1,58 @@
+.article {
+  width: min(100%, 900px);
+  margin: 48px auto 108px;
+}
+
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.breadcrumbs a:hover,
+.breadcrumbs a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.breadcrumbs [aria-current="page"] {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.title {
+  margin-bottom: 28px;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin-bottom: 24px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.body {
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.body :global(p + p),
+.body :global(ul),
+.body :global(ol),
+.body :global(blockquote) {
+  margin-top: 1rem;
+}
+
+.body :global(ul) { list-style: disc; padding-left: 1.5rem; }
+.body :global(ol) { list-style: decimal; padding-left: 1.5rem; }
+.body :global(a) { text-decoration: underline; text-underline-offset: 3px; }
+.body :global(a:focus-visible) { outline: 3px solid var(--ring); outline-offset: 3px; }
+.body :global(img) { max-width: 100%; height: auto; }
+
+@media (width <= 767px) {
+  .article { margin-block: 32px 72px; }
+}

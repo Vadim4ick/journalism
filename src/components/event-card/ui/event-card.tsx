@@ -29,7 +29,7 @@ export function EventCard({ event, imageSizes }: { event: EventCardData; imageSi
       aria-label={`Подробнее: ${event.title}`}
     >
       <div className="relative aspect-[535/400] w-full shrink-0 overflow-hidden rounded-[20px] bg-muted">
-        {event.image && <Image
+        <Image
           src={event.image}
           alt={event.imageAlt ?? ""}
           textLinkLabel={`Фото события: ${event.title}`}
@@ -37,9 +37,9 @@ export function EventCard({ event, imageSizes }: { event: EventCardData; imageSi
           fill
           sizes={imageSizes ?? "(min-width: 1150px) calc((min(100vw, 1792px) - 204px) / 3), (min-width: 768px) calc((100vw - 132px) / 2), calc(100vw - 72px)"}
           quality={60}
-          unoptimized={event.image.startsWith("http")}
+          unoptimized={event.image?.startsWith("http")}
           className="object-cover transition-[opacity,scale] duration-1000 ease-out motion-safe:group-hover:scale-[1.045] motion-reduce:transition-none"
-        />}
+        />
         <span data-text-flow-inline className="absolute top-4 left-4 rounded-xl bg-primary px-3.5 py-2.5 text-sm font-bold text-primary-foreground mobile:text-base desktop1250:text-xl">
           {event.date}
         </span>

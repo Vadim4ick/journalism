@@ -64,6 +64,11 @@
   background: var(--muted);
 }
 
+.imageOpen { position: absolute; inset: 0; display: block; width: 100%; cursor: zoom-in; }
+.imageOpen:focus-visible { outline: 3px solid var(--ring); outline-offset: -3px; border-radius: 18px; }
+.textImageLink { display: block; }
+:global(html[data-text-mode="true"]) .imageFrame { aspect-ratio: auto; overflow: visible; border-radius: 0; background: transparent; }
+
 .galleryFooter {
   display: flex;
   min-height: 60px;

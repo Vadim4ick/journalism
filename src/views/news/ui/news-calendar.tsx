@@ -15,11 +15,12 @@ function dateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-export function NewsCalendar({ dates, selected, initialDate, onSelect }: {
+export function NewsCalendar({ dates, selected, initialDate, onSelect, onMonthChange }: {
   dates: readonly string[];
   selected?: NewsDateRange;
   initialDate: string;
   onSelect: (range?: NewsDateRange) => void;
+  onMonthChange: () => void;
 }) {
   // Open on the latest publication so the marked dates correspond to actual data.
   const latestDate = [...dates].sort().at(-1);
@@ -39,6 +40,7 @@ export function NewsCalendar({ dates, selected, initialDate, onSelect }: {
     const next = new Date(year, monthIndex + delta, 1);
     setMonth(next);
     setFocused(next);
+    onMonthChange();
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>, date: Date) {
@@ -64,6 +66,7 @@ export function NewsCalendar({ dates, selected, initialDate, onSelect }: {
     event.preventDefault();
     setMonth(new Date(next.getFullYear(), next.getMonth(), 1));
     setFocused(next);
+    if (next.getMonth() !== date.getMonth() || next.getFullYear() !== date.getFullYear()) onMonthChange();
     requestAnimationFrame(() => calendarRef.current?.querySelector<HTMLButtonElement>(`[data-date="${dateKey(next)}"]`)?.focus());
   }
 

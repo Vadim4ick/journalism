@@ -3,14 +3,22 @@ import { Info } from "lucide-react";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
-import { Vk } from "@/shared/icons/seti/vk";
-import { Ok } from "@/shared/icons/seti/ok";
-import type { Newspaper } from "../model/newspapers";
+import type { ContentNewspaper, ContentNewspaperIssue } from "@/shared/types/model/content.type";
 import { NewspaperLogo } from "./newspaper-logo";
 import { IssuesFeed } from "./issues-feed";
 import styles from "./newspaper-detail-page.module.css";
 
-export function NewspaperDetailPage({ newspaper }: { newspaper: Newspaper }) {
+function websiteUrl(value: string) {
+  try {
+    const url = new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`);
+    return url.protocol === "https:" || url.protocol === "http:" ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+export function NewspaperDetailPage({ newspaper, issues, pagination, date }: { newspaper: ContentNewspaper; issues: ContentNewspaperIssue[]; pagination: Pagination; date?: string }) {
+  const website = newspaper.website ? websiteUrl(newspaper.website) : undefined;
   return (
     <Container>
       <article className={styles.article}>
@@ -29,12 +37,13 @@ export function NewspaperDetailPage({ newspaper }: { newspaper: Newspaper }) {
             </div>
             <div className={styles.publisherContent}>
               <Typography as="h1" variant="heading-medium" className={styles.title}>{newspaper.name}</Typography>
-              {newspaper.website || newspaper.municipality || newspaper.socials ? (
+              {newspaper.description && <Typography variant="body" className={styles.description}>{newspaper.description}</Typography>}
+              {website || newspaper.municipality || newspaper.socials.length > 0 ? (
                 <dl className={styles.publisherMeta}>
-                  {newspaper.website && (
+                  {website && (
                     <div>
                       <dt>Сайт:</dt>
-                      <dd><a href={`https://${newspaper.website}`} className={styles.website}>{newspaper.website}</a></dd>
+                      <dd><a href={website} className={styles.website}>{newspaper.website}</a></dd>
                     </div>
                   )}
                   {newspaper.municipality && (
@@ -43,17 +52,10 @@ export function NewspaperDetailPage({ newspaper }: { newspaper: Newspaper }) {
                       <dd>{newspaper.municipality}</dd>
                     </div>
                   )}
-                  {newspaper.socials && (
+                  {newspaper.socials.length > 0 && (
                     <div>
                       <dt>Соц. сети:</dt>
-                      <dd className={styles.socials}>
-                        <span className={styles.socialNames}>{newspaper.socials.join(", ")}</span>
-                        {newspaper.socials.map((social) => (
-                          <span key={social} aria-hidden="true" className={styles.socialBadge}>
-                            {social === "ВКонтакте" ? <Vk /> : <Ok />}
-                          </span>
-                        ))}
-                      </dd>
+                      <dd>{newspaper.socials.join(", ")}</dd>
                     </div>
                   )}
                 </dl>
@@ -69,7 +71,7 @@ export function NewspaperDetailPage({ newspaper }: { newspaper: Newspaper }) {
           </header>
         </ScrollReveal>
 
-        <ScrollReveal><IssuesFeed issues={newspaper.issues} /></ScrollReveal>
+        <ScrollReveal><IssuesFeed issues={issues} pagination={pagination} slug={newspaper.slug} date={date} /></ScrollReveal>
       </article>
     </Container>
   );

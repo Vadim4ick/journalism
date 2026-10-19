@@ -1,0 +1,45 @@
+.lightbox { display: flex; flex-direction: column; background: #111; color: #fff; }
+.header {
+  display: flex;
+  min-height: 68px;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 8px max(12px, env(safe-area-inset-left));
+}
+.heading { min-width: 0; }
+.title { overflow: hidden; font-size: 16px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.count { font-size: 13px; }
+.actions { display: flex; flex: none; align-items: center; gap: 8px; }
+.download, .close, .previous, .next {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: inherit;
+  cursor: pointer;
+}
+.download { padding: 8px 12px; font-size: 14px; font-weight: 600; text-decoration: none; }
+.close, .previous, .next { padding: 8px; }
+.download:hover, .close:hover, .previous:hover, .next:hover { background: rgb(255 255 255 / 16%); }
+.download:focus-visible, .close:focus-visible, .previous:focus-visible, .next:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+.body { display: grid; min-height: 0; flex: 1; grid-template-columns: 52px minmax(0, 1fr) 52px; grid-template-rows: minmax(0, 1fr); align-items: center; }
+.imageWrap { position: relative; grid-column: 1 / -1; grid-row: 1; width: 100%; height: 100%; min-height: 0; }
+.image { object-fit: contain; }
+.previous, .next { z-index: 1; grid-row: 1; margin: 4px; background: rgb(0 0 0 / 65%); }
+.previous { grid-column: 1; }
+.next { grid-column: 3; }
+.caption { flex: none; padding: 8px 16px max(16px, env(safe-area-inset-bottom)); text-align: center; font-size: 14px; }
+
+:global(html[data-a11y-enabled="true"]) .lightbox { background: var(--background); color: var(--foreground); }
+:global(html[data-a11y-enabled="true"]) .previous,
+:global(html[data-a11y-enabled="true"]) .next { background: var(--background); }
+:global(html[data-a11y-enabled="true"]) .download:hover,
+:global(html[data-a11y-enabled="true"]) .close:hover,
+:global(html[data-a11y-enabled="true"]) .previous:hover,
+:global(html[data-a11y-enabled="true"]) .next:hover { background: var(--muted); }

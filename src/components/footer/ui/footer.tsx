@@ -6,6 +6,7 @@ import effects from "@/shared/assets/style/link-effects.module.css";
 import Link from "next/link";
 import { FooterNavigation } from "./footer-navigation";
 import { FooterMap } from "./footer-map";
+import { FooterPolicyLink } from "./footer-policy-link";
 import { CONTACTS } from "@/shared/const/contacts.const";
 
 const Footer = () => {
@@ -56,9 +57,7 @@ const Footer = () => {
                 <SocialLinks />
               </div>
             </div>
-            <Link href="/" className={`${effects.link} ${effects.text} w-fit text-base font-semibold underline underline-offset-2 mobile:text-lg`}>
-              Политика конфиденциальности
-            </Link>
+            <FooterPolicyLink />
           </div>
 
           <div className="flex flex-col gap-5 tablet:col-span-2 desktop1250:col-span-1">

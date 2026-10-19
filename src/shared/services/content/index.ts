@@ -5,10 +5,19 @@ import type {
   ContentProjectsParams,
   ContentSlug,
   ContentDocumentsResponse,
+  ContentDocumentDetailResponse,
+  ContentLegalDocumentsResponse,
+  ContentLegalDocumentResponse,
   ContentEventsResponse,
   ContentEventResponse,
   ContentNewsResponse,
   ContentNewsDetailResponse,
+  ContentMediaResponse,
+  ContentMediaDetailResponse,
+  ContentProjectsResponse,
+  ContentNewspaperIssuesParams,
+  ContentNewspapersResponse,
+  ContentNewspaperResponse,
 } from "@/shared/types/model/content.type";
 
 async function getList<T = unknown>(path: string, params?: ContentPaginationParams, signal?: AbortSignal) {
@@ -16,9 +25,10 @@ async function getList<T = unknown>(path: string, params?: ContentPaginationPara
   return data;
 }
 
-async function getItem<T = unknown>(path: string, slug: ContentSlug, signal?: AbortSignal) {
+async function getItem<T = unknown>(path: string, slug: ContentSlug, signal?: AbortSignal, params?: ContentNewspaperIssuesParams) {
   const { data } = await $serverApi.get<T>(`${path}/${encodeURIComponent(String(slug))}`, {
     signal,
+    params,
   });
   return data;
 }
@@ -27,7 +37,17 @@ export const contentServices = {
   getDocuments: (params?: ContentPaginationParams, signal?: AbortSignal) =>
     getList<ContentDocumentsResponse>("/content/documents", params, signal),
   getDocument: (slug: ContentSlug, signal?: AbortSignal) =>
-    getItem("/content/documents", slug, signal),
+    getItem<ContentDocumentDetailResponse>("/content/documents", slug, signal),
+  getFile: (id: number, signal?: AbortSignal) => {
+    const base = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, "");
+    if (!base) throw new Error("Не задан NEXT_PUBLIC_SERVER_URL");
+    return fetch(`${base}/api/v1/content/files/${encodeURIComponent(String(id))}`, {
+      signal,
+      cache: "no-store",
+      headers: { Accept: "*/*" },
+      redirect: "error",
+    });
+  },
 
   getEvents: (params?: ContentPaginationParams, signal?: AbortSignal) =>
     getList<ContentEventsResponse>("/content/events", params, signal),
@@ -35,14 +55,14 @@ export const contentServices = {
     getItem<ContentEventResponse>("/content/events", slug, signal),
 
   getLegalDocuments: (params?: ContentPaginationParams, signal?: AbortSignal) =>
-    getList("/content/legal-documents", params, signal),
+    getList<ContentLegalDocumentsResponse>("/content/legal-documents", params, signal),
   getLegalDocument: (slug: ContentSlug, signal?: AbortSignal) =>
-    getItem("/content/legal-documents", slug, signal),
+    getItem<ContentLegalDocumentResponse>("/content/legal-documents", slug, signal),
 
   getMedia: (params?: ContentPaginationParams, signal?: AbortSignal) =>
-    getList("/content/media", params, signal),
+    getList<ContentMediaResponse>("/content/media", params, signal),
   getMediaItem: (slug: ContentSlug, signal?: AbortSignal) =>
-    getItem("/content/media", slug, signal),
+    getItem<ContentMediaDetailResponse>("/content/media", slug, signal),
 
   getNews: (params?: ContentNewsParams, signal?: AbortSignal) =>
     getList<ContentNewsResponse>("/content/news", params, signal),
@@ -50,7 +70,12 @@ export const contentServices = {
     getItem<ContentNewsDetailResponse>("/content/news", slug, signal),
 
   getProjects: (params?: ContentProjectsParams, signal?: AbortSignal) =>
-    getList("/content/projects", params, signal),
+    getList<ContentProjectsResponse>("/content/projects", params, signal),
   getProject: (slug: ContentSlug, signal?: AbortSignal) =>
     getItem("/content/projects", slug, signal),
+
+  getNewspapers: (params?: ContentPaginationParams, signal?: AbortSignal) =>
+    getList<ContentNewspapersResponse>("/content/newspapers", params, signal),
+  getNewspaper: (slug: ContentSlug, params?: ContentNewspaperIssuesParams, signal?: AbortSignal) =>
+    getItem<ContentNewspaperResponse>("/content/newspapers", slug, signal, params),
 };

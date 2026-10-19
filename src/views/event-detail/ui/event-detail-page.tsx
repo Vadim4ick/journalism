@@ -22,10 +22,9 @@ function eventDate(event: ContentEventDetail) {
 
 export function EventDetailPage({ event, related }: { event: ContentEventDetail; related: ContentEvent[] }) {
   const gallery = (event.images ?? [])
-    .map((image) => ({ src: eventImageUrl(image.url), alt: image.description || `Фото события «${event.title}»` }))
-    .filter((image): image is { src: string; alt: string } => Boolean(image.src));
+    .map((image) => ({ src: eventImageUrl(image.url) ?? "/images/no-image.png", alt: image.description || `Фото события «${event.title}»` }));
   const cover = eventImageUrl(event.image);
-  if (gallery.length === 0 && cover) gallery.push({ src: cover, alt: `Фото события «${event.title}»` });
+  if (gallery.length === 0) gallery.push({ src: cover ?? "/images/no-image.png", alt: `Фото события «${event.title}»` });
 
   return (
     <>

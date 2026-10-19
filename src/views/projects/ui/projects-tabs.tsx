@@ -4,25 +4,17 @@ import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { SiteImage } from "@/components/site-image";
 import { PartnerInquiry } from "@/components/partner-inquiry";
-import type { ProjectCardData } from "@/components/project-card";
+import { projectCardData } from "@/components/project-card";
+import type { ContentProject } from "@/shared/types/model/content.type";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
-import { COMPLETED_PROJECTS, CURRENT_PROJECTS } from "../model/projects";
 import styles from "./projects-page.module.css";
 
-const tabs = [
-  { id: "current", label: "Текущие проекты", projects: CURRENT_PROJECTS },
-  {
-    id: "completed",
-    label: "Завершённые проекты",
-    projects: COMPLETED_PROJECTS,
-  },
-] as const;
-
-function ProjectItem({ project }: { project: ProjectCardData }) {
+function ProjectItem({ item }: { item: ContentProject }) {
+  const project = projectCardData(item);
   const titleId = `projects-page-${project.id}-title`;
   const descriptionId = `projects-page-${project.id}-description`;
-  const isLogo = project.id === "neighbors" || project.id === "rural-blogger";
+  const isLogo = project.id === "neighbors";
 
   return (
     <article
@@ -33,6 +25,7 @@ function ProjectItem({ project }: { project: ProjectCardData }) {
       <div className={styles.imageFrame}>
         <SiteImage
           src={project.image}
+          unoptimized={project.image?.startsWith("http")}
           alt={project.imageAlt}
           textLinkLabel={`Изображение проекта: ${project.title}`}
           textModeLink={false}
@@ -57,16 +50,20 @@ function ProjectItem({ project }: { project: ProjectCardData }) {
           {project.description}
         </Typography>
       </div>
-      <Link
+      {project.detailAvailable && <Link
         href={`/projects/${project.slug}`}
         aria-label={`О проекте ${project.title}`}
         className={styles.cardLink}
-      />
+      />}
     </article>
   );
 }
 
-export function ProjectsTabs() {
+export function ProjectsTabs({ projects }: { projects: ContentProject[] }) {
+  const tabs = [
+    { id: "current", label: "Текущие проекты", projects: projects.filter((project) => !project.is_completed) },
+    { id: "completed", label: "Завершённые проекты", projects: projects.filter((project) => project.is_completed) },
+  ];
   const [activeTab, setActiveTab] = useState(0);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   function handleTabKeyDown(
@@ -129,14 +126,14 @@ export function ProjectsTabs() {
             <ul data-a11y-content-grid className={styles.grid}>
               {tab.projects.map((project) => (
                 <li key={project.id}>
-                  <ScrollReveal className="h-full"><ProjectItem project={project} /></ScrollReveal>
+                  <ScrollReveal className="h-full"><ProjectItem item={project} /></ScrollReveal>
                 </li>
               ))}
             </ul>
           ) : (
             <ScrollReveal>
               <Typography variant="body" className={styles.emptyState}>
-                Информация о завершённых проектах пока не добавлена.
+                {tab.id === "completed" ? "На этой странице нет завершённых проектов." : "На этой странице нет текущих проектов."}
               </Typography>
             </ScrollReveal>
           )}

@@ -14,13 +14,9 @@ import {
   useCarousel,
 } from "@/shared/ui/carousel";
 import styles from "./home-gallery.module.css";
+import { contentImageUrl } from "@/shared/lib/content-image-url";
+import type { ContentMedia } from "@/shared/types/model/content.type";
 
-type HomeGalleryAlbum = {
-  slug: string;
-  title: string;
-  cover: { src: string };
-  photos: readonly unknown[];
-};
 
 function GalleryControls() {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
@@ -51,11 +47,13 @@ function GalleryControls() {
   );
 }
 
-function GallerySlide({ album, staticMode }: { album: HomeGalleryAlbum; staticMode: boolean }) {
+function GallerySlide({ album, staticMode }: { album: ContentMedia; staticMode: boolean }) {
+  const cover = contentImageUrl(album.image) ?? contentImageUrl(album.images?.[0]?.url);
   return (
-    <Link href={`/gallery/${album.slug}`} className={styles.slide} aria-label={`${album.title}, ${album.photos.length} фото`}>
+    <Link href={`/gallery/${album.slug}`} className={styles.slide} aria-label={`${album.title}, ${album.photo_count} фото`}>
       <SiteImage
-        src={album.cover.src}
+        src={cover}
+        unoptimized={cover?.startsWith("http")}
         alt=""
         fill
         sizes={staticMode
@@ -69,14 +67,14 @@ function GallerySlide({ album, staticMode }: { album: HomeGalleryAlbum; staticMo
           {album.title}
         </Typography>
         <Typography as="span" variant="caption" className={styles.slideCount}>
-          {album.photos.length} фото
+          {album.photo_count} фото
         </Typography>
       </span>
     </Link>
   );
 }
 
-export function HomeGallery({ albums }: { albums: readonly HomeGalleryAlbum[] }) {
+export function HomeGallery({ albums, error = false }: { albums: readonly ContentMedia[]; error?: boolean }) {
   const enabled = useAccessibilityStore((state) => state.enabled);
   const textMode = useAccessibilityStore((state) => state.textMode);
   const hydrated = useAccessibilityStore((state) => state.hydrated);
@@ -107,7 +105,9 @@ export function HomeGallery({ albums }: { albums: readonly HomeGalleryAlbum[] })
             Все фото
           </Button>
         </div>
-        {albums.length === 0 ? (
+        {error ? (
+          <p role="alert">Не удалось загрузить фотоальбомы. Попробуйте обновить страницу.</p>
+        ) : albums.length === 0 ? (
           <p>Фотоальбомов пока нет.</p>
         ) : staticMode ? (
           <ul data-a11y-content-grid className="grid gap-5" aria-label="Фотоальбомы медиацентра">

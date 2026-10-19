@@ -1,0 +1,31 @@
+@reference "../../../shared/assets/style/globals.css";
+
+.filterBar { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-bottom: 28px; }
+.trigger { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; gap: 10px; padding: 0 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--background); color: var(--foreground); font-size: 0.875rem; font-weight: 600; cursor: pointer; }
+.trigger:hover, .trigger[data-popup-open] { border-color: var(--primary); color: var(--primary); }
+.triggerChevron { transition: transform 160ms ease; }
+.trigger[data-popup-open] .triggerChevron { transform: rotate(180deg); }
+.clear { display: inline-flex; min-height: 44px; align-items: center; color: var(--primary); font-size: 0.875rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.positioner { z-index: 80; }
+.calendar { width: 304px; max-width: calc(100vw - 32px); padding: 16px; border: 1px solid var(--border); border-radius: 16px; background: var(--popover); color: var(--popover-foreground); box-shadow: 0 16px 40px rgb(0 0 0 / 12%); outline: none; }
+.title { margin-bottom: 12px; font-size: 0.875rem; font-weight: 600; }
+.monthHeader { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.month { font-size: 0.875rem; font-weight: 600; text-align: center; text-transform: capitalize; }
+.navigation { display: inline-flex; width: 36px; height: 36px; flex: none; align-items: center; justify-content: center; border-radius: 8px; color: var(--foreground); cursor: pointer; }
+.navigation:hover { background: var(--muted); }
+.grid { width: 100%; table-layout: fixed; border-collapse: collapse; }
+.grid th { height: 30px; color: var(--muted-foreground); font-size: 0.7rem; font-weight: 600; }
+.grid td { height: 36px; padding: 0; text-align: center; }
+.day { display: flex; width: 34px; height: 34px; max-width: 100%; align-items: center; justify-content: center; margin: auto; border-radius: 8px; color: var(--foreground); font-size: 0.8rem; text-decoration: none; }
+.day:hover { background: var(--muted); }
+.day[aria-current="date"] { background: var(--primary); color: var(--primary-foreground); font-weight: 700; }
+.trigger:focus-visible, .navigation:focus-visible, .day:focus-visible, .clear:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .triggerChevron { transition: none; }
+}
+
+:global(html[data-a11y-reduce-motion="true"]) .triggerChevron { transition: none; }
+:global(html[data-text-mode="true"]) .filterBar { justify-content: flex-start; }
+:global(html[data-text-mode="true"]) .calendar { box-shadow: none; }
+:global(html[data-text-mode="true"]) .day[aria-current="date"] { border: 2px solid currentColor; }

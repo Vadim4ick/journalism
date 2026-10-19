@@ -48,7 +48,7 @@ function DocumentRow({ document }: { document: ContentDocument }) {
           </div>
         )}
       </div>
-      <DownloadButton title={document.title} file={document.file} />
+      <DownloadButton documentId={document.id} title={document.title} file={document.file} />
     </li>
   );
 }

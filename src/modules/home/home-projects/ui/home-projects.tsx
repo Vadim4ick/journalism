@@ -1,12 +1,12 @@
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard, projectCardData } from "@/components/project-card";
+import type { ContentProject } from "@/shared/types/model/content.type";
 import Link from "next/link";
 import { ArrowUpRight } from "@/shared/icons/arrow-up-right";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { Typography } from "@/shared/ui/typography";
-import { HOME_PROJECTS } from "../model/projects";
 
-export function HomeProjects() {
+export function HomeProjects({ projects, error = false }: { projects: ContentProject[]; error?: boolean }) {
   return (
     <section id="home-projects" aria-labelledby="home-projects-heading" className="pt-16 pb-0 mobile:pt-20 desktop:pt-[120px]">
       <Container>
@@ -27,11 +27,11 @@ export function HomeProjects() {
             Все проекты
           </Button>
         </div>
-        <div data-a11y-content-grid className="grid grid-cols-1 gap-5 mobile:grid-cols-2 desktop:grid-cols-3 desktop:gap-[30px]" data-text-flow>
-          {HOME_PROJECTS.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
+        {error ? <p role="alert">Не удалось загрузить проекты. Попробуйте обновить страницу.</p> : projects.length === 0 ? <p>Проектов пока нет.</p> : (
+          <div data-a11y-content-grid className="grid grid-cols-1 gap-5 mobile:grid-cols-2 desktop:grid-cols-3 desktop:gap-[30px]" data-text-flow>
+            {projects.map((project) => <ProjectCard key={project.id} project={projectCardData(project)} />)}
+          </div>
+        )}
       </Container>
     </section>
   );

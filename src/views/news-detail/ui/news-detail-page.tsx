@@ -14,10 +14,9 @@ import styles from "./news-detail-page.module.css";
 
 export function NewsDetailPage({ article, related }: { article: ContentNewsDetail; related: ContentNews[] }) {
   const gallery = (article.images ?? [])
-    .map((image) => ({ src: contentImageUrl(image.url), alt: image.description || `Фото новости «${article.title}»` }))
-    .filter((image): image is { src: string; alt: string } => Boolean(image.src));
+    .map((image) => ({ src: contentImageUrl(image.url) ?? "/images/no-image.png", alt: image.description || `Фото новости «${article.title}»` }));
   const cover = contentImageUrl(article.image);
-  if (gallery.length === 0 && cover) gallery.push({ src: cover, alt: `Фото новости «${article.title}»` });
+  if (gallery.length === 0) gallery.push({ src: cover ?? "/images/no-image.png", alt: `Фото новости «${article.title}»` });
 
   return (
     <>
@@ -46,7 +45,7 @@ export function NewsDetailPage({ article, related }: { article: ContentNewsDetai
             <Typography as="h1" variant="heading-medium" className={styles.title}>{article.title}</Typography>
           </header>
 
-          {gallery.length > 0 && <ScrollReveal><NewsGallery images={gallery} /></ScrollReveal>}
+          {gallery.length > 0 && <ScrollReveal><NewsGallery images={gallery} title={article.title} /></ScrollReveal>}
 
           <ScrollReveal>
             <div className={styles.body}>

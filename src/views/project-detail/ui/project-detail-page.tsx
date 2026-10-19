@@ -14,7 +14,7 @@ function PartnerLink({ project }: { project: ProjectCardData }) {
 }
 
 export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
-  const neighbors = project.slug === "sosedi";
+  const neighbors = project.id === "neighbors";
   const title = neighbors ? NEIGHBORS_CONTENT.title : `Проект ${project.title}`;
 
   return (

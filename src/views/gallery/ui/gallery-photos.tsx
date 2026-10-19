@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from "@/shared/ui/dialog";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
-import type { GalleryAlbum } from "../model/albums";
+import type { GalleryAlbum } from "../model/album";
 import styles from "./gallery-album-page.module.css";
 
 export function GalleryPhotos({ album }: { album: GalleryAlbum }) {
@@ -59,6 +59,7 @@ export function GalleryPhotos({ album }: { album: GalleryAlbum }) {
                   >
                     <SiteImage
                       src={photo.src}
+                      unoptimized={photo.src.startsWith("http")}
                       alt=""
                       fill
                       priority={index === 0}
@@ -122,6 +123,7 @@ export function GalleryPhotos({ album }: { album: GalleryAlbum }) {
               <SiteImage
                 key={activePhoto.id}
                 src={activePhoto.src}
+                unoptimized={activePhoto.src.startsWith("http")}
                 alt={activePhoto.alt}
                 textLinkLabel={activePhoto.alt}
                 fill

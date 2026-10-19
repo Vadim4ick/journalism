@@ -5,27 +5,34 @@ import { useState } from "react";
 import { cn } from "@/shared/lib/utils";
 import { useAccessibilityStore } from "@/state/accessibility";
 
-type SiteImageProps = ImageProps & {
+type SiteImageProps = Omit<ImageProps, "src"> & {
+  src?: ImageProps["src"] | null;
   textLinkLabel?: string;
   textModeLink?: boolean;
 };
+
+const fallbackSrc = "/images/no-image.png";
+
+function imagePath(src: SiteImageProps["src"]): string {
+  if (typeof src === "string") return src.trim();
+  if (!src) return "";
+  return "default" in src ? src.default.src : src.src;
+}
 
 /** Wait for saved preferences before requesting image resources. */
 export function SiteImage({ textLinkLabel, textModeLink = true, ...props }: SiteImageProps) {
   const textMode = useAccessibilityStore((state) => state.textMode);
   const hydrated = useAccessibilityStore((state) => state.hydrated);
-  const [loaded, setLoaded] = useState(false);
+  const [loadedSrc, setLoadedSrc] = useState<string | null>(null);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const originalSrc = imagePath(props.src);
+  const srcKey = originalSrc || fallbackSrc;
+  const currentSrc = !originalSrc || failedSrc === srcKey ? fallbackSrc : srcKey;
+  const src = currentSrc === fallbackSrc ? fallbackSrc : typeof props.src === "string" ? currentSrc : props.src!;
 
   if (textMode) {
-    const src =
-      typeof props.src === "string"
-        ? props.src
-        : "default" in props.src
-          ? props.src.default.src
-          : props.src.src;
-
     if (!textLinkLabel) return null;
-    return textModeLink ? <a href={src}>{textLinkLabel}</a> : <span>{textLinkLabel}</span>;
+    return textModeLink ? <a href={currentSrc}>{textLinkLabel}</a> : <span>{textLinkLabel}</span>;
   }
 
   // No src/srcset or preload is emitted until the text-mode preference is known.
@@ -34,14 +41,19 @@ export function SiteImage({ textLinkLabel, textModeLink = true, ...props }: Site
   return (
     <Image
       {...props}
+      src={src}
       alt={props.alt}
       onLoad={(event) => {
-        setLoaded(true);
+        setLoadedSrc(currentSrc);
         props.onLoad?.(event);
+      }}
+      onError={(event) => {
+        if (currentSrc !== fallbackSrc) setFailedSrc(srcKey);
+        props.onError?.(event);
       }}
       className={cn(
         props.className,
-        loaded ? "opacity-100" : "opacity-0",
+        loadedSrc === currentSrc ? "opacity-100" : "opacity-0",
         "transition-[opacity,scale] duration-700 ease-out motion-reduce:transition-none",
       )}
     />
