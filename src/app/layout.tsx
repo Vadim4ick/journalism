@@ -1,23 +1,15 @@
 import type { Metadata } from "next";
-import { Raleway } from "next/font/google";
 import Script from "next/script";
 
 import "@/shared/assets/style/globals.css";
 import "@/shared/assets/style/text-mode.css";
 import { Providers } from "@/shared/providers/providers";
-import { foglihten } from "@/shared/assets/font";
+import { foglihten, raleway } from "@/shared/assets/font";
 import {
   ACCESSIBILITY_COLOR_SCHEMES,
   ACCESSIBILITY_STORAGE_KEY,
   DEFAULT_ACCESSIBILITY_SETTINGS,
 } from "@/state/accessibility/model/constants";
-
-const raleway = Raleway({
-  variable: "--font-raleway",
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Дом журналистики",
@@ -37,7 +29,11 @@ const accessibilityInitScript = `
     root.dataset.textMode = String(settings.textMode === true);
     if (settings.textMode === true) root.dataset.a11yReduceMotion = "true";
     if (settings.enabled !== true) return;
-    var fontScale = settings.fontScale === 2.5 ? "2.5" : "2";
+    var fontScale = settings.fontScale === 2.5 || settings.fontScale === 1.5
+      ? "1.5"
+      : settings.fontScale === 2 || settings.fontScale === 1.25
+        ? "1.25"
+        : "1";
     var schemes = ${JSON.stringify(ACCESSIBILITY_COLOR_SCHEMES.map((scheme) => scheme.value))};
     var scheme = schemes.indexOf(settings.colorScheme) >= 0
       ? settings.colorScheme

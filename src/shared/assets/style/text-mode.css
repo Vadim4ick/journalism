@@ -19,12 +19,12 @@ html[data-text-mode="true"] body {
 }
 
 /* Keep the selected low-vision scale when text mode is also active. */
-html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="2"] {
-  --a11y-text-scale: 2;
+html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="1.25"] {
+  --a11y-text-scale: 1.25;
 }
 
-html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="2.5"] {
-  --a11y-text-scale: 2.5;
+html[data-text-mode="true"][data-a11y-enabled="true"][data-a11y-font-scale="1.5"] {
+  --a11y-text-scale: 1.5;
 }
 
 html[data-text-mode="true"] body {

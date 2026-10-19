@@ -7,8 +7,8 @@
 
 ## Шрифты и наследование
 
-- **R** — Raleway, подключённый в `app/layout.tsx`: 400 (Regular), 500 (Medium),
-  600 (SemiBold). Наследуется от `html` через `font-sans`.
+- **R** — локальный Raleway, подключённый в `app/layout.tsx`: 400 (Regular),
+  500 (Medium), 600 (SemiBold). Наследуется от `html` через `font-sans`.
 - **F** — локальный FoglihtenNo06, 400 (Regular), `var(--font-foglihten)`.
   `category-title` и `directory-title` также сохраняют запасное семейство `serif`.
 - Все начертания прямые (`normal`); курсив в исходном интерфейсе не используется.

@@ -130,7 +130,7 @@ export function ContactsPage() {
               <Typography variant="small" className={styles.label}>
                 Мы в соцсетях:
               </Typography>
-              <SocialLinks size="small" whiteIcons className={styles.socials} />
+              <SocialLinks size="small" className={styles.socials} />
             </div>
           </ScrollReveal>
 

@@ -60,7 +60,7 @@ export function NewsDetailPage({ article }: { article: NewsArticle }) {
           <ScrollReveal>
             <section aria-label="Социальные сети" className={styles.socialSection}>
               <Typography variant="caption" className={styles.socialLabel}>Мы в социальных сетях:</Typography>
-              <SocialLinks size="small" whiteIcons />
+              <SocialLinks size="small" />
             </section>
           </ScrollReveal>
         </article>

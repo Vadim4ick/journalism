@@ -13,6 +13,7 @@ import { Nominees } from "@/shared/icons/lk/nominees";
 import { Voted } from "@/shared/icons/lk/voted";
 import { LeftVoted } from "@/shared/icons/lk/left-voted";
 import { LeftDay } from "@/shared/icons/lk/left-day";
+import { useAuthStore } from "@/state/auth.store";
 import styles from "./account-page.module.css";
 
 const statistics = [
@@ -42,6 +43,7 @@ function AnimatedRules({ children, reducedMotion }: { children: ReactNode; reduc
 }
 
 export function AccountPage() {
+  const fullName = useAuthStore((state) => state.profile?.full_name?.trim());
   const [selectedProjectSlug, setSelectedProjectSlug] = useState<string | null>(null);
   const selectedProject = CURRENT_PROJECTS.find((project) => project.slug === selectedProjectSlug);
   const reducedMotion = useEffectiveReducedMotion();
@@ -51,7 +53,7 @@ export function AccountPage() {
       <section aria-labelledby="account-heading">
         <header>
           <Typography as="h1" variant="heading-medium" id="account-heading" className={styles.heading}>
-            Анна, добро пожаловать!
+            {fullName ? `${fullName}, добро пожаловать!` : "Добро пожаловать!"}
           </Typography>
           <Typography as="p" variant="body" className={styles.subtitle}>
             Голосование членов жюри конкурса коммуникационных проектов «Сорока»

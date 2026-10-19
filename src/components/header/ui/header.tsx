@@ -1,15 +1,12 @@
-import { typographyVariants } from "@/shared/ui/typography";
 import effects from "@/shared/assets/style/link-effects.module.css";
 import { Logo } from "@/shared/icons/logo";
 import { Container } from "@/shared/ui/container";
-import { Button } from "@/shared/ui/button";
-import { SiteImage as Image } from "@/components/site-image";
 import { TextModeToggle } from "@/components/text-mode";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { HeaderNavigation } from "./header-navigation";
 import { MobileNavigation } from "./mobile-navigation";
-import { AccountMenu } from "./account-menu";
+import { HeaderAuthControl } from "./header-auth-control";
 import { AccessibilityPanel } from "@/components/accessibility-panel";
 import { SiteSearch } from "@/components/site-search";
 import { cn } from "@/shared/lib/utils";
@@ -39,6 +36,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
         variant === "account" && "desktop1250:grid-cols-[124px_minmax(0,1fr)_auto]",
       )}>
         <Link
+          data-site-header-logo
           href="/"
           aria-label="Дом журналистики — главная"
           className={cn(
@@ -61,21 +59,23 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
           <span className="text-mode-only">Медиацентр «Дом журналистики»</span>
         </Link>
 
-        <div className={cn(
+        <div data-site-header-center className={cn(
           "col-span-2 row-start-2 flex min-w-0 flex-col items-center gap-4 desktop1250:col-span-8 desktop1250:col-start-3 desktop1250:row-start-1 desktop1250:gap-8",
           variant === "account" && "desktop1250:col-span-1 desktop1250:col-start-2",
         )}>
-          <span className="hidden w-full max-w-[28.75rem] items-center gap-2 desktop1250:flex">
+          <span data-site-header-search className="hidden w-full max-w-[28.75rem] items-center gap-2 desktop1250:flex">
             {search}
           </span>
-          <HeaderNavigation />
+          <div data-site-header-nav className="w-full">
+            <HeaderNavigation />
+          </div>
         </div>
 
-        <div className={cn(
+        <div data-site-header-actions className={cn(
           "col-start-2 row-start-1 justify-self-end desktop1250:col-span-2 desktop1250:col-start-11",
           variant === "account"
             ? "flex flex-col items-end gap-3 desktop1250:col-span-1 desktop1250:col-start-3"
-            : "grid grid-cols-4 items-center justify-items-end gap-1 mobile:gap-2 desktop1250:flex",
+            : "grid grid-cols-4 items-center justify-items-end gap-1 mobile:gap-2 desktop1250:flex desktop1250:flex-wrap desktop1250:justify-end desktop1250:gap-y-3",
         )}>
           {variant === "account" ? (
             <>
@@ -89,7 +89,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
                   <MobileNavigation />
                 </div>
               </div>
-              <AccountMenu />
+              <HeaderAuthControl />
             </>
           ) : (
             <>
@@ -101,26 +101,7 @@ const Header = ({ search, variant = "default" }: HeaderProps) => {
               <div className="text-mode-hidden desktop1250:hidden">
                 <MobileNavigation />
               </div>
-              <Button
-                variant="secondary"
-                nativeButton={false}
-                render={<Link href="/login" aria-label="Войти в аккаунт" />}
-                className={`${typographyVariants["button-login"]} col-span-4 min-h-11 gap-3 rounded-full py-2 pr-1 pl-4 disabled:opacity-100 desktop1250:min-h-13 desktop1250:gap-4 desktop1250:py-1.5 desktop1250:pr-1.5`}
-              >
-                Войти
-                <span
-                  aria-hidden="true"
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary desktop1250:size-10"
-                >
-                  <Image
-                    src="/images/header/account.svg"
-                    alt=""
-                    width={15}
-                    height={17}
-                    className="h-[17px] w-[15px]"
-                  />
-                </span>
-              </Button>
+              <HeaderAuthControl publicLayout />
             </>
           )}
         </div>

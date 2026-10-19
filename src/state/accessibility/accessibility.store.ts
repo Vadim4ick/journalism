@@ -29,6 +29,13 @@ function isFontScale(value: unknown): value is AccessibilityFontScale {
   return ACCESSIBILITY_FONT_SCALES.includes(value as AccessibilityFontScale);
 }
 
+function restoreFontScale(value: unknown): AccessibilityFontScale {
+  // Preserve the closest option for settings saved before the scale was reduced.
+  if (value === 2) return 1.25;
+  if (value === 2.5) return 1.5;
+  return isFontScale(value) ? value : DEFAULT_ACCESSIBILITY_SETTINGS.fontScale;
+}
+
 function isColorScheme(value: unknown): value is AccessibilityColorScheme {
   return ACCESSIBILITY_COLOR_SCHEMES.some((scheme) => scheme.value === value);
 }
@@ -50,9 +57,7 @@ function mergePersistedSettings(
       typeof persisted.enabled === "boolean"
         ? persisted.enabled
         : currentState.enabled,
-    fontScale: isFontScale(persisted.fontScale)
-      ? persisted.fontScale
-      : currentState.fontScale,
+    fontScale: restoreFontScale(persisted.fontScale),
     colorScheme: isColorScheme(persisted.colorScheme)
       ? persisted.colorScheme
       : currentState.colorScheme,

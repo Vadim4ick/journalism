@@ -1,4 +1,4 @@
-export type AccessibilityFontScale = 2 | 2.5;
+export type AccessibilityFontScale = 1 | 1.25 | 1.5;
 
 export type AccessibilityColorScheme =
   | "normal"

@@ -8,8 +8,7 @@ export const ACCESSIBILITY_STORAGE_KEY =
   "journalism-front:accessibility-settings";
 
 export const ACCESSIBILITY_FONT_SCALES: readonly AccessibilityFontScale[] = [
-  2,
-  2.5,
+  1, 1.25, 1.5,
 ];
 
 export const ACCESSIBILITY_COLOR_SCHEMES: readonly {
@@ -25,7 +24,7 @@ export const ACCESSIBILITY_COLOR_SCHEMES: readonly {
 export const DEFAULT_ACCESSIBILITY_SETTINGS: AccessibilitySettings = {
   enabled: false,
   textMode: false,
-  fontScale: 2,
+  fontScale: 1,
   colorScheme: "normal",
   reduceMotion: true,
   backgroundImagesVisible: false,

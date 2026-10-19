@@ -4,118 +4,29 @@ import { SiteImage } from "@/components/site-image";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
+import type {
+  ContentDocument,
+  ContentDocumentSection,
+} from "@/shared/types/model/content.type";
 import { DownloadButton } from "./download-button";
 import styles from "./documents-page.module.css";
 
-type DocumentItem = {
-  title: string;
-  date: string;
-  dateTime: string;
-  size: string;
-  format: "PDF" | "DOCX";
-};
+function documentDate(value: string) {
+  const match = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(value);
+  return match ? `${match[3]}-${match[2]}-${match[1]}` : undefined;
+}
 
-type DocumentGroup = {
-  title: string;
-  documents: DocumentItem[];
-};
+function fileSize(bytes: number) {
+  if (bytes < 1024) return `${bytes} Б`;
+  const unit = bytes < 1024 ** 2 ? "КБ" : bytes < 1024 ** 3 ? "МБ" : "ГБ";
+  const value = bytes / (unit === "КБ" ? 1024 : unit === "МБ" ? 1024 ** 2 : 1024 ** 3);
+  return `${new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 2 }).format(value)} ${unit}`;
+}
 
-const DOCUMENT_GROUPS: DocumentGroup[] = [
-  {
-    title: "Защита персональных данных",
-    documents: [
-      {
-        title: "Политика защиты и обработки персональных данных ГКУ КК «Медиацентр „Дом журналистики“»",
-        date: "19 марта 2026",
-        dateTime: "2026-03-19",
-        size: "10,13 МБ",
-        format: "PDF",
-      },
-    ],
-  },
-  {
-    title: "Нормативные правовые акты, определяющие полномочия, задачи и функции учреждения",
-    documents: [
-      {
-        title: "Перечень нормативных правовых актов, определяющих полномочия, задачи и функции гос...",
-        date: "19 марта 2026",
-        dateTime: "2026-03-19",
-        size: "15 КБ",
-        format: "DOCX",
-      },
-      {
-        title: "Устав государственного казенного учреждения Краснодарского края «Медиацентр „Дом...",
-        date: "19 февраля 2024",
-        dateTime: "2024-02-19",
-        size: "5,17 МБ",
-        format: "PDF",
-      },
-      {
-        title: "Изменение в Устав государственного казенного учреждения Краснодарского края «Медиа...",
-        date: "20 июня 2024",
-        dateTime: "2024-06-20",
-        size: "190 КБ",
-        format: "PDF",
-      },
-      {
-        title: "Изменение в Устав государственного казенного учреждения Краснодарского края «Медиа...",
-        date: "16 августа 2024",
-        dateTime: "2024-08-16",
-        size: "198 КБ",
-        format: "PDF",
-      },
-      {
-        title: "Изменение в Устав государственного казенного учреждения Краснодарского края «Медиа...",
-        date: "28 октября 2024",
-        dateTime: "2024-10-28",
-        size: "1,76 МБ",
-        format: "PDF",
-      },
-      {
-        title: "Изменение в Устав государственного казенного учреждения Краснодарского края «Медиа...",
-        date: "19 февраля 2025",
-        dateTime: "2025-02-19",
-        size: "3,96 МБ",
-        format: "PDF",
-      },
-      {
-        title: "Изменение в Устав государственного казенного учреждения Краснодарского края «Медиа...",
-        date: "28 октября 2025",
-        dateTime: "2025-10-28",
-        size: "215 КБ",
-        format: "PDF",
-      },
-    ],
-  },
-  {
-    title: "Противодействие коррупции",
-    documents: [
-      {
-        title: "Кодекс этики и служебного поведения государственного казенного учреждения Краснодарского края...",
-        date: "26 марта 2024",
-        dateTime: "2024-03-26",
-        size: "4,37 МБ",
-        format: "PDF",
-      },
-      {
-        title: "Положение о комиссии по противодействию коррупции в государственном казенном учре...",
-        date: "26 марта 2024",
-        dateTime: "2024-03-26",
-        size: "3,39 МБ",
-        format: "PDF",
-      },
-      {
-        title: "Положение об антикоррупционной политике государственного казенного учреждения К...",
-        date: "26 марта 2024",
-        dateTime: "2024-03-26",
-        size: "12,37 МБ",
-        format: "PDF",
-      },
-    ],
-  },
-];
+function DocumentRow({ document }: { document: ContentDocument }) {
+  const size = document.file?.size_bytes == null ? null : fileSize(document.file.size_bytes);
+  const extension = document.file?.extension?.replace(/^\./, "").toUpperCase() || null;
 
-function DocumentRow({ document }: { document: DocumentItem }) {
   return (
     <li className={styles.documentRow}>
       <span aria-hidden="true" className={styles.fileIcon}>
@@ -125,83 +36,99 @@ function DocumentRow({ document }: { document: DocumentItem }) {
         <Typography as="p" variant="body" className={styles.documentTitle} title={document.title}>
           {document.title}
         </Typography>
-        <div className={styles.documentMetadata}>
-          <time dateTime={document.dateTime}>{`от ${document.date}`}</time>
-          <span aria-hidden="true">·</span>
-          <span>{document.size}</span>
-          <span aria-hidden="true">·</span>
-          <span>{document.format}</span>
-        </div>
+        {(document.published_at || size || extension) && (
+          <div className={styles.documentMetadata}>
+            {document.published_at && (
+              <time dateTime={documentDate(document.published_at)}>{`от ${document.published_at}`}</time>
+            )}
+            {document.published_at && (size || extension) && <span aria-hidden="true">·</span>}
+            {size && <span>{size}</span>}
+            {size && extension && <span aria-hidden="true">·</span>}
+            {extension && <span>{extension}</span>}
+          </div>
+        )}
       </div>
-      <div className={styles.downloadAction}>
-        <span className={styles.downloadLabel}>Скачать</span>
-        <DownloadButton title={document.title} />
-      </div>
+      <DownloadButton title={document.title} file={document.file} />
     </li>
   );
 }
 
-const DocumentsPage = () => (
-  <>
-    <section aria-labelledby="documents-heading" className={styles.heroSection}>
-      <div className={styles.hero}>
-        <div className={styles.heroContent}>
-          <nav aria-label="Хлебные крошки" className={styles.breadcrumbs}>
-            <Link
-              href="/"
-              className="rounded-sm underline-offset-4 hover:underline focus-visible:underline"
-            >
-              Главная
-            </Link>
-            <span aria-hidden="true" className={styles.breadcrumbSeparator}>
-              <SiteImage
-                src="/images/news/breadcrumb.svg"
-                alt=""
-                width={15}
-                height={15}
-                className="-rotate-90"
-              />
-              <span className="text-mode-only">›</span>
-            </span>
-            <span aria-current="page">Документы</span>
-          </nav>
-          <Typography as="h1" variant="hero-title" id="documents-heading">
-            Документы
-          </Typography>
-        </div>
-      </div>
-    </section>
+type DocumentsPageProps = {
+  sections: ContentDocumentSection[];
+  error?: boolean;
+};
 
-    <section aria-label="Документы учреждения" className={styles.documentsSection}>
-      <Container className={styles.container}>
-        <div className={styles.documentsPanel}>
-          {DOCUMENT_GROUPS.map((group, groupIndex) => (
-            <ScrollReveal key={group.title}>
-            <section
-              aria-labelledby={`document-group-${groupIndex}`}
-              className={styles.documentGroup}
-            >
-              {groupIndex > 0 && <div aria-hidden="true" className={styles.divider} />}
-              <Typography
-                as="h2"
-                variant="heading-small"
-                id={`document-group-${groupIndex}`}
-                className={styles.groupTitle}
+function DocumentsPage({ sections, error = false }: DocumentsPageProps) {
+  const populatedSections = sections.filter((section) => section.items.length > 0);
+
+  return (
+    <>
+      <section aria-labelledby="documents-heading" className={styles.heroSection}>
+        <div className={styles.hero}>
+          <div className={styles.heroContent}>
+            <nav aria-label="Хлебные крошки" className={styles.breadcrumbs}>
+              <Link
+                href="/"
+                className="rounded-sm underline-offset-4 hover:underline focus-visible:underline"
               >
-                {group.title}
-              </Typography>
-              <ul className={styles.documentList}>
-                {group.documents.map((document, documentIndex) => (
-                  <DocumentRow key={`${document.dateTime}-${documentIndex}`} document={document} />
-                ))}
-              </ul>
-            </section>
-            </ScrollReveal>
-          ))}
+                Главная
+              </Link>
+              <span aria-hidden="true" className={styles.breadcrumbSeparator}>
+                <SiteImage
+                  src="/images/news/breadcrumb.svg"
+                  alt=""
+                  width={15}
+                  height={15}
+                  className="-rotate-90"
+                />
+                <span className="text-mode-only">›</span>
+              </span>
+              <span aria-current="page">Документы</span>
+            </nav>
+            <Typography as="h1" variant="hero-title" id="documents-heading">
+              Документы
+            </Typography>
+          </div>
         </div>
-      </Container>
-    </section>
-  </>
-);
+      </section>
+
+      <section aria-label="Документы учреждения" className={styles.documentsSection}>
+        <Container className={styles.container}>
+          <div className={styles.documentsPanel}>
+            {error ? (
+              <p role="alert">Не удалось загрузить документы. Попробуйте обновить страницу.</p>
+            ) : populatedSections.length === 0 ? (
+              <p>Документы пока не опубликованы.</p>
+            ) : (
+              populatedSections.map((section, index) => (
+                <ScrollReveal key={section.id ?? section.slug ?? `section-${index}`}>
+                  <section
+                    aria-labelledby={`document-group-${index}`}
+                    className={styles.documentGroup}
+                  >
+                    {index > 0 && <div aria-hidden="true" className={styles.divider} />}
+                    <Typography
+                      as="h2"
+                      variant="heading-small"
+                      id={`document-group-${index}`}
+                      className={styles.groupTitle}
+                    >
+                      {section.title}
+                    </Typography>
+                    <ul className={styles.documentList}>
+                      {section.items.map((document) => (
+                        <DocumentRow key={document.id} document={document} />
+                      ))}
+                    </ul>
+                  </section>
+                </ScrollReveal>
+              ))
+            )}
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}
 
 export { DocumentsPage };

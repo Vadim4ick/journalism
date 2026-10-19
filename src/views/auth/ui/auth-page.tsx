@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import { Check } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
@@ -15,44 +17,80 @@ import {
 } from "../model/auth.schema";
 import { AuthField } from "./auth-field";
 import { PasswordInput } from "./password-input";
+import { getLoginErrorMessage, useLoginMutation } from "@/shared/services/auth/hooks/useLoginMutation";
 
 type AuthMode = "login" | "recovery";
 
 export function AuthPage() {
+  const router = useRouter();
+  const loginMutation = useLoginMutation({ showToasts: false });
+  const submitting = useRef(false);
   const [mode, setMode] = useState<AuthMode>("login");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<AuthFieldErrors>({});
   const [message, setMessage] = useState("");
+  const [redirecting, setRedirecting] = useState(false);
 
   const isRecovery = mode === "recovery";
+  const isBusy = loginMutation.isPending || redirecting;
+  const identifier = isRecovery ? "email" : "login";
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (submitting.current || isBusy) return;
     setMessage("");
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const values = Object.fromEntries(formData.entries());
-    const schema = isRecovery ? recoverySchema : loginSchema;
-    const result = schema.safeParse(values);
+
+    if (isRecovery) {
+      const result = recoverySchema.safeParse(values);
+      if (!result.success) {
+        setErrors(getAuthFieldErrors(result.error.issues));
+        (form.elements.namedItem("email") as HTMLInputElement | null)?.focus();
+        return;
+      }
+      setErrors({});
+      setMessage("Сервис восстановления пока не подключён: письмо не отправлено.");
+      return;
+    }
+
+    const result = loginSchema.safeParse(values);
 
     if (!result.success) {
       setErrors(getAuthFieldErrors(result.error.issues));
+      const firstField = result.error.issues[0]?.path[0];
+      if (typeof firstField === "string") {
+        (form.elements.namedItem(firstField) as HTMLInputElement | null)?.focus();
+      }
       return;
     }
 
     setErrors({});
-    setMessage(
-      isRecovery
-        ? "Сервис восстановления пока не подключён: письмо не отправлено."
-        : "Сервис входа пока не подключён.",
-    );
+    submitting.current = true;
+    try {
+      await loginMutation.mutateAsync({
+        ...result.data,
+        captcha_token: "",
+        rememberMe,
+      });
+      setRedirecting(true);
+      router.replace("/account");
+    } catch (error) {
+      if (!axios.isCancel(error)) setMessage(getLoginErrorMessage(error));
+    } finally {
+      submitting.current = false;
+    }
   }
 
   function switchMode(nextMode: AuthMode) {
+    if (submitting.current || isBusy) return;
     setMode(nextMode);
     setErrors({});
     setMessage("");
+    loginMutation.reset();
   }
 
   const title = isRecovery ? "Восстановление доступа" : "Вход в систему";
@@ -90,113 +128,119 @@ export function AuthPage() {
               </div>
             )}
 
-            <form className="flex flex-col" onSubmit={handleSubmit} noValidate>
-              {!isRecovery && (
-                <Typography
-                  as="h1"
-                  id="auth-title"
-                  variant="heading-medium"
-                  className="mb-6 text-foreground text-[20px] font-semibold"
-                >
-                  {title}
-                </Typography>
-              )}
-
-              <div className="flex flex-col gap-4">
-                <AuthField
-                  id="auth-email"
-                  label="Электронная почта"
-                  error={errors.email}
-                >
-                  <Input
-                    id="auth-email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder="example@mail.ru"
-                    aria-invalid={Boolean(errors.email)}
-                    aria-describedby={
-                      errors.email ? "auth-email-error" : undefined
-                    }
-                    className="h-12 rounded-md border-border bg-background px-3.5 text-foreground placeholder:text-muted-foreground aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive"
-                    onChange={() =>
-                      errors.email &&
-                      setErrors((current) => ({ ...current, email: undefined }))
-                    }
-                  />
-                </AuthField>
-
+            <form className="flex flex-col" onSubmit={handleSubmit} aria-busy={isBusy} noValidate>
+              <fieldset disabled={isBusy} className="contents">
+                <legend className="sr-only">{title}</legend>
                 {!isRecovery && (
-                  <PasswordInput
-                    id="auth-password"
-                    label="Пароль"
-                    name="password"
-                    autoComplete="current-password"
-                    placeholder="Введите пароль"
-                    error={errors.password}
-                    visible={showPassword}
-                    onVisibilityChange={setShowPassword}
-                    onChange={() =>
-                      errors.password &&
-                      setErrors((current) => ({ ...current, password: undefined }))
-                    }
-                  />
+                  <Typography
+                    as="h1"
+                    id="auth-title"
+                    variant="heading-medium"
+                    className="mb-6 text-foreground text-[20px] font-semibold"
+                  >
+                    {title}
+                  </Typography>
                 )}
-              </div>
 
-              {mode === "login" && (
-                <div className="mt-5 flex items-center justify-between gap-4">
-                  <label
-                    htmlFor="auth-remember"
-                    className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+                <div className="flex flex-col gap-4">
+                  <AuthField
+                    id={`auth-${identifier}`}
+                    label={isRecovery ? "Электронная почта" : "Логин"}
+                    error={errors[identifier]}
                   >
-                    <Checkbox
-                      id="auth-remember"
-                      name="rememberMe"
-                      checked={rememberMe}
-                      onCheckedChange={(checked) =>
-                        setRememberMe(checked === true)
+                    <Input
+                      key={identifier}
+                      id={`auth-${identifier}`}
+                      name={identifier}
+                      type={isRecovery ? "email" : "text"}
+                      autoComplete={isRecovery ? "email" : "username"}
+                      autoCapitalize="none"
+                      spellCheck={false}
+                      placeholder={isRecovery ? "example@mail.ru" : "Введите логин"}
+                      aria-invalid={Boolean(errors[identifier])}
+                      aria-describedby={
+                        errors[identifier] ? `auth-${identifier}-error` : undefined
                       }
-                      className="size-5 border-1 border-border bg-background text-primary-foreground transition-colors data-checked:border-primary data-checked:bg-primary"
+                      className="h-12 rounded-md border-border bg-background px-3.5 text-foreground placeholder:text-muted-foreground aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive"
+                      onChange={() =>
+                        errors[identifier] &&
+                        setErrors((current) => ({ ...current, [identifier]: undefined }))
+                      }
                     />
-                    Запомнить меня
-                  </label>
-                  <button
-                    type="button"
-                    className="cursor-pointer text-sm text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    onClick={() => switchMode("recovery")}
-                  >
-                    Забыли пароль?
-                  </button>
-                </div>
-              )}
+                  </AuthField>
 
-              <div className="mt-8 flex flex-col items-center gap-4">
-                <Button
-                  type="submit"
-                  className="h-12 w-full rounded-full text-[15px] font-semibold"
-                >
-                  {isRecovery ? "Восстановить пароль" : "Войти"}
-                </Button>
-              </div>
-
-              {isRecovery && (
-                <div className="mt-6 flex flex-wrap items-center justify-center gap-[0.35rem] border-t border-border pt-4 text-center">
-                  <button
-                    type="button"
-                    className="cursor-pointer text-xs text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    onClick={() => switchMode("login")}
-                  >
-                    Вернуться на страницу входа
-                  </button>
+                  {!isRecovery && (
+                    <PasswordInput
+                      id="auth-password"
+                      label="Пароль"
+                      name="password"
+                      autoComplete="current-password"
+                      placeholder="Введите пароль"
+                      error={errors.password}
+                      visible={showPassword}
+                      onVisibilityChange={setShowPassword}
+                      onChange={() =>
+                        errors.password &&
+                        setErrors((current) => ({ ...current, password: undefined }))
+                      }
+                    />
+                  )}
                 </div>
-              )}
+
+                {mode === "login" && (
+                  <div className="mt-5 flex items-center justify-between gap-4">
+                    <label
+                      htmlFor="auth-remember"
+                      className="flex cursor-pointer items-center gap-2 text-sm text-foreground"
+                    >
+                      <Checkbox
+                        id="auth-remember"
+                        name="rememberMe"
+                        checked={rememberMe}
+                        onCheckedChange={(checked) =>
+                          setRememberMe(checked === true)
+                        }
+                        className="size-5 border-1 border-border bg-background text-primary-foreground transition-colors data-checked:border-primary data-checked:bg-primary"
+                      />
+                      Запомнить меня
+                    </label>
+                    <button
+                      type="button"
+                      className="cursor-pointer text-sm text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onClick={() => switchMode("recovery")}
+                    >
+                      Забыли пароль?
+                    </button>
+                  </div>
+                )}
+
+                <div className="mt-8 flex flex-col items-center gap-4">
+                  <Button
+                    type="submit"
+                    disabled={isBusy}
+                    className="h-12 w-full rounded-full text-[15px] font-semibold"
+                  >
+                    {isBusy ? "Входим…" : isRecovery ? "Восстановить пароль" : "Войти"}
+                  </Button>
+                </div>
+
+                {isRecovery && (
+                  <div className="mt-6 flex flex-wrap items-center justify-center gap-[0.35rem] border-t border-border pt-4 text-center">
+                    <button
+                      type="button"
+                      className="cursor-pointer text-xs text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      onClick={() => switchMode("login")}
+                    >
+                      Вернуться на страницу входа
+                    </button>
+                  </div>
+                )}
+              </fieldset>
 
               {message && (
                 <p
                   className="mt-3 text-sm leading-6 text-foreground"
-                  role="status"
-                  aria-live="polite"
+                  role={isRecovery ? "status" : "alert"}
                 >
                   {message}
                 </p>

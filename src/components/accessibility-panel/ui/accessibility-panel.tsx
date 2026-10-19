@@ -16,6 +16,13 @@ import {
   ACCESSIBILITY_FONT_SCALES,
   useAccessibilityStore,
 } from "@/state/accessibility";
+import type { AccessibilityFontScale } from "@/state/accessibility";
+
+const FONT_SCALE_LABELS: Record<AccessibilityFontScale, string> = {
+  1: "×1",
+  1.25: "×2",
+  1.5: "×2.5",
+};
 
 const COLOR_SCHEME_PREVIEW: Record<
   (typeof ACCESSIBILITY_COLOR_SCHEMES)[number]["value"],
@@ -79,23 +86,20 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
         data-a11y-settings-dialog
         className="max-w-[720px] p-4 mobile:p-5"
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <DialogTitle className="text-[1.125em] leading-tight font-semibold">
-              Версия для слабовидящих
-            </DialogTitle>
-            <DialogDescription className="mt-1 max-w-[56ch] text-[0.75em] leading-snug text-muted-foreground">
-              Настройки применяются ко всему сайту и сохраняются автоматически.
-            </DialogDescription>
-          </div>
-
+        <div className="relative">
+          <DialogTitle className="pr-12 text-[1.125em] leading-tight font-semibold">
+            Версия для слабовидящих
+          </DialogTitle>
           <DialogClose
             render={<Button variant="ghost" size="icon" />}
             aria-label="Закрыть настройки версии для слабовидящих"
-            className="size-11 shrink-0 rounded-full"
+            className="absolute top-0 right-0 size-11 rounded-full"
           >
             <X aria-hidden="true" />
           </DialogClose>
+          <DialogDescription className="mt-2 max-w-[56ch] text-[0.75em] leading-snug text-muted-foreground">
+            Настройки применяются ко всему сайту и сохраняются автоматически.
+          </DialogDescription>
         </div>
 
         {textMode && (
@@ -105,13 +109,13 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
           </p>
         )}
 
-        <div className="mt-4 grid gap-4 desktop:grid-cols-2">
+        <div className="mt-4 grid items-start gap-4 desktop:grid-cols-2">
           <fieldset className="min-w-0 rounded-xl border border-border p-3">
             <legend className="px-1 text-[0.75em] font-semibold">
               Размер текста
             </legend>
 
-            <div className="mt-1 grid grid-cols-2 gap-2">
+            <div className="mt-1 grid grid-cols-1 gap-2 mobileSmall:grid-cols-3">
               {ACCESSIBILITY_FONT_SCALES.map((scale) => {
                 const selected = fontScale === scale;
 
@@ -120,11 +124,11 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
                     key={scale}
                     variant={selected ? "default" : "outline"}
                     aria-pressed={selected}
+                    aria-label={`Размер текста ${FONT_SCALE_LABELS[scale]} (${Math.round(scale * 100)}%)`}
                     onClick={() => setFontScale(scale)}
-                    className="min-h-11 w-full gap-2"
+                    className="min-h-11 min-w-0 w-full px-2"
                   >
-                    <span aria-hidden="true">A</span>
-                    <span>×{scale}</span>
+                    <span>{FONT_SCALE_LABELS[scale]}</span>
                   </Button>
                 );
               })}
@@ -179,7 +183,7 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
                     aria-pressed={selected}
                     onClick={() => setColorScheme(scheme.value)}
                     className={cn(
-                      "relative min-h-12 justify-start gap-2 overflow-hidden whitespace-normal px-2.5 text-left",
+                      "relative min-h-12 min-w-0 justify-start gap-2 whitespace-normal px-2.5 text-left [overflow-wrap:anywhere]",
                       selected && "border-ring ring-2 ring-ring/50",
                     )}
                   >
@@ -207,7 +211,7 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
         </div>
 
         <div className="mt-4 flex flex-col-reverse gap-2 border-t border-border pt-4 mobile:flex-row mobile:items-center mobile:justify-between">
-          <span className="text-[0.6875em] text-muted-foreground">
+          <span className="min-w-0 flex-1 text-[0.6875em] leading-snug text-muted-foreground">
             Настройки сохраняются после перезагрузки.
           </span>
 
@@ -217,7 +221,7 @@ function AccessibilityPanel({ triggerClassName }: AccessibilityPanelProps) {
               setEnabled(false);
               if (textMode) setTextMode(false);
             }}
-            className="min-h-11 whitespace-normal"
+            className="min-h-11 shrink-0 whitespace-normal"
           >
             {textMode ? "Выключить увеличение текста" : "Обычная версия"}
           </DialogClose>
