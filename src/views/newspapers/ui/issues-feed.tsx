@@ -51,7 +51,20 @@ export function IssuesFeed({ issues, pagination, slug, date }: { issues: Content
       ) : (
         <ul data-a11y-content-grid data-text-flow className={styles.issuesGrid}>
           {issues.map((issue) => {
-            const file = contentImageUrl(issue.file?.url);
+            const file = issue.file?.url ? issue.file : null;
+            const extension = (
+              file?.extension?.trim().replace(/^\./, "") ||
+              file?.name.match(/\.([^.]+)$/)?.[1] ||
+              ""
+            ).toLowerCase();
+            const isPdf = extension === "pdf";
+            const fileHref = file
+              ? `/api/newspapers/file?${new URLSearchParams({
+                  path: file.url,
+                  name: file.name || `issue-${issue.id}`,
+                  extension,
+                })}`
+              : null;
             return (
               <li key={issue.id}>
                 <article className={styles.issueCard}>
@@ -62,7 +75,20 @@ export function IssuesFeed({ issues, pagination, slug, date }: { issues: Content
                     Дата выхода: {issue.date}
                   </Typography>
                   {issue.description && <Typography variant="body" className={styles.issueDescription}>{issue.description}</Typography>}
-                  {file && <a href={file} className={styles.issueFile}>Открыть файл выпуска</a>}
+                  {fileHref && (
+                    <a
+                      href={fileHref}
+                      className={styles.issueFile}
+                      target={isPdf ? "_blank" : undefined}
+                      rel={isPdf ? "noopener noreferrer" : undefined}
+                      download={isPdf ? undefined : file?.name || `issue-${issue.id}`}
+                      aria-label={isPdf
+                        ? `Открыть PDF выпуска «${issue.title}» в новой вкладке`
+                        : `Скачать файл выпуска «${issue.title}»`}
+                    >
+                      {isPdf ? "Открыть файл выпуска" : "Скачать файл выпуска"}
+                    </a>
+                  )}
                 </article>
               </li>
             );

@@ -52,7 +52,7 @@ export function AccountPage() {
             alt="Сорока — конкурс коммуникационных проектов при поддержке департамента информационной политики Краснодарского края"
             width={2038}
             height={1400}
-            sizes="(min-width: 1348px) 1300px, calc(100vw - 48px)"
+            sizes="(min-width: 948px) 900px, calc(100vw - 48px)"
             textLinkLabel="Сорока — конкурс коммуникационных проектов при поддержке департамента информационной политики Краснодарского края"
             textModeLink={false}
             className={styles.bannerImage}

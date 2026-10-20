@@ -80,6 +80,8 @@
 }
 
 .banner {
+  display: flex;
+  justify-content: center;
   margin-top: 44px;
   padding-top: 42px;
   border-top: 1px solid var(--border);
@@ -88,8 +90,10 @@
 .bannerImage {
   display: block;
   width: 100%;
+  max-width: 900px;
   height: auto;
-  border-radius: 18px;
+  border-radius: 24px;
+  box-shadow: 0 16px 40px rgb(0 0 0 / 8%);
 }
 
 .votingButton {
@@ -122,7 +126,9 @@
 }
 
 .rules {
-  margin-top: 44px;
+  width: 100%;
+  max-width: 900px;
+  margin: 44px auto 0;
 }
 
 .rulesHeading {
@@ -135,7 +141,6 @@
 }
 
 .rulesList {
-  max-width: 845px;
   margin-top: 18px;
   padding-left: 1.2em;
   font-size: 18px;

@@ -117,98 +117,77 @@
 }
 
 .choiceList {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  display: block;
   margin-top: 24px;
   padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 20px;
   list-style: none;
+  overflow: hidden;
+}
+
+.choiceItem + .choiceItem {
+  border-top: 1px solid var(--border);
+}
+
+.choiceHeading {
+  margin: 0;
 }
 
 .choiceButton {
-  position: relative;
-  display: flex;
+  display: grid;
   width: 100%;
-  height: 100%;
-  min-height: 300px;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  padding: 14px 14px 20px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  min-height: 74px;
+  grid-template-columns: 34px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 22px;
+  border: 0;
   background: var(--background);
   color: var(--foreground);
   text-align: left;
   cursor: pointer;
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  transition: background-color 180ms ease;
 }
 
-.choiceButton:hover {
-  border-color: var(--primary);
-  box-shadow: 0 10px 24px rgb(0 0 0 / 6%);
-}
-
-.choiceImage {
-  position: relative;
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border-radius: 12px;
+.choiceButton:hover,
+.choiceButton[aria-expanded="true"] {
   background: var(--secondary);
 }
 
-.choiceImageContent {
-  object-fit: cover;
-}
-
-.choiceArrow {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--card);
+.choiceNumber {
   color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .choiceTitle {
-  margin-top: 4px;
+  min-width: 0;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
 
-.choiceDescription {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--muted-foreground);
-  font-size: 14px;
-  line-height: 1.45;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+.choiceArrow {
+  justify-self: end;
+  color: var(--primary);
+  transition: transform 180ms ease;
 }
 
-.returnButton {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
-  border: 0;
-  background: transparent;
-  color: var(--primary);
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
+.choiceButton[aria-expanded="true"] .choiceArrow {
+  transform: rotate(180deg);
+}
+
+.choicePanel {
+  padding: 28px clamp(18px, 3vw, 42px) 34px;
+  border-top: 1px solid var(--border);
+  background: var(--card);
+}
+
+.choicePanel[hidden],
+:global(html[data-text-mode="true"]) .choicePanel[hidden] {
+  display: none !important;
 }
 
 .eyebrow {
@@ -242,7 +221,7 @@
 }
 
 .projectSummary {
-  margin-top: 26px;
+  margin-top: 0;
 }
 
 .descriptionTitle {
@@ -413,18 +392,11 @@
 .backLink:focus-visible,
 .projectLink:focus-visible,
 .choiceButton:focus-visible,
-.returnButton:focus-visible,
 .pdfLink:focus-visible,
 .scoreInput:focus-visible,
 .voteButton:focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
-}
-
-@media (width < 1350px) {
-  .choiceList {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 @media (width < 1050px) {
@@ -439,12 +411,6 @@
 
   .content {
     padding: 24px;
-  }
-}
-
-@media (width < 900px) and (width >= 768px) {
-  .choiceList {
-    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -476,12 +442,22 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .choiceList {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .content {
     padding: 20px 16px;
+  }
+
+  .choiceButton {
+    grid-template-columns: 26px minmax(0, 1fr) 22px;
+    gap: 10px;
+    padding: 15px 12px;
+  }
+
+  .choiceTitle {
+    font-size: 16px;
+  }
+
+  .choicePanel {
+    padding: 22px 16px 28px;
   }
 
   .criterion {
@@ -500,6 +476,7 @@
 @media (prefers-reduced-motion: reduce) {
   .projectLink,
   .choiceButton,
+  .choiceArrow,
   .voteButton {
     transition: none;
   }
@@ -511,9 +488,11 @@
 
 :global(html[data-a11y-reduce-motion="true"]) .projectLink,
 :global(html[data-a11y-reduce-motion="true"]) .choiceButton,
+:global(html[data-a11y-reduce-motion="true"]) .choiceArrow,
 :global(html[data-a11y-reduce-motion="true"]) .voteButton,
 :global(html[data-text-mode="true"]) .projectLink,
 :global(html[data-text-mode="true"]) .choiceButton,
+:global(html[data-text-mode="true"]) .choiceArrow,
 :global(html[data-text-mode="true"]) .voteButton {
   transition: none;
 }
@@ -521,11 +500,6 @@
 :global(html[data-a11y-reduce-motion="true"]) .voteButton:hover,
 :global(html[data-text-mode="true"]) .voteButton:hover {
   transform: none;
-}
-
-:global(html[data-a11y-reduce-motion="true"]) .choiceButton:hover,
-:global(html[data-text-mode="true"]) .choiceButton:hover {
-  box-shadow: none;
 }
 
 :global(html[data-text-mode="true"]) .sidebar {
@@ -536,10 +510,4 @@
 :global(html[data-text-mode="true"]) .projectList,
 :global(html[data-text-mode="true"]) .choiceList {
   display: block;
-}
-
-:global(html[data-text-mode="true"]) .choiceDescription {
-  display: block;
-  -webkit-line-clamp: unset;
-  line-clamp: unset;
 }
