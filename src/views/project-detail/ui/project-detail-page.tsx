@@ -7,6 +7,7 @@ import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
 import { NEIGHBORS_CONTENT } from "../model/neighbors";
 import { ProjectGallery } from "./project-gallery";
+import { ExpertsCarousel } from "./experts-carousel";
 import styles from "./project-detail-page.module.css";
 
 function PartnerLink({ project }: { project: ProjectCardData }) {
@@ -203,11 +204,21 @@ export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
 
             <ScrollReveal>
               <figure className={styles.quote} data-text-flow>
-                <span aria-hidden="true" className={styles.quoteMark}>
-                  «
-                </span>
-                <blockquote>«{NEIGHBORS_CONTENT.quote}»</blockquote>
-                <figcaption>{NEIGHBORS_CONTENT.quoteAuthor}</figcaption>
+                <div className={styles.quoteImage}>
+                  <SiteImage
+                    src="/images/no-image.png"
+                    alt="Фотография Дмитрия Лихачёва пока не добавлена"
+                    textLinkLabel="Фотография Дмитрия Лихачёва пока не добавлена"
+                    textModeLink={false}
+                    fill
+                    sizes="(min-width: 768px) 360px, calc(100vw - 48px)"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className={styles.quoteText}>
+                  <blockquote>«{NEIGHBORS_CONTENT.quote}»</blockquote>
+                  <span className={styles.quoteAuthor}>{NEIGHBORS_CONTENT.quoteAuthor}</span>
+                </figcaption>
               </figure>
             </ScrollReveal>
 
@@ -217,17 +228,7 @@ export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
                 className={styles.expertsSection}
                 data-text-flow
               >
-                <Typography
-                  as="h2"
-                  variant="body"
-                  id="experts-heading"
-                  className={styles.sectionTitle}
-                >
-                  Наши эксперты
-                </Typography>
-                <Typography as="p" variant="body" className={styles.expertsEmpty}>
-                  Информация об экспертах появится позже
-                </Typography>
+                <ExpertsCarousel />
               </section>
             </ScrollReveal>
           </Container>

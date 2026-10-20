@@ -23,7 +23,7 @@ export function GalleryLightbox({
   onChange,
   finalFocus,
 }: {
-  images: GalleryImage[];
+  images: readonly GalleryImage[];
   title: string;
   activeIndex: number;
   open: boolean;

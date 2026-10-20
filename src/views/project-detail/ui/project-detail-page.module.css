@@ -1,10 +1,7 @@
 @reference "../../../shared/assets/style/globals.css";
 
 .article,
-.narrow,
-.talesSection,
-.quote,
-.expertsSection {
+.narrow {
   width: min(100%, 800px);
   margin-inline: auto;
 }
@@ -124,6 +121,18 @@
   border-radius: 18px;
   background: var(--muted);
 }
+.galleryOpen {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  cursor: zoom-in;
+}
+.galleryOpen:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: -4px;
+}
 .textGallery { display: grid; gap: 12px; }
 
 .organizers {
@@ -192,45 +201,77 @@
 .armenian { background-color: #c8752b; }
 .jewish { background-color: #b99431; }
 
-.talesSection { margin-bottom: 68px; }
+.talesSection {
+  width: min(100%, 1100px);
+  margin-inline: auto;
+  margin-bottom: 68px;
+}
 .talesSection .paragraph { margin-top: 18px; }
 .quote {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: 12px 28px;
+  gap: 36px;
+  width: min(100%, 1100px);
+  margin-inline: auto;
   margin-bottom: 96px;
-  padding: 28px;
-  border-radius: 24px;
-  background: var(--card);
 }
-.quoteMark { align-self: center; color: var(--primary); font-family: var(--font-foglihten); font-size: 120px; line-height: .7; }
-.quote blockquote { font-size: clamp(25px, 3vw, 38px); }
-.quote figcaption { font-size: 13px; font-weight: 600; text-align: right; }
-.expertsSection { margin-bottom: 110px; }
-.expertsEmpty {
-  margin-top: 28px;
-  padding: 38px 24px;
-  border: 1px solid var(--border);
+.quoteImage {
+  position: relative;
+  width: min(100%, 360px);
+  aspect-ratio: 1;
+  overflow: hidden;
   border-radius: 20px;
-  background: var(--card);
-  color: var(--muted-foreground);
+  background: var(--muted);
+}
+.quoteText { min-width: 0; }
+.quote blockquote { font-family: var(--font-foglihten); font-size: clamp(25px, 2.2vw, 32px); line-height: 1.5; }
+.quoteAuthor { display: block; margin-top: 32px; font-size: 16px; font-weight: 600; text-align: right; }
+.expertsSection { width: 100%; margin-bottom: 110px; }
+.expertsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: min(100%, 1100px);
+  margin-inline: auto;
+  margin-bottom: 56px;
+}
+.expertsWindow { padding-left: 24px; }
+.expertsTrack { margin-left: -14px; }
+.expertsItem { flex-basis: 80%; padding-left: 14px; }
+.expertImage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 17 / 20;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--muted);
 }
 
 @media (width >= theme(--breakpoint-mobile)) {
   .article { padding-top: 80px; padding-bottom: 72px; }
   .logoFrame { aspect-ratio: 1.85; }
   .galleryItem { flex-basis: 50%; }
+  .expertsItem { flex-basis: 50%; }
   .organizers { padding: 52px 48px 60px; }
   .partnersList { columns: 2; column-gap: 44px; }
   .cultureGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .quote { grid-template-columns: 150px minmax(0, 1fr); }
-  .quoteMark { grid-row: span 2; font-size: 170px; }
+  .quote { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); column-gap: clamp(40px, 8vw, 160px); }
 }
 
 @media (width >= theme(--breakpoint-desktop)) {
   .galleryItem { flex-basis: 33.333333%; }
+  .expertsItem { flex-basis: 33.333333%; }
   .cultureGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (width >= theme(--breakpoint-desktop1350)) {
+  .talesSection,
+  .quote,
+  .expertsHeader { translate: 30px 0; }
+  .expertsItem { flex-basis: 19%; }
+  .expertsWindow { padding-left: 96px; }
 }
 
 :global(html[data-a11y-enabled="true"]) .cultureBanner {
