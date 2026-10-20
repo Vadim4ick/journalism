@@ -7,6 +7,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./auth-provider";
 import { SettingsLoader } from "./settings-loader";
+import { SiteAccessGate } from "./site-access-gate";
 
 const Toaster = dynamic(() => import("sonner").then((mod) => mod.Toaster), {
   ssr: false,
@@ -35,7 +36,9 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <SettingsLoader />
       <SmoothScroll />
 
+      {/* <SiteAccessGate> */}
       <AuthProvider>{children}</AuthProvider>
+      {/* </SiteAccessGate> */}
 
       <Toaster richColors />
     </QueryClientProvider>

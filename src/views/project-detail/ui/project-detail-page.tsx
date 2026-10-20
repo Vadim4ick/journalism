@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ProjectCardData } from "@/components/project-card";
 import { SiteImage } from "@/components/site-image";
-import { PartnerInquiry } from "@/components/partner-inquiry";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -9,10 +8,6 @@ import { NEIGHBORS_CONTENT } from "../model/neighbors";
 import { ProjectGallery } from "./project-gallery";
 import { ExpertsCarousel } from "./experts-carousel";
 import styles from "./project-detail-page.module.css";
-
-function PartnerLink({ project }: { project: ProjectCardData }) {
-  return <PartnerInquiry project={project.title} className={styles.partnerButton} />;
-}
 
 export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
   const neighbors = project.id === "neighbors";
@@ -32,9 +27,9 @@ export function ProjectDetailPage({ project }: { project: ProjectCardData }) {
           <Typography as="h1" variant="body" className={styles.title}>
             {title}
           </Typography>
-          <div className={styles.partnerPlacement}>
-            <PartnerLink project={project} />
-          </div>
+          {/* <div className={styles.partnerPlacement}>
+            <PartnerInquiry project={project.title} className={styles.partnerButton} />
+          </div> */}
           <ScrollReveal>
             <figure className={styles.heroFigure}>
               <div className={neighbors ? styles.logoFrame : styles.photoFrame}>

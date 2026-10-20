@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { SiteImage } from "@/components/site-image";
-import { PartnerInquiry } from "@/components/partner-inquiry";
 import { projectCardData } from "@/components/project-card";
 import type { ContentProject } from "@/shared/types/model/content.type";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
@@ -39,7 +38,7 @@ function ProjectItem({ item }: { item: ContentProject }) {
           <Typography as="h2" variant="heading-medium" id={titleId} className={styles.cardTitle}>
             <span className={styles.projectLink}>{project.title}</span>
           </Typography>
-          <PartnerInquiry project={project.title} className={styles.partnerButton} />
+          {/* <PartnerInquiry project={project.title} className={styles.partnerButton} /> */}
         </div>
         <Typography
           as="p"
