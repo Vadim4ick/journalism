@@ -2,7 +2,6 @@
 
 .container {
   width: 100%;
-  max-width: 1450px;
   padding-top: 42px;
   padding-bottom: 100px;
   color: var(--foreground);
@@ -34,7 +33,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(245px, 300px) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 400px) minmax(0, 1fr);
   align-items: start;
   gap: 28px;
   margin-top: 36px;
@@ -61,22 +60,29 @@
   display: grid;
   gap: 6px;
   margin-top: 18px;
+  padding: 0;
+  list-style: none;
 }
 
 .projectLink {
   display: grid;
+  width: 100%;
   grid-template-columns: 26px minmax(0, 1fr) 18px;
   align-items: center;
   gap: 10px;
   min-height: 60px;
   padding: 10px 12px;
+  border: 0;
   border-radius: 14px;
+  background: transparent;
   color: var(--foreground);
   font-size: 15px;
   font-weight: 600;
   line-height: 1.3;
+  text-align: left;
   text-decoration: none;
   overflow-wrap: anywhere;
+  cursor: pointer;
   transition: background-color 180ms ease, color 180ms ease;
 }
 
@@ -84,8 +90,8 @@
   background: var(--secondary);
 }
 
-.projectLink[aria-current="page"],
-.projectLink[aria-current="page"]:hover {
+.projectLink[aria-pressed="true"],
+.projectLink[aria-pressed="true"]:hover {
   background: var(--primary);
   color: var(--primary-foreground);
 }
@@ -110,11 +116,112 @@
   background: var(--card);
 }
 
+.choiceList {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.choiceButton {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 14px 14px 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--background);
+  color: var(--foreground);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.choiceButton:hover {
+  border-color: var(--primary);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 6%);
+}
+
+.choiceImage {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--secondary);
+}
+
+.choiceImageContent {
+  object-fit: cover;
+}
+
+.choiceArrow {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--primary);
+}
+
+.choiceTitle {
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.choiceDescription {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.returnButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
 .eyebrow {
   color: var(--primary);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.08em;
+}
+
+.organization {
+  margin-bottom: 12px;
+  color: var(--muted-foreground);
+  font-size: 14px;
 }
 
 .projectTitle {
@@ -129,9 +236,39 @@
 
 .projectDescription {
   max-width: 780px;
-  margin-top: 18px;
+  margin-top: 10px;
   font-size: 17px;
   line-height: 1.6;
+}
+
+.projectSummary {
+  margin-top: 26px;
+}
+
+.descriptionTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.pdfLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--primary);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pdfNote {
+  color: var(--muted-foreground);
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
 }
 
 .form {
@@ -275,15 +412,24 @@
 
 .backLink:focus-visible,
 .projectLink:focus-visible,
+.choiceButton:focus-visible,
+.returnButton:focus-visible,
+.pdfLink:focus-visible,
 .scoreInput:focus-visible,
 .voteButton:focus-visible {
   outline: 3px solid var(--ring);
   outline-offset: 3px;
 }
 
+@media (width < 1350px) {
+  .choiceList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (width < 1050px) {
   .layout {
-    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    grid-template-columns: minmax(285px, 320px) minmax(0, 1fr);
     gap: 18px;
   }
 
@@ -293,6 +439,12 @@
 
   .content {
     padding: 24px;
+  }
+}
+
+@media (width < 900px) and (width >= 768px) {
+  .choiceList {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -324,6 +476,10 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .choiceList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .content {
     padding: 20px 16px;
   }
@@ -343,6 +499,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .projectLink,
+  .choiceButton,
   .voteButton {
     transition: none;
   }
@@ -353,8 +510,10 @@
 }
 
 :global(html[data-a11y-reduce-motion="true"]) .projectLink,
+:global(html[data-a11y-reduce-motion="true"]) .choiceButton,
 :global(html[data-a11y-reduce-motion="true"]) .voteButton,
 :global(html[data-text-mode="true"]) .projectLink,
+:global(html[data-text-mode="true"]) .choiceButton,
 :global(html[data-text-mode="true"]) .voteButton {
   transition: none;
 }
@@ -364,7 +523,23 @@
   transform: none;
 }
 
+:global(html[data-a11y-reduce-motion="true"]) .choiceButton:hover,
+:global(html[data-text-mode="true"]) .choiceButton:hover {
+  box-shadow: none;
+}
+
 :global(html[data-text-mode="true"]) .sidebar {
   position: static;
   margin-bottom: 2rem;
+}
+
+:global(html[data-text-mode="true"]) .projectList,
+:global(html[data-text-mode="true"]) .choiceList {
+  display: block;
+}
+
+:global(html[data-text-mode="true"]) .choiceDescription {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
 }

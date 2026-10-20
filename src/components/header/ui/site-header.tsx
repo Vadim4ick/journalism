@@ -19,7 +19,9 @@ export function SiteHeader() {
         pathname === "/projects" ||
         pathname === "/about"
           ? "default"
-        : pathname === "/account" || pathname.startsWith("/account/voting/")
+        : pathname === "/account" ||
+            pathname === "/account/voting" ||
+            pathname.startsWith("/account/voting/")
             ? "account"
           : "inner"
       }
