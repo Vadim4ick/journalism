@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CONTACTS } from "@/shared/const/contacts.const";
+import { useSiteSettingsStore } from "@/state/site-settings.store";
 
 type YandexPlacemark = Record<string, unknown>;
 
@@ -47,6 +47,11 @@ const labelLayout = (ymaps: YandexMapsApi) =>
   );
 
 const FooterMap = () => {
+  const contacts = useSiteSettingsStore((state) => state.settings?.contacts);
+  const status = useSiteSettingsStore((state) => state.status);
+  const mapUrl = contacts?.map_url && /^https?:\/\//i.test(contacts.map_url)
+    ? contacts.map_url
+    : null;
   const mapElementRef = useRef<HTMLDivElement>(null);
   const [showMapFallback, setShowMapFallback] = useState(!API_KEY);
 
@@ -123,27 +128,39 @@ const FooterMap = () => {
     <>
       <div
         ref={mapElementRef}
-        title={`Яндекс Карты: ${CONTACTS.address}`}
+        title={contacts?.address ? `Яндекс Карты: ${contacts.address}` : "Яндекс Карты"}
         className="text-mode-hidden absolute inset-0 size-full"
       />
       {showMapFallback && (
+        mapUrl ? (
+          <a
+            href={mapUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-mode-hidden absolute inset-0 z-10 flex items-center justify-center bg-[#e8e8e8] p-4 text-center text-base font-semibold text-[#171717] underline underline-offset-4"
+          >
+            Карта временно недоступна. Открыть Яндекс.Карты
+          </a>
+        ) : (
+          <span className="text-mode-hidden absolute inset-0 z-10 flex items-center justify-center bg-[#e8e8e8] p-4 text-center text-base font-semibold text-[#171717]">
+            Карта временно недоступна
+          </span>
+        )
+      )}
+      {mapUrl ? (
         <a
-          href={CONTACTS.mapHref}
+          href={mapUrl}
           target="_blank"
           rel="noreferrer"
-          className="text-mode-hidden absolute inset-0 z-10 flex items-center justify-center bg-[#e8e8e8] p-4 text-center text-base font-semibold text-[#171717] underline underline-offset-4"
+          className="text-mode-only text-base font-semibold underline underline-offset-2 mobile:text-lg"
         >
-          Карта временно недоступна. Открыть Яндекс.Карты
+          Открыть карту: {contacts?.address}
         </a>
+      ) : (
+        <span className="text-mode-only text-base font-semibold">
+          {contacts?.address ?? (status === "error" ? "Адрес временно недоступен" : "Адрес загружается…")}
+        </span>
       )}
-      <a
-        href={CONTACTS.mapHref}
-        target="_blank"
-        rel="noreferrer"
-        className="text-mode-only text-base font-semibold underline underline-offset-2 mobile:text-lg"
-      >
-        Открыть карту: {CONTACTS.address}
-      </a>
     </>
   );
 };

@@ -6,6 +6,7 @@ import { SmoothScroll } from "./smooth-scroll";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./auth-provider";
+import { SettingsLoader } from "./settings-loader";
 
 const Toaster = dynamic(() => import("sonner").then((mod) => mod.Toaster), {
   ssr: false,
@@ -31,6 +32,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <AccessibilityEffects />
+      <SettingsLoader />
       <SmoothScroll />
 
       <AuthProvider>{children}</AuthProvider>

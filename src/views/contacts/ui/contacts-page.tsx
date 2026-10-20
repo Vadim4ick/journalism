@@ -1,7 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { FooterMap } from "@/components/footer";
 import { SocialLinks } from "@/components/social-links";
-import { CONTACTS } from "@/shared/const/contacts.const";
+import { useSiteSettingsStore } from "@/state/site-settings.store";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -14,24 +16,12 @@ type Detail = {
   href?: string;
 };
 
-const generalDetails: Detail[] = [
-  {
-    label: "Полное наименование",
-    value:
-      "Государственное казенное учреждение Краснодарского края «Медиацентр „Дом журналистики“»",
-  },
-  { label: "Сокращенное наименование", value: "ГКУ КК «Дом журналистики»" },
+const fixedGeneralDetails: Detail[] = [
   {
     label: "Юридический адрес",
     value:
       "350014, Российская Федерация, Краснодарский край, город Краснодар, ул. Красная, д. 35",
   },
-  {
-    label: "Фактический адрес",
-    value: "г. Краснодар, ул. им. Гоголя, 70 / ул. Красноармейская, 60",
-  },
-  { label: "Email", value: CONTACTS.email, href: `mailto:${CONTACTS.email}` },
-  { label: "Телефон", value: "8 (861) 997-62-61", href: "tel:+78619976261" },
 ];
 
 const registrationDetails: Detail[] = [
@@ -75,8 +65,24 @@ function DetailList({ items }: { items: Detail[] }) {
     </dl>
   );
 }
-
 export function ContactsPage() {
+  const settings = useSiteSettingsStore((state) => state.settings);
+  const status = useSiteSettingsStore((state) => state.status);
+  const contacts = settings?.contacts;
+  const hours = contacts?.work_hours.split(/\r?\n/).map((line) => line.trim()).filter(Boolean) ?? [];
+  const generalDetails: Detail[] = settings ? [
+    { label: "Полное наименование", value: settings.organization.full_name },
+    { label: "Сокращенное наименование", value: settings.organization.short_name },
+    ...fixedGeneralDetails,
+    { label: "Фактический адрес", value: contacts?.address ?? "" },
+    { label: "Email", value: contacts?.email ?? "", href: contacts?.email ? `mailto:${contacts.email}` : undefined },
+    ...(contacts?.phones.map(({ value }, index) => ({
+      label: contacts.phones.length === 1 ? "Телефон" : `Телефон ${index + 1}`,
+      value,
+      href: `tel:${value.replace(/[^+\d]/g, "")}`,
+    })) ?? []),
+  ] : fixedGeneralDetails;
+
   return (
     <Container className={styles.container}>
       <nav aria-label="Хлебные крошки" className={styles.breadcrumbs}>
@@ -96,12 +102,18 @@ export function ContactsPage() {
         </Typography>
         <div className={styles.contactsGrid} data-a11y-content-grid>
           <ScrollReveal className={styles.contactInfo}>
+            {!contacts && (
+              <p role="status">
+                {status === "error" ? "Не удалось загрузить контакты." : "Загрузка контактов…"}
+              </p>
+            )}
+            {contacts && <>
             <div>
               <Typography variant="small" className={styles.label}>
                 Режим работы учреждения:
               </Typography>
               <ul className={styles.hours}>
-                {CONTACTS.hours.map((line) => (
+                {hours.map((line) => (
                   <li key={line}>{line}</li>
                 ))}
               </ul>
@@ -111,20 +123,26 @@ export function ContactsPage() {
                 <Typography variant="small" className={styles.label}>
                   Телефон:
                 </Typography>
-                <a href={CONTACTS.phoneHref}>{CONTACTS.phone}</a>
+                <ul>
+                  {contacts.phones.map(({ value }, index) => (
+                    <li key={`${value}-${index}`}>
+                      <a href={`tel:${value.replace(/[^+\d]/g, "")}`}>{value}</a>
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div>
                 <Typography variant="small" className={styles.label}>
                   Почта:
                 </Typography>
-                <a href={`mailto:${CONTACTS.email}`}>{CONTACTS.email}</a>
+                <a href={`mailto:${contacts.email}`}>{contacts.email}</a>
               </div>
             </div>
             <div>
               <Typography variant="small" className={styles.label}>
                 Адрес:
               </Typography>
-              <p>{CONTACTS.address}</p>
+              <p>{contacts.address}</p>
             </div>
             <div>
               <Typography variant="small" className={styles.label}>
@@ -132,6 +150,7 @@ export function ContactsPage() {
               </Typography>
               <SocialLinks size="small" className={styles.socials} />
             </div>
+            </>}
           </ScrollReveal>
 
           <ScrollReveal className={styles.map}>

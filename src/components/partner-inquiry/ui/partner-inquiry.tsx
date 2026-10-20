@@ -2,7 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { X } from "lucide-react";
-import { CONTACTS } from "@/shared/const/contacts.const";
+import { useSiteSettingsStore } from "@/state/site-settings.store";
 import { Button } from "@/shared/ui/button";
 import {
   Dialog,
@@ -31,9 +31,12 @@ export function PartnerInquiry({
 }) {
   const id = useId();
   const [errors, setErrors] = useState<PartnerInquiryErrors>({});
+  const recipient = useSiteSettingsStore((state) => state.settings?.contacts.email);
+  const settingsStatus = useSiteSettingsStore((state) => state.status);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!recipient) return;
     const form = event.currentTarget;
     const result = partnerInquirySchema.safeParse(
       Object.fromEntries(new FormData(form)),
@@ -51,7 +54,7 @@ export function PartnerInquiry({
     const { name, email, inn, message } = result.data;
     const subject = `Партнёрство: ${project}`;
     const body = `Проект: ${project}\nИмя: ${name}\nEmail: ${email}\nИНН: ${inn}\n\n${message}`;
-    window.location.href = `mailto:${CONTACTS.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   function clearError(field: Field) {
@@ -204,9 +207,14 @@ export function PartnerInquiry({
               </p>
             )}
           </div>
-          <Button type="submit" className="min-h-11 rounded-full px-5">
+          <Button type="submit" disabled={!recipient} className="min-h-11 rounded-full px-5">
             Открыть письмо
           </Button>
+          {!recipient && (
+            <p role="status" className="text-sm text-muted-foreground">
+              {settingsStatus === "error" ? "Адрес для заявки временно недоступен." : "Загрузка адреса для заявки…"}
+            </p>
+          )}
         </form>
       </DialogContent>
     </Dialog>
