@@ -251,11 +251,15 @@ html[data-a11y-enabled="true"][data-a11y-color-scheme="blue-yellow"] {
   outline-offset: 3px;
 }
 
-html[data-a11y-enabled="true"]:not([data-text-mode="true"])[data-a11y-font-scale="1.25"] {
+html[data-a11y-enabled="true"]:not(
+    [data-text-mode="true"]
+  )[data-a11y-font-scale="1.25"] {
   font-size: 125%;
 }
 
-html[data-a11y-enabled="true"]:not([data-text-mode="true"])[data-a11y-font-scale="1.5"] {
+html[data-a11y-enabled="true"]:not(
+    [data-text-mode="true"]
+  )[data-a11y-font-scale="1.5"] {
   font-size: 150%;
 }
 
@@ -298,34 +302,41 @@ html[data-a11y-enabled="true"] [data-site-header] {
 }
 
 @media (min-width: 1250px) {
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header] > div {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header]
+    > div {
     grid-template-columns: auto minmax(0, 1fr) auto;
     column-gap: clamp(1rem, 3vw, 3rem);
     row-gap: 1rem;
   }
 
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header-logo] {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header-logo] {
     grid-column: 1;
     grid-row: 1;
   }
 
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header-center] {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header-center] {
     display: contents;
   }
 
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header-search] {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header-search] {
     grid-column: 2;
     grid-row: 1;
     justify-self: center;
   }
 
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header-nav] {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header-nav] {
     grid-column: 1 / -1;
     grid-row: 2;
     min-width: 0;
   }
 
-  html[data-a11y-enabled="true"]:not([data-text-mode="true"]) [data-site-header-actions] {
+  html[data-a11y-enabled="true"]:not([data-text-mode="true"])
+    [data-site-header-actions] {
     grid-column: 3;
     grid-row: 1;
     min-width: 0;
@@ -333,8 +344,11 @@ html[data-a11y-enabled="true"] [data-site-header] {
 }
 
 @media (min-width: 1250px) and (max-width: 1599px) {
-  html[data-a11y-enabled="true"][data-a11y-font-scale="1.5"]:not([data-text-mode="true"])
-    [data-site-header-nav] ul {
+  html[data-a11y-enabled="true"][data-a11y-font-scale="1.5"]:not(
+      [data-text-mode="true"]
+    )
+    [data-site-header-nav]
+    ul {
     display: grid;
     grid-template-columns: repeat(4, max-content);
     gap: 0.5rem 1rem;

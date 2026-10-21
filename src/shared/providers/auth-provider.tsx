@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "../services/auth/hooks/useGetProfile";
 import { initializeAuth } from "../lib/auth-token";
@@ -11,6 +11,7 @@ import { Loader2 } from "lucide-react";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const pathname = usePathname();
   const initialized = useAuthStore((state) => state.initialized);
   const hasSession = useAuthStore((state) => state.hasSession);
   const profile = useAuthStore((state) => state.profile);
@@ -21,11 +22,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Removing a query also cancels its request via the consumed AbortSignal.
         queryClient.removeQueries({ queryKey: ["me", previous.sessionId] });
       }
-      if (previous.hasSession && !state.hasSession) router.replace("/");
+      if (
+        previous.hasSession &&
+        !state.hasSession &&
+        (pathname === "/account" || pathname.startsWith("/account/"))
+      ) {
+        router.replace("/");
+      }
     });
     initializeAuth();
     return unsubscribe;
-  }, [queryClient, router]);
+  }, [pathname, queryClient, router]);
 
   const { isLoading, isSuccess } = useGetProfile();
 
