@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Menu } from "@base-ui/react/menu";
 import { ChevronDown, LogOut, UserRound } from "lucide-react";
 import { useLogoutMutation } from "@/shared/services/auth/hooks/useLogoutMutation";
@@ -22,7 +23,8 @@ export function AccountMenu() {
         <Menu.Positioner side="bottom" align="end" sideOffset={8} className="z-[80]">
           <Menu.Popup className="min-w-40 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-lg outline-none">
             <Menu.LinkItem
-              href="/account"
+              render={<Link href="/account" />}
+              closeOnClick
               className="flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm font-medium outline-none data-[highlighted]:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
             >
               <UserRound aria-hidden="true" size={18} />

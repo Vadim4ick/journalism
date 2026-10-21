@@ -6,7 +6,7 @@ import { Logo } from "@/shared/icons/logo";
 import { Typography } from "@/shared/ui/typography";
 import styles from "./site-status.module.css";
 
-type StatusKind = "maintenance" | "not-found" | "loading" | "error";
+type StatusKind = "maintenance" | "not-found" | "loading" | "profile-loading" | "error";
 
 const content: Record<StatusKind, {
   eyebrow: string;
@@ -36,6 +36,13 @@ const content: Record<StatusKind, {
     symbol: "…",
     visualCaption: "Загрузка",
   },
+  "profile-loading": {
+    eyebrow: "Личный кабинет",
+    title: "Загружаем профиль",
+    description: "Получаем данные вашего аккаунта. Это займёт немного времени.",
+    symbol: "…",
+    visualCaption: "Загрузка профиля",
+  },
   error: {
     eyebrow: "Ошибка соединения",
     title: "Связь прервалась",
@@ -64,7 +71,11 @@ export function SiteStatus({
   );
 
   return (
-    <section className={styles.page} aria-labelledby="site-status-heading" data-text-flow>
+    <section
+      className={styles.page}
+      aria-labelledby="site-status-heading"
+      data-text-flow
+    >
       <div className={styles.topBand}>
         <header className={styles.header}>
           {kind === "not-found" ? (
@@ -82,7 +93,10 @@ export function SiteStatus({
       </div>
 
       <div className={styles.card}>
-        <div className={styles.copy}>
+        <div
+          className={styles.copy}
+          role={kind === "loading" || kind === "profile-loading" ? "status" : undefined}
+        >
           <Typography variant="small" className={styles.eyebrow}>
             <span className={styles.dot} aria-hidden="true" />
             {page.eyebrow}
