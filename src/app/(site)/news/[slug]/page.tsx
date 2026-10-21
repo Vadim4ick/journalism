@@ -5,6 +5,8 @@ import axios from "axios";
 import { contentServices } from "@/shared/services/content";
 import { NewsDetailPage } from "@/views/news-detail";
 
+export const revalidate = 0;
+
 type PageProps = { params: Promise<{ slug: string }> };
 
 const getNewsItem = cache(async (slug: string) => {

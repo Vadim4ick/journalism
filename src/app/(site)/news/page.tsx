@@ -3,6 +3,8 @@ import { NewsPage } from "@/views/news";
 import { contentServices } from "@/shared/services/content";
 import type { ContentNews } from "@/shared/types/model/content.type";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Новости — Дом журналистики",
   description: "Новости и события Медиацентра «Дом журналистики».",

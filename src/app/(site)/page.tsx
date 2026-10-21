@@ -3,6 +3,8 @@ import { contentServices } from "@/shared/services/content";
 import type { ContentEvent, ContentNews, ContentMedia, ContentProject } from "@/shared/types/model/content.type";
 import { connection } from "next/server";
 
+export const revalidate = 0;
+
 export default async function Page() {
   await connection();
 

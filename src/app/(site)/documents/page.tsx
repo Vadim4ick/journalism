@@ -3,6 +3,8 @@ import { connection } from "next/server";
 import { getDocumentsAction } from "@/shared/server-actions/get-documents";
 import { DocumentsPage } from "@/views/documents";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Документы",
   description:

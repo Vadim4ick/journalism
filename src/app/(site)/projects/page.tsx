@@ -3,6 +3,8 @@ import { ProjectsPage } from "@/views/projects";
 import { contentServices } from "@/shared/services/content";
 import type { ContentProject } from "@/shared/types/model/content.type";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Проекты медиацентра — Дом журналистики",
   description: "Текущие и завершённые проекты медиацентра «Дом журналистики».",

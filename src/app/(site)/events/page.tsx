@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { EventsPage } from "@/views/events";
 import { contentServices } from "@/shared/services/content";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Предстоящие события — Дом журналистики",
   description:

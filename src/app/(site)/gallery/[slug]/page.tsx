@@ -5,6 +5,8 @@ import axios from "axios";
 import { contentServices } from "@/shared/services/content";
 import { GalleryAlbumPage, toGalleryAlbum } from "@/views/gallery";
 
+export const revalidate = 0;
+
 type PageProps = { params: Promise<{ slug: string }> };
 
 const getAlbum = cache(async (slug: string) => {

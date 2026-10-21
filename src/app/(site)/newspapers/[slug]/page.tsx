@@ -5,6 +5,8 @@ import axios from "axios";
 import { contentServices } from "@/shared/services/content";
 import { NewspaperDetailPage } from "@/views/newspapers";
 
+export const revalidate = 0;
+
 type PageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ page?: string | string[]; date?: string | string[] }>;

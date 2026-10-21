@@ -5,6 +5,8 @@ import { cache } from "react";
 import { contentServices } from "@/shared/services/content";
 import { EventDetailPage } from "@/views/event-detail";
 
+export const revalidate = 0;
+
 type PageProps = { params: Promise<{ slug: string }> };
 
 const getEvent = cache(async (slug: string) => {

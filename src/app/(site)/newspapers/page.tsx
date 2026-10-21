@@ -3,6 +3,8 @@ import { NewspapersPage } from "@/views/newspapers";
 import { contentServices } from "@/shared/services/content";
 import type { ContentNewspaper } from "@/shared/types/model/content.type";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Газетный киоск — Дом журналистики",
   description: "Редакции газет Краснодарского края в газетном киоске Дома журналистики.",

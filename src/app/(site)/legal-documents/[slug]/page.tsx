@@ -5,6 +5,8 @@ import axios from "axios";
 import { contentServices } from "@/shared/services/content";
 import { LegalDocumentPage } from "@/views/legal-document";
 
+export const revalidate = 0;
+
 type PageProps = { params: Promise<{ slug: string }> };
 
 const getLegalDocument = cache(async (slug: string) => {

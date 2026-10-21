@@ -3,6 +3,8 @@ import { contentServices } from "@/shared/services/content";
 import type { ContentMedia } from "@/shared/types/model/content.type";
 import { GalleryPage } from "@/views/gallery";
 
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Фотогалерея — Дом журналистики",
   description: "Фотографии и альбомы мероприятий Дома журналистики.",
