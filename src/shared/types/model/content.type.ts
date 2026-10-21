@@ -17,7 +17,7 @@ export interface ContentNews {
   description: string;
   image: string | null;
   published_at: string;
-  published_at_iso: string;
+  published_at_iso: string | null;
   tags: { id: string; label: string }[];
 }
 

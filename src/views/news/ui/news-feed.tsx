@@ -7,6 +7,7 @@ import { NewsCard, newsCardData } from "@/components/news-card";
 import { Button } from "@/shared/ui/button";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
+import { newsDate } from "@/shared/lib/news-date";
 import type { ContentNews } from "@/shared/types/model/content.type";
 import { NewsCalendar } from "./news-calendar";
 import { formatDateRange, type NewsDateRange } from "../model/date-range";
@@ -37,7 +38,7 @@ export function NewsFeed({ news, pagination, selected, error = false, calendarDa
         <aside aria-label="Фильтр новостей по периоду" className={styles.calendarSlot}>
           <ScrollReveal>
             <NewsCalendar
-              dates={news.map((item) => item.published_at_iso.slice(0, 10))}
+              dates={news.map(newsDate).filter((date): date is string => Boolean(date))}
               initialDate={calendarDate}
               selected={selected}
               onSelect={(range) => router.push(pageHref(1, range))}

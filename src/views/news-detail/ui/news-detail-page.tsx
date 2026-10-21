@@ -4,6 +4,7 @@ import { SiteImage } from "@/components/site-image";
 import { SocialLinks } from "@/components/social-links";
 import { ArrowUpRight } from "@/shared/icons/arrow-up-right";
 import { contentImageUrl } from "@/shared/lib/content-image-url";
+import { newsDate } from "@/shared/lib/news-date";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
@@ -38,8 +39,11 @@ export function NewsDetailPage({ article, related }: { article: ContentNewsDetai
 
           <header className={styles.articleHeader}>
             <div className={styles.dateLine}>
-              <time dateTime={article.published_at_iso}>
-                {article.published_at} <span className={styles.time}>{article.published_at_iso.slice(11, 16)}</span>
+              <time dateTime={article.published_at_iso ?? newsDate(article)}>
+                {article.published_at}
+                {article.published_at_iso?.slice(11, 16) && (
+                  <> <span className={styles.time}>{article.published_at_iso.slice(11, 16)}</span></>
+                )}
               </time>
             </div>
             <Typography as="h1" variant="heading-medium" className={styles.title}>{article.title}</Typography>
