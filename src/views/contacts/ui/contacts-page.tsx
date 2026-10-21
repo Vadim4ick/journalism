@@ -16,43 +16,6 @@ type Detail = {
   href?: string;
 };
 
-const fixedGeneralDetails: Detail[] = [
-  {
-    label: "Юридический адрес",
-    value:
-      "350014, Российская Федерация, Краснодарский край, город Краснодар, ул. Красная, д. 35",
-  },
-];
-
-const registrationDetails: Detail[] = [
-  { label: "ИНН", value: "2308296019" },
-  { label: "ОГРН", value: "1242300010501" },
-  { label: "КПП", value: "230801001" },
-  { label: "ОКПО", value: "75629431" },
-];
-
-const managementDetails: Detail[] = [
-  { label: "Директор", value: "Косарева Анна Владимировна" },
-  { label: "Заместитель директора", value: "Чебыкина Екатерина Владимировна" },
-];
-
-const founderDetails: Detail[] = [
-  {
-    label: "Наименование",
-    value: "Департамент информационной политики Краснодарского края",
-  },
-  {
-    label: "Email",
-    value: "dsmi@krasnodar.ru",
-    href: "mailto:dsmi@krasnodar.ru",
-  },
-  { label: "Телефон", value: "8 (861) 214-58-34", href: "tel:+78612145834" },
-  {
-    label: "Руководитель департамента",
-    value: "Навазова Галина Александровна",
-  },
-];
-
 function DetailList({ items }: { items: Detail[] }) {
   return (
     <dl className={styles.detailList}>
@@ -68,12 +31,12 @@ function DetailList({ items }: { items: Detail[] }) {
 export function ContactsPage() {
   const settings = useSiteSettingsStore((state) => state.settings);
   const status = useSiteSettingsStore((state) => state.status);
+  const organization = status === "success" ? settings?.organization : undefined;
   const contacts = settings?.contacts;
   const hours = contacts?.work_hours.split(/\r?\n/).map((line) => line.trim()).filter(Boolean) ?? [];
-  const generalDetails: Detail[] = settings ? [
-    { label: "Полное наименование", value: settings.organization.full_name },
-    { label: "Сокращенное наименование", value: settings.organization.short_name },
-    ...fixedGeneralDetails,
+  const generalDetails: Detail[] = organization ? [
+    { label: "Полное наименование", value: organization.full_name },
+    { label: "Сокращенное наименование", value: organization.short_name },
     { label: "Фактический адрес", value: contacts?.address ?? "" },
     { label: "Email", value: contacts?.email ?? "", href: contacts?.email ? `mailto:${contacts.email}` : undefined },
     ...(contacts?.phones.map(({ value }, index) => ({
@@ -81,7 +44,30 @@ export function ContactsPage() {
       value,
       href: `tel:${value.replace(/[^+\d]/g, "")}`,
     })) ?? []),
-  ] : fixedGeneralDetails;
+  ] : [];
+  const managementDetails: Detail[] = organization ? [
+    { label: "Директор", value: organization.management.director },
+    { label: "Заместитель директора", value: organization.management.deputy_director },
+  ] : [];
+  const bankDetails: Detail[] = organization ? [
+    { label: "Банк", value: organization.bank.name },
+    { label: "БИК", value: organization.bank.bik },
+    { label: "Расчётный счёт", value: organization.bank.account },
+    { label: "Корреспондентский счёт", value: organization.bank.correspondent_account },
+  ].filter((item): item is Detail => Boolean(item.value)) : [];
+  const registrationDetails: Detail[] = organization ? [
+    { label: "ИНН", value: organization.registration.inn },
+    { label: "ОГРН", value: organization.registration.ogrn },
+    { label: "КПП", value: organization.registration.kpp },
+    { label: "ОКПО", value: organization.registration.okpo },
+    ...bankDetails,
+  ] : [];
+  const founderDetails: Detail[] = organization ? [
+    { label: "Наименование", value: organization.founder.name },
+    { label: "Email", value: organization.founder.email, href: `mailto:${organization.founder.email}` },
+    { label: "Телефон", value: organization.founder.phone, href: `tel:${organization.founder.phone.replace(/[^+\d]/g, "")}` },
+    { label: "Руководитель департамента", value: organization.founder.director },
+  ] : [];
 
   return (
     <Container className={styles.container}>
@@ -173,18 +159,26 @@ export function ContactsPage() {
           Реквизиты учреждения
         </Typography>
         <ScrollReveal className={styles.requisitesPanel}>
-          <Requisite title="Общая информация">
-            <DetailList items={generalDetails} />
-          </Requisite>
-          <Requisite title="Руководство">
-            <DetailList items={managementDetails} />
-          </Requisite>
-          <Requisite title="Банковские и регистрационные данные">
-            <DetailList items={registrationDetails} />
-          </Requisite>
-          <Requisite title="Учредитель">
-            <DetailList items={founderDetails} />
-          </Requisite>
+          {organization ? <>
+            <Requisite title="Общая информация">
+              <DetailList items={generalDetails} />
+            </Requisite>
+            <Requisite title="Руководство">
+              <DetailList items={managementDetails} />
+            </Requisite>
+            <Requisite title="Банковские и регистрационные данные">
+              <DetailList items={registrationDetails} />
+            </Requisite>
+            <Requisite title="Учредитель">
+              <DetailList items={founderDetails} />
+            </Requisite>
+          </> : (
+            <p role="status">
+              {status === "error" || status === "success"
+                ? "Не удалось загрузить реквизиты учреждения."
+                : "Загрузка реквизитов учреждения…"}
+            </p>
+          )}
         </ScrollReveal>
       </section>
     </Container>

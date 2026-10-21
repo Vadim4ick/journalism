@@ -9,6 +9,28 @@ export interface SiteSettings {
       path: string;
     }[];
     requisites: string;
+    management: {
+      director: string;
+      deputy_director: string;
+    };
+    registration: {
+      inn: string;
+      ogrn: string;
+      kpp: string;
+      okpo: string;
+    };
+    founder: {
+      name: string;
+      email: string;
+      phone: string;
+      director: string;
+    };
+    bank: {
+      name: string | null;
+      bik: string | null;
+      account: string | null;
+      correspondent_account: string | null;
+    };
   };
   contacts: {
     address: string;
@@ -17,7 +39,7 @@ export interface SiteSettings {
       value: string;
     }[];
     work_hours: string;
-    map_url: string;
+    map_url: string | null;
   };
   socials: {
     type: string;
