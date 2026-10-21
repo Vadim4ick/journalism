@@ -119,40 +119,40 @@ export function ProjectVotingPage() {
                       />
                     </button>
                   </h3>
-                  <div
-                    id={panelId}
-                    className={styles.choicePanel}
-                    aria-labelledby={triggerId}
-                    hidden={!expanded}
-                  >
-                    {expanded && (
-                      <>
-                        {item.organization && (
-                          <p className={styles.organization}>
-                            {item.organization}
-                          </p>
-                        )}
-                        <div className={styles.projectSummary}>
-                          <h4 className={styles.descriptionTitle}>
-                            Описание проекта
-                          </h4>
-                          <p className={styles.projectDescription}>
-                            {item.description ?? placeholderDescription}
-                          </p>
-                          <a
-                            href={`/files/voting/${item.slug}.pdf`}
-                            download={`${item.slug}.pdf`}
-                            className={styles.pdfLink}
-                          >
-                            <Download size={19} aria-hidden="true" />
-                            Скачать PDF
-                          </a>
-                        </div>
+                  <div className={styles.choiceDetails}>
+                    {item.organization && (
+                      <p className={styles.organization}>
+                        {item.organization}
+                      </p>
+                    )}
+                    <div className={styles.projectSummary}>
+                      <h4 className={styles.descriptionTitle}>
+                        Описание проекта
+                      </h4>
+                      <p className={styles.projectDescription}>
+                        {item.description ?? placeholderDescription}
+                      </p>
+                      <a
+                        href={`/files/voting/${item.slug}.pdf`}
+                        download={`${item.slug}.pdf`}
+                        className={styles.pdfLink}
+                      >
+                        <Download size={19} aria-hidden="true" />
+                        Скачать PDF
+                      </a>
+                    </div>
+                    <div
+                      id={panelId}
+                      className={styles.choicePanel}
+                      aria-labelledby={triggerId}
+                      hidden={!expanded}
+                    >
+                      {expanded && (
                         <ProjectVotingForm
                           key={`${nominationIndex}-${item.slug}`}
                         />
-                      </>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </li>
               );

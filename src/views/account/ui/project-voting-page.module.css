@@ -117,17 +117,29 @@
 }
 
 .choiceList {
-  display: block;
+  display: grid;
+  gap: 16px;
   margin-top: 24px;
   padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 20px;
   list-style: none;
-  overflow: hidden;
 }
 
-.choiceItem + .choiceItem {
-  border-top: 1px solid var(--border);
+.choiceItem {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--background);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.choiceItem:has(.choiceButton[aria-expanded="true"]) {
+  border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
+  box-shadow: 0 10px 28px rgb(0 0 0 / 6%);
+}
+
+.choiceItem:has(:focus-visible) {
+  box-shadow: 0 0 0 3px var(--ring);
 }
 
 .choiceHeading {
@@ -137,11 +149,11 @@
 .choiceButton {
   display: grid;
   width: 100%;
-  min-height: 74px;
-  grid-template-columns: 34px minmax(0, 1fr) 28px;
+  min-height: 88px;
+  grid-template-columns: 42px minmax(0, 1fr) 40px;
   align-items: center;
   gap: 16px;
-  padding: 16px 22px;
+  padding: 18px 24px;
   border: 0;
   background: var(--background);
   color: var(--foreground);
@@ -156,6 +168,12 @@
 }
 
 .choiceNumber {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 9%, var(--background));
   color: var(--primary);
   font-size: 13px;
   font-weight: 600;
@@ -170,7 +188,11 @@
 }
 
 .choiceArrow {
+  box-sizing: content-box;
   justify-self: end;
+  padding: 9px;
+  border-radius: 50%;
+  background: var(--card);
   color: var(--primary);
   transition: transform 180ms ease;
 }
@@ -179,10 +201,10 @@
   transform: rotate(180deg);
 }
 
-.choicePanel {
+.choiceDetails {
   padding: 28px clamp(18px, 3vw, 42px) 34px;
   border-top: 1px solid var(--border);
-  background: var(--card);
+  background: var(--background);
 }
 
 .choicePanel[hidden],
@@ -447,16 +469,27 @@
   }
 
   .choiceButton {
-    grid-template-columns: 26px minmax(0, 1fr) 22px;
+    min-height: 72px;
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
     gap: 10px;
     padding: 15px 12px;
+  }
+
+  .choiceNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
 
   .choiceTitle {
     font-size: 16px;
   }
 
-  .choicePanel {
+  .choiceArrow {
+    padding: 5px;
+  }
+
+  .choiceDetails {
     padding: 22px 16px 28px;
   }
 
@@ -475,6 +508,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .projectLink,
+  .choiceItem,
   .choiceButton,
   .choiceArrow,
   .voteButton {
@@ -487,10 +521,12 @@
 }
 
 :global(html[data-a11y-reduce-motion="true"]) .projectLink,
+:global(html[data-a11y-reduce-motion="true"]) .choiceItem,
 :global(html[data-a11y-reduce-motion="true"]) .choiceButton,
 :global(html[data-a11y-reduce-motion="true"]) .choiceArrow,
 :global(html[data-a11y-reduce-motion="true"]) .voteButton,
 :global(html[data-text-mode="true"]) .projectLink,
+:global(html[data-text-mode="true"]) .choiceItem,
 :global(html[data-text-mode="true"]) .choiceButton,
 :global(html[data-text-mode="true"]) .choiceArrow,
 :global(html[data-text-mode="true"]) .voteButton {
@@ -510,4 +546,9 @@
 :global(html[data-text-mode="true"]) .projectList,
 :global(html[data-text-mode="true"]) .choiceList {
   display: block;
+}
+
+:global(html[data-text-mode="true"]) .choiceItem {
+  margin-bottom: 1rem;
+  box-shadow: none;
 }

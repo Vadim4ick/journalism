@@ -47,16 +47,28 @@ export function AccountPage() {
         </dl>
 
         <div className={styles.banner}>
-          <SiteImage
-            src="/images/auth/soroka.png"
-            alt="Сорока — конкурс коммуникационных проектов при поддержке департамента информационной политики Краснодарского края"
-            width={2038}
-            height={1400}
-            sizes="(min-width: 948px) 900px, calc(100vw - 48px)"
-            textLinkLabel="Сорока — конкурс коммуникационных проектов при поддержке департамента информационной политики Краснодарского края"
-            textModeLink={false}
-            className={styles.bannerImage}
-          />
+          <div className={styles.sorokaBanner}>
+            <div className={styles.bannerBrand}>
+              <SiteImage
+                src="/images/account/soroka-logo.svg"
+                alt="Сорока"
+                width={137}
+                height={85}
+                textLinkLabel="Сорока"
+                textModeLink={false}
+                className={styles.bannerLogo}
+              />
+              <p className={styles.bannerCaption}>
+                Конкурс коммуникационных проектов
+                <br className={styles.bannerBreak} /> при поддержке департамента
+                информационной
+                <br className={styles.bannerBreak} /> политики Краснодарского края
+              </p>
+            </div>
+            <span className={styles.bannerArcBack} aria-hidden="true" data-text-decorative data-a11y-background-image />
+            <span className={styles.bannerArcFront} aria-hidden="true" data-text-decorative data-a11y-background-image />
+            <p className={styles.bannerYear}>2026 г.</p>
+          </div>
         </div>
 
         <section className={styles.rules} aria-labelledby="voting-rules-title">

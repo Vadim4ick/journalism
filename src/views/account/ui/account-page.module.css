@@ -87,13 +87,80 @@
   border-top: 1px solid var(--border);
 }
 
-.bannerImage {
-  display: block;
+.sorokaBanner {
+  position: relative;
+  display: flex;
   width: 100%;
-  max-width: 900px;
-  height: auto;
-  border-radius: 24px;
-  box-shadow: 0 16px 40px rgb(0 0 0 / 8%);
+  max-width: 1476px;
+  height: 150px;
+  align-items: center;
+  padding-left: 58px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #023d37;
+  color: #fff;
+}
+
+.bannerBrand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.bannerLogo {
+  display: block;
+  flex: none;
+  width: 137px;
+  height: 85px;
+}
+
+.bannerCaption {
+  width: 564px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.bannerArcBack,
+.bannerArcFront {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.bannerArcBack {
+  top: -9px;
+  left: calc(50% - 16px);
+  width: 778px;
+  height: 930px;
+  background-image: url("/images/account/banner-arc-back.svg");
+}
+
+.bannerArcFront {
+  top: -101px;
+  left: calc(50% - 130px);
+  width: 761px;
+  height: 957px;
+  background-image: url("/images/account/banner-arc-front.svg");
+}
+
+.bannerYear {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 73.2%;
+  margin: 0;
+  color: #fff;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
 }
 
 .votingButton {
@@ -127,7 +194,6 @@
 
 .rules {
   width: 100%;
-  max-width: 900px;
   margin: 44px auto 0;
 }
 
@@ -141,6 +207,7 @@
 }
 
 .rulesList {
+  max-width: 928px;
   margin-top: 18px;
   padding-left: 1.2em;
   font-size: 18px;
@@ -191,6 +258,30 @@
 }
 
 @media (width < 991px) {
+  .sorokaBanner {
+    padding-left: 32px;
+  }
+
+  .bannerBrand {
+    max-width: 66%;
+    gap: 20px;
+  }
+
+  .bannerCaption {
+    width: auto;
+    font-size: 16px;
+    line-height: 1.15;
+  }
+
+  .bannerBreak {
+    display: none;
+  }
+
+  .bannerYear {
+    left: 78%;
+    font-size: 30px;
+  }
+
   .statistics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -205,6 +296,53 @@
   .statistics {
     gap: 12px;
     margin-top: 28px;
+  }
+
+  .sorokaBanner {
+    height: 210px;
+    padding: 18px;
+  }
+
+  .bannerBrand {
+    align-self: flex-start;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    max-width: 85%;
+  }
+
+  .bannerLogo {
+    width: 110px;
+    height: auto;
+  }
+
+  .bannerCaption {
+    max-width: 250px;
+    font-size: 13px;
+    line-height: 1.2;
+  }
+
+  .bannerArcBack {
+    top: -4px;
+    left: calc(100% - 180px);
+    transform: scale(0.45);
+    transform-origin: top left;
+  }
+
+  .bannerArcFront {
+    top: -45px;
+    left: calc(100% - 220px);
+    transform: scale(0.45);
+    transform-origin: top left;
+  }
+
+  .bannerYear {
+    top: auto;
+    right: 18px;
+    bottom: 18px;
+    left: auto;
+    font-size: 24px;
+    transform: none;
   }
 
   .statistic {
