@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
 
   if (request.nextUrl.pathname === "/login") {
     return hasAuthCookie
-      ? NextResponse.redirect(new URL("/account", request.url))
+      ? NextResponse.redirect(new URL("/", request.url))
       : NextResponse.next();
   }
 

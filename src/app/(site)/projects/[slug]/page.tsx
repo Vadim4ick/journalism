@@ -1,27 +1,42 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { NEIGHBORS_PROJECT } from "@/views/projects/model/projects";
+import axios from "axios";
+import { cache } from "react";
+import { contentServices } from "@/shared/services/content";
 import { NEIGHBORS_API_SLUG } from "@/components/project-card";
 import { ProjectDetailPage } from "@/views/project-detail";
 
+export const revalidate = 0;
+
 type PageProps = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return [{ slug: NEIGHBORS_PROJECT.slug }, { slug: NEIGHBORS_API_SLUG }];
-}
+const getProject = cache(async (slug: string) => {
+  try {
+    const response = await contentServices.getProject(slug === "sosedi" ? NEIGHBORS_API_SLUG : slug);
+    if (response.status !== "success" || !response.data?.element || !Array.isArray(response.data.element.blocks)) {
+      throw new Error("Некорректный ответ сервера при загрузке проекта");
+    }
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) return null;
+    throw error;
+  }
+});
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = slug === NEIGHBORS_PROJECT.slug || slug === NEIGHBORS_API_SLUG ? NEIGHBORS_PROJECT : null;
-  return project
-    ? { title: `Проект ${project.title} — Дом журналистики`, description: project.description }
-    : { title: "Проект не найден — Дом журналистики" };
+  const data = await getProject(slug);
+  if (!data) return { title: "Проект не найден — Дом журналистики" };
+  return {
+    title: data.seo?.meta_title || data.seo?.browser_title || `${data.element.title} — Дом журналистики`,
+    description: data.seo?.meta_description || data.element.description,
+  };
 }
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const project = slug === NEIGHBORS_PROJECT.slug || slug === NEIGHBORS_API_SLUG ? NEIGHBORS_PROJECT : null;
-  if (!project) notFound();
+  const data = await getProject(slug);
+  if (!data) notFound();
 
-  return <ProjectDetailPage project={project} />;
+  return <ProjectDetailPage project={data.element} />;
 }

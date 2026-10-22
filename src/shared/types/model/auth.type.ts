@@ -32,7 +32,7 @@ export interface Profile {
   active: boolean;
   blocked: boolean;
   date_register: string;
-  last_login: string;
+  last_login: string | null;
   groups: UserGroup[];
   group_codes: string[];
 }

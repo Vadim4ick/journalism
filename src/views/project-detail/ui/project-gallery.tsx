@@ -8,13 +8,13 @@ import { Carousel, CarouselContent, CarouselItem, useCarousel } from "@/shared/u
 import { useAccessibilityStore, useEffectiveReducedMotion } from "@/state/accessibility";
 import styles from "./project-detail-page.module.css";
 
-type GalleryImage = { src: string; alt: string };
+type GalleryImage = { id: string; src: string; alt: string };
 
-function GalleryControls() {
+function GalleryControls({ title }: { title: string }) {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
 
   return (
-    <div className={styles.galleryControls} role="group" aria-label="Управление фотографиями">
+    <div className={styles.galleryControls} role="group" aria-label={`Управление галереей «${title}»`}>
       <button type="button" onClick={scrollPrev} disabled={!canScrollPrev} aria-label="Предыдущие фотографии" className={styles.galleryButton}>
         <ChevronLeft aria-hidden="true" size={20} />
       </button>
@@ -25,7 +25,7 @@ function GalleryControls() {
   );
 }
 
-export function ProjectGallery({ images }: { images: readonly GalleryImage[] }) {
+export function ProjectGallery({ images, title, headingId }: { images: readonly GalleryImage[]; title: string; headingId: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const openerRef = useRef<HTMLButtonElement | null>(null);
@@ -40,13 +40,12 @@ export function ProjectGallery({ images }: { images: readonly GalleryImage[] }) 
 
   if (textMode) {
     return (
-      <section aria-labelledby="project-gallery-heading" className={styles.gallerySection} data-text-flow>
-        <h2 id="project-gallery-heading" className="sr-only">Фотографии проекта</h2>
+      <section aria-labelledby={headingId} className={styles.gallerySection} data-text-flow>
+        <h2 id={headingId} className={styles.sectionTitle}>{title}</h2>
         <ul className={styles.textGallery}>
           {images.map((image) => (
-            <li key={image.src}>
-              <SiteImage src={image.src} alt={image.alt} textLinkLabel={image.alt} width={400} height={300} />{" "}
-              <a href={image.src} download>Скачать фотографию</a>
+            <li key={image.id}>
+              <a href={image.src}>{image.alt || "Открыть фотографию"}</a>
             </li>
           ))}
         </ul>
@@ -56,13 +55,15 @@ export function ProjectGallery({ images }: { images: readonly GalleryImage[] }) 
 
   return (
     <>
-      <section aria-labelledby="project-gallery-heading" className={styles.gallerySection}>
-        <h2 id="project-gallery-heading" className="sr-only">Фотографии проекта</h2>
-        <Carousel opts={{ align: "start", containScroll: "trimSnaps", duration: reducedMotion ? 0 : 25 }} aria-label="Фотографии проекта">
-          <div className={styles.galleryHeading}><GalleryControls /></div>
+      <section aria-labelledby={headingId} className={styles.gallerySection}>
+        <Carousel opts={{ align: "start", containScroll: "trimSnaps", duration: reducedMotion ? 0 : 25 }} aria-label={title}>
+          <div className={styles.galleryHeading}>
+            <h2 id={headingId} className={styles.sectionTitle}>{title}</h2>
+            <GalleryControls title={title} />
+          </div>
           <CarouselContent className={styles.galleryTrack}>
             {images.map((image, index) => (
-              <CarouselItem key={`${image.src}-${index}`} className={styles.galleryItem}>
+              <CarouselItem key={image.id} className={styles.galleryItem}>
                 <div className={styles.galleryImage}>
                   <button
                     type="button"
@@ -74,7 +75,7 @@ export function ProjectGallery({ images }: { images: readonly GalleryImage[] }) 
                       setLightboxOpen(true);
                     }}
                   >
-                    <SiteImage src={image.src} alt="" fill sizes="(min-width: 1150px) calc((min(100vw, 1792px) - 64px) / 3), (min-width: 768px) 50vw, calc(100vw - 32px)" className="object-cover" />
+                    <SiteImage src={image.src} unoptimized={image.src.startsWith("http")} alt="" fill sizes="(min-width: 1150px) calc((min(100vw, 1792px) - 64px) / 3), (min-width: 768px) 50vw, calc(100vw - 32px)" className="object-cover" />
                   </button>
                 </div>
               </CarouselItem>
@@ -82,7 +83,7 @@ export function ProjectGallery({ images }: { images: readonly GalleryImage[] }) 
           </CarouselContent>
         </Carousel>
       </section>
-      <GalleryLightbox images={images} title="Фотографии проекта" activeIndex={activeIndex} open={lightboxOpen} onOpenChange={setLightboxOpen} onChange={move} finalFocus={openerRef} />
+      <GalleryLightbox images={images} title={title} activeIndex={activeIndex} open={lightboxOpen} onOpenChange={setLightboxOpen} onChange={move} finalFocus={openerRef} />
     </>
   );
 }

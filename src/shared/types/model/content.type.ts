@@ -81,6 +81,61 @@ export type ContentProjectsResponse = ApiSuccessResponse<{
   pagination: Pagination;
 }>;
 
+/** Варианты blocks.type, присутствующие в ответе /content/projects/soroka. */
+export type ContentProjectBlockType =
+  | "rich_text"
+  | "gallery"
+  | "organizers"
+  | "partners"
+  | "cards"
+  | "stories"
+  | "quote"
+  | "experts";
+
+export interface ContentProjectBlockImage {
+  url: string;
+  alt: string;
+  description: string;
+}
+
+export interface ContentProjectBlockItem {
+  id: string;
+  title: string;
+  text: string;
+  description_html: string;
+  color: string;
+  sort: number;
+  url: string | null;
+  image: ContentProjectBlockImage | null;
+}
+
+export interface ContentProjectBlock {
+  id: string;
+  type: ContentProjectBlockType;
+  title: string;
+  description_html: string;
+  text: string;
+  sort: number;
+  style: {
+    variant: string;
+    color: string;
+    background_color: string;
+  };
+  items: ContentProjectBlockItem[];
+}
+
+export interface ContentProjectDetail extends ContentProject {
+  // В предоставленном ответе массив пуст: формат его элементов не подтверждён.
+  images: unknown[];
+  detail_text: string;
+  blocks: ContentProjectBlock[];
+}
+
+export type ContentProjectDetailResponse = ApiSuccessResponse<{
+  element: ContentProjectDetail;
+  seo: SEO;
+}>;
+
 export interface ContentNewspaper {
   id: number;
   slug: string;

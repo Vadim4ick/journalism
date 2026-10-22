@@ -1,96 +1,76 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { GalleryLightbox } from "@/components/gallery-lightbox";
 import { SiteImage } from "@/components/site-image";
+import { contentImageUrl } from "@/shared/lib/content-image-url";
+import type { ContentProjectBlockItem } from "@/shared/types/model/content.type";
 import { Carousel, CarouselContent, CarouselItem, useCarousel } from "@/shared/ui/carousel";
-import { Typography } from "@/shared/ui/typography";
 import { useAccessibilityStore, useEffectiveReducedMotion } from "@/state/accessibility";
 import styles from "./project-detail-page.module.css";
 
-const EXPERT_PHOTOS = Array.from({ length: 10 }, (_, index) => ({
-  src: "/images/no-image.png",
-  alt: `Фото эксперта ${index + 1}: изображение пока не добавлено`,
-}));
-
-function ExpertsControls() {
+function ExpertsControls({ title }: { title: string }) {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
-
   return (
-    <div className={styles.galleryControls} role="group" aria-label="Управление фотографиями экспертов">
-      <button type="button" onClick={scrollPrev} disabled={!canScrollPrev} aria-label="Предыдущие фотографии экспертов" className={styles.galleryButton}>
+    <div className={styles.galleryControls} role="group" aria-label={`Управление блоком «${title}»`}>
+      <button type="button" onClick={scrollPrev} disabled={!canScrollPrev} aria-label="Предыдущие эксперты" className={styles.galleryButton}>
         <ChevronLeft aria-hidden="true" size={20} />
       </button>
-      <button type="button" onClick={scrollNext} disabled={!canScrollNext} aria-label="Следующие фотографии экспертов" className={styles.galleryButton}>
+      <button type="button" onClick={scrollNext} disabled={!canScrollNext} aria-label="Следующие эксперты" className={styles.galleryButton}>
         <ChevronRight aria-hidden="true" size={20} />
       </button>
     </div>
   );
 }
 
-export function ExpertsCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
-  const openerRef = useRef<HTMLButtonElement | null>(null);
+export function ExpertsCarousel({ items, title, headingId }: { items: readonly ContentProjectBlockItem[]; title: string; headingId: string }) {
   const textMode = useAccessibilityStore((state) => state.textMode);
   const reducedMotion = useEffectiveReducedMotion();
 
-  function move(direction: number) {
-    setActiveIndex((index) => (index + direction + EXPERT_PHOTOS.length) % EXPERT_PHOTOS.length);
-  }
+  if (items.length === 0) return null;
+
+  const cards = items.map((item) => {
+    const imageSrc = contentImageUrl(item.image?.url);
+    return (
+      <article key={item.id} className={styles.expertCard}>
+        {imageSrc && (
+          <div className={styles.expertImage}>
+            <SiteImage
+              src={imageSrc}
+              unoptimized
+              alt={item.image?.alt || item.title}
+              textLinkLabel={item.image?.alt || item.title}
+              fill
+              sizes="(min-width: 1150px) 320px, (min-width: 768px) 50vw, 80vw"
+              className="object-cover"
+            />
+          </div>
+        )}
+        <h3 className={styles.expertName}>{item.title}</h3>
+        {item.description_html && <div className={styles.htmlContent} dangerouslySetInnerHTML={{ __html: item.description_html }} />}
+      </article>
+    );
+  });
 
   if (textMode) {
     return (
-      <>
-        <Typography as="h2" variant="body" id="experts-heading" className={styles.sectionTitle}>Наши эксперты</Typography>
-        <p>Фотографии десяти экспертов пока не добавлены.</p>
-        <a href="/images/no-image.png" download>Скачать файл-заглушку</a>
-      </>
+      <section aria-labelledby={headingId} className={styles.expertsSection} data-text-flow>
+        <h2 id={headingId} className={styles.sectionTitle}>{title}</h2>
+        <ul className={styles.expertList}>{cards.map((card, index) => <li key={items[index].id}>{card}</li>)}</ul>
+      </section>
     );
   }
 
   return (
-    <>
-      <Carousel
-        opts={{ align: "start", containScroll: "trimSnaps", duration: reducedMotion ? 0 : 25 }}
-        aria-label="Фотографии экспертов"
-        className={styles.expertsCarousel}
-      >
+    <section aria-labelledby={headingId} className={styles.expertsSection}>
+      <Carousel opts={{ align: "start", containScroll: "trimSnaps", duration: reducedMotion ? 0 : 25 }} aria-label={title}>
         <div className={styles.expertsHeader}>
-          <Typography as="h2" variant="body" id="experts-heading" className={styles.sectionTitle}>Наши эксперты</Typography>
-          <ExpertsControls />
+          <h2 id={headingId} className={styles.sectionTitle}>{title}</h2>
+          <ExpertsControls title={title} />
         </div>
-        <div className={styles.expertsWindow}>
-          <CarouselContent className={styles.expertsTrack}>
-            {EXPERT_PHOTOS.map((image, index) => (
-              <CarouselItem key={index} className={styles.expertsItem} aria-label={`Фото эксперта ${index + 1} из ${EXPERT_PHOTOS.length}: изображение пока не добавлено`}>
-                <div className={styles.expertImage}>
-                  <button
-                    type="button"
-                    className={styles.galleryOpen}
-                    aria-label={`Открыть фото эксперта ${index + 1}`}
-                    onClick={(event) => {
-                      openerRef.current = event.currentTarget;
-                      setActiveIndex(index);
-                      setLightboxOpen(true);
-                    }}
-                  >
-                    <SiteImage
-                      src={image.src}
-                      alt=""
-                      fill
-                      sizes="(min-width: 1350px) 320px, (min-width: 1150px) 33vw, (min-width: 768px) 50vw, 80vw"
-                      className="object-cover"
-                    />
-                  </button>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </div>
+        <CarouselContent className={styles.expertsTrack}>
+          {cards.map((card, index) => <CarouselItem key={items[index].id} className={styles.expertsItem}>{card}</CarouselItem>)}
+        </CarouselContent>
       </Carousel>
-      <GalleryLightbox images={EXPERT_PHOTOS} title="Наши эксперты" activeIndex={activeIndex} open={lightboxOpen} onOpenChange={setLightboxOpen} onChange={move} finalFocus={openerRef} />
-    </>
+    </section>
   );
 }

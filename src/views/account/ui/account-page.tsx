@@ -1,26 +1,150 @@
 "use client";
 
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { ArrowRight } from "lucide-react";
-import { SiteImage } from "@/components/site-image";
 import { Container } from "@/shared/ui/container";
 import { Typography } from "@/shared/ui/typography";
+import { Button } from "@/shared/ui/button";
+import { GlobalPreloader } from "@/shared/ui/global-preloader";
+import { SiteImage } from "@/components/site-image";
+import { contentImageUrl } from "@/shared/lib/content-image-url";
 import { Nominees } from "@/shared/icons/lk/nominees";
 import { Voted } from "@/shared/icons/lk/voted";
 import { LeftVoted } from "@/shared/icons/lk/left-voted";
 import { LeftDay } from "@/shared/icons/lk/left-day";
+import { juryServices } from "@/shared/services/jury";
 import { useAuthStore } from "@/state/auth.store";
+import type { JuryContest, JuryDashboard } from "@/shared/types/model/jury.type";
 import styles from "./account-page.module.css";
 
-const statistics = [
-  { label: "Всего номинантов", value: 67, icon: Nominees },
-  { label: "Вы проголосовали", value: 1, icon: Voted },
-  { label: "Осталось проголосовать", value: 66, icon: LeftVoted },
-  { label: "Осталось дней", value: 10, icon: LeftDay },
-];
+function formatContestDate(value: string | null, timeZone: string | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return value;
+
+  try {
+    return new Intl.DateTimeFormat("ru-RU", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: timeZone || "Europe/Moscow",
+      timeZoneName: "short",
+    }).format(date);
+  } catch {
+    return value;
+  }
+}
+
+function contestLogoUrl(logo: unknown): string | undefined {
+  const path = typeof logo === "string"
+    ? logo
+    : logo && typeof logo === "object" && "url" in logo && typeof logo.url === "string"
+      ? logo.url
+      : null;
+  return contentImageUrl(path);
+}
+
+function AccountStatistics({ dashboard }: { dashboard: JuryDashboard }) {
+  const statistics = [
+    { label: "Всего работ", value: dashboard.total_works, icon: Nominees },
+    { label: "Вы проголосовали", value: dashboard.evaluated_works, icon: Voted },
+    { label: "Осталось проголосовать", value: dashboard.remaining_works, icon: LeftVoted },
+    { label: "Осталось дней", value: Math.max(0, Math.ceil(dashboard.seconds_remaining / 86400)), icon: LeftDay },
+  ];
+
+  return (
+    <dl className={styles.statistics}>
+      {statistics.map(({ label, value, icon: Icon }) => (
+        <div className={styles.statistic} key={label}>
+          <span className={styles.statisticIcon} aria-hidden="true"><Icon /></span>
+          <dt className={styles.statisticLabel}>{label}</dt>
+          <dd className={styles.statisticValue}>{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+function ContestDetails({ contest, dashboard }: { contest: JuryContest; dashboard: JuryDashboard }) {
+  const rules = contest.rules_html?.trim() || contest.description?.trim();
+  const start = formatContestDate(contest.start_at, contest.timezone);
+  const end = formatContestDate(contest.end_at, contest.timezone);
+  const logo = contestLogoUrl(contest.logo);
+
+  return (
+    <>
+      <div className={styles.banner}>
+        <div className={styles.sorokaBanner}>
+          <div className={styles.bannerContent}>
+            {logo && (
+              <span className={styles.bannerLogo} data-text-decorative>
+                <SiteImage
+                  src={logo}
+                  alt=""
+                  fill
+                  unoptimized
+                  sizes="(max-width: 600px) 92px, 120px"
+                  className={styles.bannerLogoImage}
+                />
+              </span>
+            )}
+            <p className={styles.bannerCaption}>{contest.title}</p>
+          </div>
+          <span className={styles.bannerArcBack} aria-hidden="true" data-text-decorative data-a11y-background-image />
+          <span className={styles.bannerArcFront} aria-hidden="true" data-text-decorative data-a11y-background-image />
+          <p className={styles.bannerYear}>{contest.year} г.</p>
+        </div>
+      </div>
+
+      <section className={styles.rules} aria-labelledby="voting-rules-title">
+        <Link href="/account/voting" className={styles.votingButton}>
+          {dashboard.can_edit && !dashboard.finalized ? "Перейти к голосованию" : "Посмотреть оценки"}
+          <span className={styles.buttonArrow} aria-hidden="true"><ArrowRight size={19} /></span>
+        </Link>
+        {(!dashboard.can_edit || dashboard.finalized) && <p className={styles.votingStatus} role="status">
+          {dashboard.finalized ? "Голосование завершено" : "Голосование сейчас недоступно"}
+        </p>}
+
+        <Typography as="h2" variant="heading-medium" id="voting-rules-title" className={`${styles.rulesHeading} ${styles.selectedRulesHeading}`}>
+          Правила голосования
+        </Typography>
+        {rules ? <p className={styles.rulesText}>{rules}</p> : <p className={styles.rulesText}>Правила пока не опубликованы.</p>}
+        {(start || end) && (
+          <dl className={styles.dates}>
+            {start && <div><dt>Начало голосования</dt><dd><time dateTime={contest.start_at ?? undefined}>{start}</time></dd></div>}
+            {end && <div><dt>Окончание голосования</dt><dd><time dateTime={contest.end_at ?? undefined}>{end}</time></dd></div>}
+          </dl>
+        )}
+      </section>
+    </>
+  );
+}
 
 export function AccountPage() {
-  const fullName = useAuthStore((state) => state.profile?.full_name?.trim());
+  const profile = useAuthStore((state) => state.profile);
+  const sessionId = useAuthStore((state) => state.sessionId);
+  const dashboardQuery = useQuery({
+    queryKey: ["jury", "dashboard", sessionId],
+    queryFn: async ({ signal }) => {
+      const response = await juryServices.getDashboard(signal);
+      if (response.status !== "success" || !response.data) {
+        throw new Error("Некорректный ответ сервера при загрузке кабинета");
+      }
+      return response.data;
+    },
+    enabled: Boolean(profile),
+    retry: false,
+  });
+
+  if (dashboardQuery.isPending) return <GlobalPreloader />;
+
+  const fullName = profile?.full_name?.trim();
+  const dashboard = dashboardQuery.data;
+  const accessDenied = axios.isAxiosError(dashboardQuery.error) && dashboardQuery.error.response?.status === 403;
 
   return (
     <Container className={styles.container}>
@@ -29,115 +153,24 @@ export function AccountPage() {
           <Typography as="h1" variant="heading-medium" id="account-heading" className={styles.heading}>
             {fullName ? `${fullName}, добро пожаловать!` : "Добро пожаловать!"}
           </Typography>
-          <Typography as="p" variant="body" className={styles.subtitle}>
-            Голосование членов жюри конкурса коммуникационных проектов «Сорока»
-          </Typography>
+          <Typography as="p" variant="body" className={styles.subtitle}>Личный кабинет члена жюри</Typography>
         </header>
 
-        <dl className={styles.statistics}>
-          {statistics.map(({ label, value, icon: Icon }) => (
-            <div className={styles.statistic} key={label}>
-              <span className={styles.statisticIcon} aria-hidden="true">
-                <Icon />
-              </span>
-              <dt className={styles.statisticLabel}>{label}</dt>
-              <dd className={styles.statisticValue}>{value}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className={styles.banner}>
-          <div className={styles.sorokaBanner}>
-            <div className={styles.bannerBrand}>
-              <SiteImage
-                src="/images/account/soroka-logo.svg"
-                alt="Сорока"
-                width={137}
-                height={85}
-                textLinkLabel="Сорока"
-                textModeLink={false}
-                className={styles.bannerLogo}
-              />
-              <p className={styles.bannerCaption}>
-                Конкурс коммуникационных проектов
-                <br className={styles.bannerBreak} /> при поддержке департамента
-                информационной
-                <br className={styles.bannerBreak} /> политики Краснодарского края
-              </p>
-            </div>
-            <span className={styles.bannerArcBack} aria-hidden="true" data-text-decorative data-a11y-background-image />
-            <span className={styles.bannerArcFront} aria-hidden="true" data-text-decorative data-a11y-background-image />
-            <p className={styles.bannerYear}>2026 г.</p>
+        {dashboardQuery.isError ? (
+          <div className={styles.message} role="alert">
+            <p>{accessDenied ? "У вас нет доступа к кабинету жюри." : "Не удалось загрузить данные кабинета."}</p>
+            {!accessDenied && <Button type="button" onClick={() => void dashboardQuery.refetch()} className={styles.retryButton}>Повторить</Button>}
           </div>
-        </div>
-
-        <section className={styles.rules} aria-labelledby="voting-rules-title">
-          <Link href="/account/voting" className={styles.votingButton}>
-            Перейти к голосованию
-            <span className={styles.buttonArrow} aria-hidden="true">
-              <ArrowRight size={19} />
-            </span>
-          </Link>
-          <Typography as="h2" variant="heading-medium" id="voting-rules-title" className={`${styles.rulesHeading} ${styles.selectedRulesHeading}`}>
-            Правила голосования
-          </Typography>
-          <ol className={styles.rulesList}>
-            <li>
-              <h3>Общие положения</h3>
-              <p>
-                Голосование членов Жюри конкурса журналистики и медиакоммуникаций «Сорока» проходит
-                с 13 января по 24 января 2025 года до 23:59 по московскому времени. К участию в оценке
-                допускаются все члены экспертного совета, получившие доступ в личный кабинет.
-              </p>
-            </li>
-            <li>
-              <h3>Порядок голосования</h3>
-              <ul>
-                <li>Каждый член Жюри имеет право проголосовать за одного или нескольких номинантов в каждой номинации.</li>
-                <li>Оценка работ осуществляется по 10-балльной шкале, где 1 — минимальная оценка, 10 — максимальная.</li>
-                <li>Вы можете изменить свой выбор в любой момент до завершения голосования.</li>
-                <li>После нажатия кнопки «Завершить голосование» изменения становятся невозможны.</li>
-              </ul>
-            </li>
-            <li>
-              <h3>Критерии оценки</h3>
-              <ul>
-                <li>Актуальность — соответствие темы современной повестке и интересам аудитории.</li>
-                <li>Оригинальность — уникальность подачи материала и креативность подхода.</li>
-                <li>Профессионализм — качество текста, монтажа, визуального оформления.</li>
-                <li>Влияние — общественный резонанс и вовлеченность аудитории.</li>
-                <li>Достоверность — проверенность фактов и соблюдение журналистской этики.</li>
-              </ul>
-            </li>
-            <li>
-              <h3>Номинации конкурса</h3>
-              <ul>
-                <li>Лучший репортаж.</li>
-                <li>Лучшее интервью.</li>
-                <li>Лучший аналитический материал.</li>
-                <li>Лучший мультимедийный проект.</li>
-                <li>Лучший социальный проект в медиа.</li>
-              </ul>
-            </li>
-            <li>
-              <h3>Завершение голосования и подведение итогов</h3>
-              <p>
-                После 24 января 2025 года 23:59 (МСК) голосование автоматически закрывается.
-                Организационный комитет конкурса «Сорока» подсчитывает результаты, формирует итоговый
-                рейтинг и публикует список победителей на официальном сайте. Решение Жюри является
-                окончательным и не подлежит пересмотру.
-              </p>
-            </li>
-            <li>
-              <h3>Технические вопросы</h3>
-              <p>
-                В случае возникновения технических проблем при голосовании (ошибки при отправке оценки,
-                недоступность личного кабинета) необходимо незамедлительно связаться с организаторами
-                по адресу <a href="mailto:info@soroka-award.ru">info@soroka-award.ru</a>.
-              </p>
-            </li>
-          </ol>
-        </section>
+        ) : dashboard ? (
+          <>
+            <AccountStatistics dashboard={dashboard} />
+            {dashboard.contest ? (
+              <ContestDetails contest={dashboard.contest} dashboard={dashboard} />
+            ) : (
+              <p className={styles.message} role="status">Нет текущего конкурса для голосования. <Link href="/account/voting">Посмотреть назначенные конкурсы</Link></p>
+            )}
+          </>
+        ) : null}
       </section>
     </Container>
   );

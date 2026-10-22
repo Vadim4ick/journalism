@@ -6,7 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetProfile } from "../services/auth/hooks/useGetProfile";
 import { initializeAuth } from "../lib/auth-token";
 import { useAuthStore } from "@/state/auth.store";
-import { Loader2 } from "lucide-react";
+import { GlobalPreloader } from "@/shared/ui/global-preloader";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const queryClient = useQueryClient();
@@ -36,16 +36,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { isLoading, isSuccess } = useGetProfile();
 
-  if (initialized && hasSession && !profile && (isLoading || isSuccess)) {
-    return (
-      <>
-        <main id="main-content" data-text-flow tabIndex={-1}>
-          <div className="fixed top-1/2 left-1/2 z-100 flex h-screen w-full translate-x-[-50%] translate-y-[-50%] items-center justify-center bg-white">
-            <Loader2 className="size-10 animate-spin" />
-          </div>
-        </main>
-      </>
-    );
+  if (pathname !== "/login" && initialized && hasSession && !profile && (isLoading || isSuccess)) {
+    return <GlobalPreloader asMain />;
   }
 
   return children;

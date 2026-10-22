@@ -12,6 +12,6 @@ export function projectCardData(project: ContentProject): ProjectCardData {
     description: project.description,
     image: contentImageUrl(project.image) ?? "",
     imageAlt: `Изображение проекта «${project.title}»`,
-    detailAvailable: project.slug === NEIGHBORS_API_SLUG,
+    detailAvailable: true,
   };
 }

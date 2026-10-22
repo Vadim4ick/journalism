@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Check } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -27,6 +28,10 @@ import {
   getLoginErrorMessage,
   useLoginMutation,
 } from "@/shared/services/auth/hooks/useLoginMutation";
+import { authServices } from "@/shared/services/auth";
+import { isJuryMember } from "@/shared/lib/jury-access";
+import { useAuthStore } from "@/state/auth.store";
+import { GlobalPreloader } from "@/shared/ui/global-preloader";
 
 export function AuthPage() {
   const settings = useSiteSettingsStore((state) => state.settings);
@@ -45,6 +50,7 @@ export function AuthPage() {
         ? "Капча не настроена. Вход временно недоступен."
         : "";
   const router = useRouter();
+  const queryClient = useQueryClient();
   const loginMutation = useLoginMutation({ showToasts: false });
   const submitting = useRef(false);
   const captchaRef = useRef<LoginCaptchaHandle>(null);
@@ -54,7 +60,7 @@ export function AuthPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<AuthFieldErrors>({});
   const [message, setMessage] = useState("");
-  const [redirecting, setRedirecting] = useState(false);
+  const [showPreloader, setShowPreloader] = useState(false);
   const [checkingCaptcha, setCheckingCaptcha] = useState(false);
   const [readySiteKey, setReadySiteKey] = useState<string | null>(null);
   const [captchaError, setCaptchaError] = useState("");
@@ -80,7 +86,7 @@ export function AuthPage() {
     }
   }, []);
 
-  const isBusy = checkingCaptcha || loginMutation.isPending || redirecting;
+  const isBusy = checkingCaptcha || loginMutation.isPending || showPreloader;
   const captchaReady = !captchaEnabled || readySiteKey === captchaSiteKey;
 
   async function submitLogin(
@@ -89,16 +95,34 @@ export function AuthPage() {
   ) {
     if (submitting.current) return;
     submitting.current = true;
+    setShowPreloader(true);
+    let loggedIn = false;
     try {
       await loginMutation.mutateAsync({
         ...credentials,
         captcha_token: token,
         rememberMe: false,
       });
-      setRedirecting(true);
-      router.replace("/account");
+      loggedIn = true;
+      const sessionId = useAuthStore.getState().sessionId;
+      const profile = await queryClient.fetchQuery({
+        queryKey: ["me", sessionId],
+        queryFn: ({ signal }) => authServices.getMe(signal),
+        staleTime: 5 * 60 * 1000,
+      });
+      if (useAuthStore.getState().sessionId !== sessionId) {
+        setShowPreloader(false);
+        return;
+      }
+      useAuthStore.getState().setProfile(profile);
+      router.replace(isJuryMember(profile) ? "/account" : "/");
     } catch (error) {
-      if (!axios.isCancel(error)) setMessage(getLoginErrorMessage(error));
+      setShowPreloader(false);
+      if (!axios.isCancel(error)) {
+        setMessage(loggedIn
+          ? "Вход выполнен, но не удалось загрузить профиль. Попробуйте снова позже."
+          : getLoginErrorMessage(error));
+      }
       if (token) setCaptchaResetSignal((current) => current + 1);
     } finally {
       submitting.current = false;
@@ -158,6 +182,8 @@ export function AuthPage() {
       );
     }
   }
+
+  if (showPreloader) return <GlobalPreloader />;
 
   return (
     <section

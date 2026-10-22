@@ -15,6 +15,7 @@ import type {
   ContentMediaResponse,
   ContentMediaDetailResponse,
   ContentProjectsResponse,
+  ContentProjectDetailResponse,
   ContentNewspaperIssuesParams,
   ContentNewspapersResponse,
   ContentNewspaperResponse,
@@ -72,7 +73,7 @@ export const contentServices = {
   getProjects: (params?: ContentProjectsParams, signal?: AbortSignal) =>
     getList<ContentProjectsResponse>("/content/projects", params, signal),
   getProject: (slug: ContentSlug, signal?: AbortSignal) =>
-    getItem("/content/projects", slug, signal),
+    getItem<ContentProjectDetailResponse>("/content/projects", slug, signal),
 
   getNewspapers: (params?: ContentPaginationParams, signal?: AbortSignal) =>
     getList<ContentNewspapersResponse>("/content/newspapers", params, signal),
