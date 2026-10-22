@@ -4,6 +4,7 @@ import Script from "next/script";
 import "@/shared/assets/style/globals.css";
 import "@/shared/assets/style/text-mode.css";
 import { Providers } from "@/shared/providers/providers";
+import { CookieNotice } from "@/components/cookie-notice";
 import { foglihten, raleway } from "@/shared/assets/font";
 import {
   ACCESSIBILITY_COLOR_SCHEMES,
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             </main>
           </div>
+          <CookieNotice />
         </Providers>
       </body>
     </html>
