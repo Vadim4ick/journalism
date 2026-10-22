@@ -23,7 +23,7 @@ export function CookieNotice() {
             <h2 id="cookie-notice-title" className={styles.title}>Используем файлы cookie</h2>
             <div id="cookie-notice-description" className={styles.description}>
               <p>На сайте используются файлы cookie. Они помогают сайту работать стабильно, запоминать настройки и улучшать сервис.</p>
-              <p>Продолжая пользоваться сайтом, вы соглашаетесь с <Link href="/legal-documents/policy">Политикой конфиденциальности</Link>.</p>
+              <p>Продолжая пользоваться сайтом, вы соглашаетесь с <Link href="/legal-documents/cookie">Политикой использования файлов cookie</Link>.</p>
             </div>
             {error && <p role="alert" className={styles.error}>Не удалось сохранить закрытие уведомления. Проверьте настройки браузера.</p>}
           </div>
