@@ -5,6 +5,7 @@ import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { Typography, typographyVariants } from "@/shared/ui/typography";
 import { cn } from "@/shared/lib/utils";
+import { ContentEmptyState } from "@/components/content-empty-state";
 
 type UpcomingEventsSectionProps = {
   events: EventCardData[];
@@ -62,9 +63,7 @@ export function UpcomingEventsSection({
             ))}
           </ul>
         ) : (
-          <Typography variant="body" className="text-muted-foreground">
-            Пока нет предстоящих событий.
-          </Typography>
+          <ContentEmptyState kind="events" headingLevel="h3" />
         )}
       </Container>
     </section>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SiteImage } from "@/components/site-image";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -59,7 +60,7 @@ export function NewspapersPage({ newspapers, pagination, error = false }: { news
                     <li key={newspaper.id}><ScrollReveal><NewspaperCard newspaper={newspaper} /></ScrollReveal></li>
                   ))}
                 </ul>
-              ) : <Typography variant="body">Газеты пока не добавлены.</Typography>}
+              ) : <ContentEmptyState kind="newspapers" />}
               {pagination && pagination.last_page > 1 && <nav aria-label="Страницы газет" className={styles.pagination}>
                 {pagination.current_page > 1 && <Link href={pageHref(pagination.current_page - 1)} aria-label="Предыдущая страница" className={styles.pageArrow}><ChevronLeft aria-hidden="true" size={18} /></Link>}
                 {Array.from({ length: pagination.last_page }, (_, index) => index + 1).map((page) => (

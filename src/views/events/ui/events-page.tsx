@@ -5,6 +5,7 @@ import { Typography } from "@/shared/ui/typography";
 import { SiteImage } from "@/components/site-image";
 import type { ContentEvent } from "@/shared/types/model/content.type";
 import { eventCardData } from "@/components/event-card";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { EventsCards } from "./events-cards";
 import styles from "./events-page.module.css";
 
@@ -47,9 +48,7 @@ export function EventsPage({ events, pagination, error = false }: { events: Cont
           ) : events.length > 0 ? (
             <EventsCards events={events.map(eventCardData)} />
           ) : (
-            <Typography variant="body" className="text-muted-foreground">
-              Пока нет предстоящих событий.
-            </Typography>
+            <ContentEmptyState kind="events" />
           )}
           {!error && pagination && pagination.last_page > 1 && (
             <nav aria-label="Страницы событий" className={styles.pagination}>

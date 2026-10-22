@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Newspaper } from "lucide-react";
 import { NewsCard, newsCardData } from "@/components/news-card";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { Button } from "@/shared/ui/button";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -60,21 +61,30 @@ export function NewsFeed({ news, pagination, selected, error = false, calendarDa
             <ScrollReveal><NewsCard news={newsCardData(item)} headingLevel="h2" /></ScrollReveal>
           </div>
         ))}
-        {(error || news.length === 0) && (
-          <div className={styles.empty} role={error ? "alert" : undefined}>
+        {error && (
+          <div className={styles.empty} role="alert">
             <span className={styles.emptyIcon} data-text-decorative aria-hidden="true"><Newspaper size={32} strokeWidth={1.5} /></span>
             <Typography as="h2" variant="heading-medium" className={styles.emptyTitle}>
-              {error ? "Не удалось загрузить новости" : selected ? multipleDays ? "За этот период новостей нет" : selected.to ? "В этот день новостей нет" : "Начиная с этой даты новостей нет" : "Новости пока не опубликованы"}
+              Не удалось загрузить новости
             </Typography>
             <Typography className={styles.emptyDescription}>
-              {error ? "Попробуйте обновить страницу." : selected ? "Попробуйте выбрать другие даты или посмотрите все новости медиацентра." : "Здесь появятся события и истории из жизни медиацентра. Загляните к нам позже."}
+              Попробуйте обновить страницу.
             </Typography>
-            {selected && !error && (
+          </div>
+        )}
+        {!error && news.length === 0 && (
+          <ContentEmptyState
+            kind="news"
+            className={styles.emptyState}
+            title={selected ? multipleDays ? "За этот период новостей нет" : selected.to ? "В этот день новостей нет" : "Начиная с этой даты новостей нет" : undefined}
+            description={selected ? "Попробуйте выбрать другие даты или посмотрите все новости медиацентра." : undefined}
+          >
+            {selected && (
               <Button variant="outline" nativeButton={false} render={<Link href="/news" />} className={styles.emptyAction}>
                 Показать все новости
               </Button>
             )}
-          </div>
+          </ContentEmptyState>
         )}
       </div>
       {!error && <p role="status" className="sr-only">

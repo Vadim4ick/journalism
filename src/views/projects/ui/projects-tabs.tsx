@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRef, useState, type KeyboardEvent } from "react";
 import { SiteImage } from "@/components/site-image";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { projectCardData } from "@/components/project-card";
 import type { ContentProject } from "@/shared/types/model/content.type";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
@@ -131,9 +132,11 @@ export function ProjectsTabs({ projects }: { projects: ContentProject[] }) {
             </ul>
           ) : (
             <ScrollReveal>
-              <Typography variant="body" className={styles.emptyState}>
-                {tab.id === "completed" ? "На этой странице нет завершённых проектов." : "На этой странице нет текущих проектов."}
-              </Typography>
+              <ContentEmptyState
+                kind="projects"
+                title={tab.id === "completed" ? "Завершённых проектов пока нет" : "Текущих проектов пока нет"}
+                description={tab.id === "completed" ? "Когда появятся завершённые проекты, они будут здесь." : "Когда появятся текущие проекты, они будут здесь."}
+              />
             </ScrollReveal>
           )}
         </div>

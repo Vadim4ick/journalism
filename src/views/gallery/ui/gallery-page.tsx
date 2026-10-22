@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteImage } from "@/components/site-image";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -87,7 +88,7 @@ export function GalleryPage({ albums, pagination, error = false }: { albums: Con
             Фотоальбомы
           </Typography>
           {error && <p role="alert">Не удалось загрузить фотоальбомы. Попробуйте обновить страницу.</p>}
-          {!error && <ul data-a11y-content-grid className={styles.albumsGrid}>
+          {!error && visibleAlbums.length > 0 && <ul data-a11y-content-grid className={styles.albumsGrid}>
             {visibleAlbums.map((album, index) => (
               <li key={album.slug}>
                 <ScrollReveal><AlbumCard album={album} priority={index === 0} /></ScrollReveal>
@@ -95,7 +96,7 @@ export function GalleryPage({ albums, pagination, error = false }: { albums: Con
             ))}
           </ul>}
           {!error && visibleAlbums.length === 0 && (
-            <ScrollReveal><p>Фотоальбомов пока нет.</p></ScrollReveal>
+            <ScrollReveal><ContentEmptyState kind="gallery" /></ScrollReveal>
           )}
           {!error && pageCount > 1 && (
             <ScrollReveal>

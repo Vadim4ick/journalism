@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FileText } from "lucide-react";
 import { SiteImage } from "@/components/site-image";
+import { ContentEmptyState } from "@/components/content-empty-state";
 import { Container } from "@/shared/ui/container";
 import { ScrollReveal } from "@/shared/ui/scroll-reveal";
 import { Typography } from "@/shared/ui/typography";
@@ -94,37 +95,39 @@ function DocumentsPage({ sections, error = false }: DocumentsPageProps) {
 
       <section aria-label="Документы учреждения" className={styles.documentsSection}>
         <Container className={styles.container}>
-          <div className={styles.documentsPanel}>
-            {error ? (
-              <p role="alert">Не удалось загрузить документы. Попробуйте обновить страницу.</p>
-            ) : populatedSections.length === 0 ? (
-              <p>Документы пока не опубликованы.</p>
-            ) : (
-              populatedSections.map((section, index) => (
-                <ScrollReveal key={section.id ?? section.slug ?? `section-${index}`}>
-                  <section
-                    aria-labelledby={`document-group-${index}`}
-                    className={styles.documentGroup}
-                  >
-                    {index > 0 && <div aria-hidden="true" className={styles.divider} />}
-                    <Typography
-                      as="h2"
-                      variant="heading-small"
-                      id={`document-group-${index}`}
-                      className={styles.groupTitle}
+          {!error && populatedSections.length === 0 ? (
+            <ContentEmptyState kind="documents" />
+          ) : (
+            <div className={styles.documentsPanel}>
+              {error ? (
+                <p role="alert">Не удалось загрузить документы. Попробуйте обновить страницу.</p>
+              ) : (
+                populatedSections.map((section, index) => (
+                  <ScrollReveal key={section.id ?? section.slug ?? `section-${index}`}>
+                    <section
+                      aria-labelledby={`document-group-${index}`}
+                      className={styles.documentGroup}
                     >
-                      {section.title}
-                    </Typography>
-                    <ul className={styles.documentList}>
-                      {section.items.map((document) => (
-                        <DocumentRow key={document.id} document={document} />
-                      ))}
-                    </ul>
-                  </section>
-                </ScrollReveal>
-              ))
-            )}
-          </div>
+                      {index > 0 && <div aria-hidden="true" className={styles.divider} />}
+                      <Typography
+                        as="h2"
+                        variant="heading-small"
+                        id={`document-group-${index}`}
+                        className={styles.groupTitle}
+                      >
+                        {section.title}
+                      </Typography>
+                      <ul className={styles.documentList}>
+                        {section.items.map((document) => (
+                          <DocumentRow key={document.id} document={document} />
+                        ))}
+                      </ul>
+                    </section>
+                  </ScrollReveal>
+                ))
+              )}
+            </div>
+          )}
         </Container>
       </section>
     </>
